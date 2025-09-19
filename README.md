@@ -4,8 +4,8 @@ use your own configuration files
 
 # 2242 
 ATMsource is the group project source code
-- To do list 
-- Programming Part:
+To do list 
+Programming Part:
 - [ ] Part I
 - [ ] Part II A
 - [ ] Part II B
