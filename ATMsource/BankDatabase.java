@@ -27,6 +27,17 @@ public class BankDatabase
       return null; // if no matching account was found, return null
    } // end method getAccount
 
+   public boolean checkAccountExist(int accountNumber)
+   {
+      for(int i = 0; i < accounts.length; i++){
+         //System.out.println("Target: " + accountNumber + " : " +i+ " : " + accounts[i].getAccountNumber());
+         if(accounts[i].getAccountNumber() == accountNumber){
+            return true;
+         }
+      }
+      return false;
+   }
+
    // determine whether user-specified account number and PIN match
    // those of an account in the database
    public boolean authenticateUser( int userAccountNumber, int userPIN )
