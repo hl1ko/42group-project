@@ -15,7 +15,6 @@ public class Transfer extends Transaction{
         BankDatabase bankDatabase = getBankDatabase();
         Screen screen = getScreen();
 
-
         // get the available balance for the account involved
         double availableBalance = 
         bankDatabase.getAvailableBalance( getAccountNumber() );
@@ -24,21 +23,22 @@ public class Transfer extends Transaction{
         double totalBalance = 
         bankDatabase.getTotalBalance( getAccountNumber() );
         int targetAccountNumber = 0;
+        screen.displayMessage("Please enter Target Account Number: ");
         do { 
-            System.out.print("Please enter Target Account Number: ");
             targetAccountNumber = keypad.getInput();
             if(targetAccountNumber == getAccountNumber()){
-                System.out.println("You cant transfer to yourself.");
+                screen.displayMessageLine("You can not transfer to yourself.");
+                screen.displayMessage("Please enter again: ");
             }
-            if(bankDatabase.checkAccountExist(getAccountNumber()) == false){
-                System.out.println("Target Account does not exist.");
+            if(bankDatabase.checkAccountExist(targetAccountNumber) == false){
+                screen.displayMessageLine("Target Account does not exist.");
+                screen.displayMessage("Please enter again: ");
             }
-            //
         } while (targetAccountNumber == getAccountNumber() || bankDatabase.checkAccountExist(targetAccountNumber) == false);
         amount = promptForTransferAmount();
         
         if(bankDatabase.getAvailableBalance(getAccountNumber()) < amount){
-         System.out.print("You do not have sufficient balance.");
+         screen.displayMessageLine("You do not have sufficient balance.");
         }else{
          bankDatabase.debit(getAccountNumber(), amount);
          bankDatabase.credit(targetAccountNumber, amount);
