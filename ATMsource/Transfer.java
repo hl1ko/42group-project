@@ -51,15 +51,15 @@ public class Transfer extends Transaction{
 
       // display the prompt
       screen.displayMessage( "\nPlease enter a transfer amount in " + 
-         "CENTS (or 0 to cancel): " );
-      int input = keypad.getInput(); // receive input of deposit amount
+         "Dollars (or 0 to cancel): " );
+      float input = keypad.getInputFloat(); // receive input of deposit amount
       
       // check whether the user canceled or entered a valid amount
       if ( input == CANCELED ) 
          return CANCELED;
       else
       {
-         return ( double ) input / 100; // return dollar amount 
+         return ( double ) input; // return dollar amount 
       } // end else
    }
 }

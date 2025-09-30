@@ -17,6 +17,12 @@ public class Keypad
    {
       return input.nextInt(); // we assume that user enters an integer  
    } // end method getInput
+   
+   public float getInputFloat()
+   {
+      return input.nextFloat(); // we assume that user enters ana float  
+   } // end method getInputFloat
+   
 } // end class Keypad  
 
 
