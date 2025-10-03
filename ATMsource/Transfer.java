@@ -1,3 +1,6 @@
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class Transfer extends Transaction{
     private double amount; // amount to transfer
     private Keypad keypad; // reference to keypad
@@ -36,12 +39,14 @@ public class Transfer extends Transaction{
             }
         } while (targetAccountNumber == getAccountNumber() || bankDatabase.checkAccountExist(targetAccountNumber) == false);
         amount = promptForTransferAmount();
-        
+
         if(bankDatabase.getAvailableBalance(getAccountNumber()) < amount){
          screen.displayMessageLine("You do not have sufficient balance.");
         }else{
          bankDatabase.debit(getAccountNumber(), amount);
          bankDatabase.credit(targetAccountNumber, amount);
+         screen.displayMessageLine("Transfer success.");
+         screen.displayMessageLine("NOTE: The money just transfer will not be available until we verify the transacation.");
         }
     }
 
@@ -51,9 +56,9 @@ public class Transfer extends Transaction{
 
       // display the prompt
       screen.displayMessage( "\nPlease enter a transfer amount in " + 
-         "Dollars (or 0 to cancel): " );
+         "Dollars (or 0 to cancel) up to maximun of two digits (.00): " );
       float input = keypad.getInputFloat(); // receive input of deposit amount
-      
+      go2digits(input);
       // check whether the user canceled or entered a valid amount
       if ( input == CANCELED ) 
          return CANCELED;
@@ -61,5 +66,8 @@ public class Transfer extends Transaction{
       {
          return ( double ) input; // return dollar amount 
       } // end else
+   }
+   public static double go2digits(double input){
+   return BigDecimal.valueOf(input).setScale(2, RoundingMode.FLOOR).doubleValue();
    }
 }
