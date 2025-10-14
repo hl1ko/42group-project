@@ -23,6 +23,38 @@ public class Keypad
       return input.nextFloat(); // we assume that user enters an float  
    } // end method getInputFloat
    
+   public String getInput1(char mode){
+      String inputstring = input.next();
+      if(checkInputValid(inputstring)){
+         switch(mode){
+            case 'i':
+               break;
+            default:
+               break;
+         }
+      }
+      return inputstring;
+      
+   }
+
+   private boolean checkInputValid(String inputstr){
+      char[] inputchar = inputstr.toCharArray();
+      boolean dotted = false;
+      int loopdest = inputstr.length();
+      int firstdotposition = -1;
+      for(int i = 0; i< inputstr.length(); i++){
+         if((inputchar[i] == 46 && dotted == true)){ // (more than 1 .)
+            return false;
+         }else{
+            dotted = true;
+            firstdotposition = i;
+         }
+      }
+      if(firstdotposition == 0){
+         return false;
+      }
+      return true;
+   }
 } // end class Keypad  
 
 
