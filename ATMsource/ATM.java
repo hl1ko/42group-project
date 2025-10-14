@@ -141,10 +141,8 @@ public class ATM
          case WITHDRAWAL: // create new Withdrawal transaction
             temp = new Withdrawal( currentAccountNumber, screen, bankDatabase, keypad, cashDispenser );
             break; 
-         case DEPOSIT: // create new Deposit transaction
-            temp = new Deposit( currentAccountNumber, screen, 
-               bankDatabase, keypad, depositSlot );
-      
+         case TRANSFER:
+            temp = new Transfer(currentAccountNumber, screen, bankDatabase, keypad);
             break;
       } // end switch
 
