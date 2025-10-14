@@ -6,8 +6,7 @@ use your own configuration files
 ATMsource is the group project source code  
   
 To do list:  
-Programming Part:
-- [ ] Part I
+- [ ] Part I  
 - [ ] Part II A
 - [ ] Part II B
 - [ ] Part II C
