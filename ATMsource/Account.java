@@ -36,6 +36,7 @@ public class Account
    // returns the total balance
    public double getTotalBalance()
    {
+      System.out.printf("\nTESTING ONLY     TESTING ONLY     TESTING ONLY\nAccount type is: %s\nTESTING ONLY     TESTING ONLY     TESTING ONLY\n", this.getClass().getName());
       return totalBalance;
    } // end method getTotalBalance
 
