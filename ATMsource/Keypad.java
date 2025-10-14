@@ -20,7 +20,7 @@ public class Keypad
    
    public float getInputFloat()
    {
-      return input.nextFloat(); // we assume that user enters ana float  
+      return input.nextFloat(); // we assume that user enters an float  
    } // end method getInputFloat
    
 } // end class Keypad  
