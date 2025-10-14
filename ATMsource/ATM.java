@@ -116,6 +116,7 @@ public class ATM
    // display the main menu and return an input selection
    private int displayMainMenu()
    {
+
       screen.displayMessageLine( "\nMain menu:" );
       screen.displayMessageLine( "1 - View my balance" );
       screen.displayMessageLine( "2 - Withdraw cash" );
@@ -141,10 +142,9 @@ public class ATM
             temp = new Withdrawal( currentAccountNumber, screen, bankDatabase, keypad, cashDispenser );
             break; 
          case DEPOSIT: // create new Deposit transaction
-            temp = new Deposit( currentAccountNumber, screen, bankDatabase, keypad, depositSlot );
-            break;
-         case TRANSFER: // create new Transfer
-            temp = new Transfer(currentAccountNumber, screen, bankDatabase, keypad);
+            temp = new Deposit( currentAccountNumber, screen, 
+               bankDatabase, keypad, depositSlot );
+      
             break;
       } // end switch
 
