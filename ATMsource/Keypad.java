@@ -91,11 +91,11 @@ public class Keypad
             return 0;
         }
     }
-   public float getInputFloat(){
+   public double getInputFloat(){
         String input = callInput();
         if(checkIntorFloat(dotsCount(input), dotsPosition(input)) != 0){
             BigDecimal bd = new BigDecimal(input).setScale(2, RoundingMode.DOWN);
-            return bd.floatValue();
+            return bd.doubleValue();
         }else{
             return 0;
         }
