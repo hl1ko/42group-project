@@ -6,64 +6,66 @@ import java.util.Scanner; // program uses Scanner to obtain user input
 
 public class Keypad
 {
-   private Scanner input; // reads data from the command line
-                         
-   // no-argument constructor initializes the Scanner
-   public Keypad()
-   {
-      input = new Scanner( System.in );    
-   } // end no-argument Keypad constructor
+    private Scanner input; // reads data from the command line
+                            
+    // no-argument constructor initializes the Scanner
+    public Keypad()
+    {
+        input = new Scanner( System.in );    
+    } // end no-argument Keypad constructor
 
-   /*
-   // return an integer value entered by user 
-   public int getInput()
-   {
-      return input.nextInt(); // we assume that user enters an integer  
-   } // end method getInput
-   
-   public float getInputFloat()
-   {
-      return input.nextFloat(); // we assume that user enters an float  
-   } // end method getInputFloat
-   */
+    /*
+    // return an integer value entered by user 
+    public int getInput()
+    {
+        return input.nextInt(); // we assume that user enters an integer  
+    } // end method getInput
 
-   private String callInput(){
+    public float getInputFloat()
+    {
+        return input.nextFloat(); // we assume that user enters an float  
+    } // end method getInputFloat
+    */
+
+    private String callInput(){
         return input.next();
-   }
+    }
 
-    private static int dotsCount(String inputstr){
-        char[] inputChar = inputstr.toCharArray();
+    private static int dotsCount(String inputString){ ///////////////////////////////////////////////////////TO BOOLEAN
+        char[] inputChar = inputString.toCharArray();
         int count = 0;
-        for(int i = 0; i < inputstr.length(); i++){
-            if(inputChar[i] == 46){
+        for(int i = 0; i < inputString.length(); i++){
+            if ( inputChar[i] == 46 )   // 
+            {
                 count++;
             }
         }
-       return switch (count) {
-           case 0 -> 0;  // no dots
-           case 1 -> 1;  // exactly 1 dot
-           default -> 2; // more than 1 dot
-       };
+        return switch (count) {
+            case 0 -> 0;  // no dots
+            case 1 -> 1;  // exactly 1 dot
+            default -> 2; // more than 1 dot
+        };
     }
 
-   private static int dotsPosition(String inputString){
+    private static int dotsPosition(String inputString){ ///////////////////////////////////////////////////////TO BOOLEAN
         char[] inputChar = inputString.toCharArray();
         int position = 0;
+
         for(int i = 0; i < inputString.length(); i++){
-            if(inputChar[i] == 46){
+            if ( inputChar[i] == 46 )
                 position = i;
-            }
         }
-        if(position == 0){
-            return 0; //the only dots at start positiion
-        }else if(position == inputString.length() - 1){
-            return 2; //the only dots at end positiion
-        }else{
-            return 1; //the only dots at moddle
+
+        if ( position == 0 ) {
+            return 0; //the only dots at start position
+        } else if (position == inputString.length() - 1){
+            return 2; //the only dots at end position
+        } else {
+            return 1; //the only dots at middle
         }
     }
 
-    private static int IntegerOrDouble(String inputString){
+    private static int IntegerOrDouble(String inputString){ ///////////////////////////////////////////////////////TO BOOLEAN
         switch (dotsCount(inputString)) {
             case 0: // no dots -> integer
                 return 1;
@@ -78,15 +80,16 @@ public class Keypad
         }
     }
 
-   public int getInput(){
+    public int getInput(){
         String inputString = callInput();
-        if(IntegerOrDouble(inputString) == 1){
+        if (IntegerOrDouble(inputString) == 1){ //if 
             return Integer.parseInt(inputString);
-        }else{
+        } else {
             return 0;
         }
     }
-   public double getInputFloat(){
+
+    public double getInputFloat(){
         String inputString = callInput();
         if(IntegerOrDouble(inputString) != 0){
             BigDecimal bd = new BigDecimal(inputString).setScale(2, RoundingMode.DOWN);

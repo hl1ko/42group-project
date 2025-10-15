@@ -7,7 +7,10 @@ public class SavingAccount extends Account {
     }
 
     public void setInterestRate(double rate){
-        interestRate = rate;
+        if (rate > 0.0 && rate <= 1.0)
+            interestRate = rate;
+        else
+            throw new IllegalArgumentException("The data given is invalid");
     }
 
     public double getInterestRate(){
