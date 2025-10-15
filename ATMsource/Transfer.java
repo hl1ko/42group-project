@@ -44,7 +44,8 @@ public class Transfer extends Transaction{
          }
 
          if(bankDatabase.getAvailableBalance(getAccountNumber()) < amount){
-         screen.displayMessageLine("You do not have sufficient balance.");
+         screen.displayMessageLine("\nInsufficient funds in your account.");
+         screen.displayMessageLine("Transfer cancelled.");
          return;
          }
 
@@ -57,7 +58,7 @@ public class Transfer extends Transaction{
          screen.displayMessage("Enter 1 to confirm this transfer action: ");
 
          if(keypad.getInput() != 1){
-            screen.displayMessageLine("Transfer action canceled.");
+            screen.displayMessageLine("Transfer cancelled.");
             return;
          }
 
