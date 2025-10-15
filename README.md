@@ -7,10 +7,10 @@ ATMsource is the group project source code
   
 To do list:  
 - [ ] Part I  
-- [ ] Part II A
-- [ ] Part II B
-- [ ] Part II C
-- [ ] Part II D  
+- [x] Part II A  
+- [x] Part II B  
+- [x] Part II C  
+- [x] Part II D  
 Documentation: 
 - [ ] :disappointed:  
 Free rider:

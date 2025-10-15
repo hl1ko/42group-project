@@ -1,5 +1,7 @@
 // Keypad.java
 // Represents the keypad of the ATM
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Scanner; // program uses Scanner to obtain user input
 
 public class Keypad
@@ -12,6 +14,7 @@ public class Keypad
       input = new Scanner( System.in );    
    } // end no-argument Keypad constructor
 
+   /*
    // return an integer value entered by user 
    public int getInput()
    {
@@ -22,39 +25,81 @@ public class Keypad
    {
       return input.nextFloat(); // we assume that user enters an float  
    } // end method getInputFloat
-   
-   public String getInput1(char mode){
-      String inputstring = input.next();
-      if(checkInputValid(inputstring)){
-         switch(mode){
-            case 'i':
-               break;
-            default:
-               break;
-         }
-      }
-      return inputstring;
-      
-   }
+   */
 
-   private boolean checkInputValid(String inputstr){
-      char[] inputchar = inputstr.toCharArray();
-      boolean dotted = false;
-      int loopdest = inputstr.length();
-      int firstdotposition = -1;
-      for(int i = 0; i< inputstr.length(); i++){
-         if((inputchar[i] == 46 && dotted == true)){ // (more than 1 .)
-            return false;
-         }else{
-            dotted = true;
-            firstdotposition = i;
-         }
-      }
-      if(firstdotposition == 0){
-         return false;
-      }
-      return true;
+   private String callInput(){
+        Scanner something = new Scanner(System.in);
+        return something.next();
    }
+   
+
+    private static int dotsCount(String inputstr){
+        char[] inputchar = inputstr.toCharArray();
+        int count = 0;
+        for(int i = 0; i < inputstr.length(); i++){
+            if(inputchar[i] == 46){
+                count++;
+            }
+        }
+        switch(count){
+            case 0:
+                return 0;
+            case 1:
+                return 1;
+            default:
+                return 2;
+        }
+    }
+
+   private static int dotsPosition(String inputstr){
+        char[] inputchar = inputstr.toCharArray();
+        int count = 0;
+        for(int i = 0; i < inputstr.length(); i++){
+            if(inputchar[i] == 46){
+                count = i;
+            }
+        }
+        if(count == 0){
+            return 0;
+        }else if(count == inputstr.length() - 1){
+            return 2;
+        }else{
+            return 1;
+        }
+    }
+
+    private static int checkIntorFloat(int DotsCount, int DotsPosition){
+        switch (DotsCount) {
+            case 0:
+                return 1;
+            case 1:
+                if(DotsPosition == 1){
+                    return 2;
+                }else{
+                    return 0;
+                }
+            default:
+                return 0;
+        }
+    }
+
+   public int getInput(){
+        String input = callInput();
+        if(checkIntorFloat(dotsCount(input), dotsPosition(input)) == 1){
+            return Integer.parseInt(input);
+        }else{
+            return 0;
+        }
+    }
+   public float getInputFloat(){
+        String input = callInput();
+        if(checkIntorFloat(dotsCount(input), dotsPosition(input)) != 0){
+            BigDecimal bd = new BigDecimal(input).setScale(2, RoundingMode.DOWN);
+            return bd.floatValue();
+        }else{
+            return 0;
+        }
+    }
 } // end class Keypad  
 
 

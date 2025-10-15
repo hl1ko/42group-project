@@ -38,10 +38,13 @@ public class Transfer extends Transaction{
                 screen.displayMessage("Please enter again: ");
             }
         } while (targetAccountNumber == getAccountNumber() || bankDatabase.checkAccountExist(targetAccountNumber) == false);
+        
         amount = promptForTransferAmount();
 
         if(bankDatabase.getAvailableBalance(getAccountNumber()) < amount){
          screen.displayMessageLine("You do not have sufficient balance.");
+        }else if(amount == 0){
+         screen.displayMessageLine("Transfer cancelled.");
         }else{
          bankDatabase.debit(getAccountNumber(), amount);
          bankDatabase.credit(targetAccountNumber, amount);
