@@ -25,10 +25,14 @@ public class Transfer extends Transaction{
         // get the total balance for the account involved
         double totalBalance = 
         bankDatabase.getTotalBalance( getAccountNumber() );
-        int targetAccountNumber = 0;
-        screen.displayMessage("Please enter Target Account Number: ");
+        int targetAccountNumber = -1;
+        screen.displayMessage("Please enter Target Account Number (0 to cancel): ");
         do { 
             targetAccountNumber = keypad.getInput();
+            if(targetAccountNumber == 0){
+                screen.displayMessageLine("Transfer cancelled");
+                return;
+            }
             if(targetAccountNumber == getAccountNumber()){
                 screen.displayMessageLine("You can not transfer to yourself.");
                 screen.displayMessage("Please enter again: ");
@@ -37,7 +41,8 @@ public class Transfer extends Transaction{
                 screen.displayMessageLine("Target Account does not exist.");
                 screen.displayMessage("Please enter again: ");
             }
-        } while (targetAccountNumber == getAccountNumber() || bankDatabase.checkAccountExist(targetAccountNumber) == false);
+            
+        } while ((targetAccountNumber == getAccountNumber() || bankDatabase.checkAccountExist(targetAccountNumber) == false) && targetAccountNumber != 0);
         
         amount = promptForTransferAmount();
 
