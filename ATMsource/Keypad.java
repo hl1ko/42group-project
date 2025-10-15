@@ -31,7 +31,7 @@ public class Keypad
         return input.next();
     }
 
-    private static int dotsCount(String inputString){ ///////////////////////////////////////////////////////TO BOOLEAN
+    private static int dotsCount(String inputString){
         char[] inputChar = inputString.toCharArray();
         int count = 0;
         for(int i = 0; i < inputString.length(); i++){
@@ -47,7 +47,7 @@ public class Keypad
         };
     }
 
-    private static int dotsPosition(String inputString){ ///////////////////////////////////////////////////////TO BOOLEAN
+    private static int dotsPosition(String inputString){
         char[] inputChar = inputString.toCharArray();
         int position = 0;
 
@@ -65,7 +65,7 @@ public class Keypad
         }
     }
 
-    private static int IntegerOrDouble(String inputString){ ///////////////////////////////////////////////////////TO BOOLEAN
+    private static int IntegerOrDouble(String inputString){
         switch (dotsCount(inputString)) {
             case 0: // no dots -> integer
                 return 1;
