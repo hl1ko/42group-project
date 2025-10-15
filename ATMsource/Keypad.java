@@ -28,73 +28,68 @@ public class Keypad
    */
 
    private String callInput(){
-        Scanner something = new Scanner(System.in);
-        return something.next();
+        return input.next();
    }
-   
 
     private static int dotsCount(String inputstr){
-        char[] inputchar = inputstr.toCharArray();
+        char[] inputChar = inputstr.toCharArray();
         int count = 0;
         for(int i = 0; i < inputstr.length(); i++){
-            if(inputchar[i] == 46){
+            if(inputChar[i] == 46){
                 count++;
             }
         }
-        switch(count){
-            case 0:
-                return 0;
-            case 1:
-                return 1;
-            default:
-                return 2;
-        }
+       return switch (count) {
+           case 0 -> 0;  // no dots
+           case 1 -> 1;  // exactly 1 dot
+           default -> 2; // more than 1 dot
+       };
     }
 
-   private static int dotsPosition(String inputstr){
-        char[] inputchar = inputstr.toCharArray();
-        int count = 0;
-        for(int i = 0; i < inputstr.length(); i++){
-            if(inputchar[i] == 46){
-                count = i;
+   private static int dotsPosition(String inputString){
+        char[] inputChar = inputString.toCharArray();
+        int position = 0;
+        for(int i = 0; i < inputString.length(); i++){
+            if(inputChar[i] == 46){
+                position = i;
             }
         }
-        if(count == 0){
-            return 0;
-        }else if(count == inputstr.length() - 1){
-            return 2;
+        if(position == 0){
+            return 0; //the only dots at start positiion
+        }else if(position == inputString.length() - 1){
+            return 2; //the only dots at end positiion
         }else{
-            return 1;
+            return 1; //the only dots at moddle
         }
     }
 
-    private static int checkIntorFloat(int DotsCount, int DotsPosition){
-        switch (DotsCount) {
-            case 0:
+    private static int IntegerOrDouble(String inputString){
+        switch (dotsCount(inputString)) {
+            case 0: // no dots -> integer
                 return 1;
-            case 1:
-                if(DotsPosition == 1){
-                    return 2;
-                }else{
-                    return 0;
-                }
-            default:
+            case 1: // 1 dots -> 
+                return switch (dotsPosition(inputString)) {
+                    case 1 -> 2; //dot locate between start and end -> float
+                    case 2 -> 2; //dot locate at end -> no decimal stuff -> float to avoid error
+                    default -> 0; //dot locate at start -> not numeric -> invalid
+                };
+            default: // more than one dots -> invalid
                 return 0;
         }
     }
 
    public int getInput(){
-        String input = callInput();
-        if(checkIntorFloat(dotsCount(input), dotsPosition(input)) == 1){
-            return Integer.parseInt(input);
+        String inputString = callInput();
+        if(IntegerOrDouble(inputString) == 1){
+            return Integer.parseInt(inputString);
         }else{
             return 0;
         }
     }
    public double getInputFloat(){
-        String input = callInput();
-        if(checkIntorFloat(dotsCount(input), dotsPosition(input)) != 0){
-            BigDecimal bd = new BigDecimal(input).setScale(2, RoundingMode.DOWN);
+        String inputString = callInput();
+        if(IntegerOrDouble(inputString) != 0){
+            BigDecimal bd = new BigDecimal(inputString).setScale(2, RoundingMode.DOWN);
             return bd.doubleValue();
         }else{
             return 0;

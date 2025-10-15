@@ -76,19 +76,21 @@ public class Transfer extends Transaction{
       // display the prompt
       screen.displayMessage( "\nPlease enter a transfer amount in " + 
          "Dollars (or 0 to cancel) up to maximun of two digits (.00): " );
-      double input = keypad.getInputFloat(); // receive input of deposit amount
-      screen.displayMessage( "\nPlease enter the transfer amount again: " );
-      double input1 = keypad.getInputFloat(); // receive input of deposit amount
-      if(input1 != input){
-         screen.displayMessageLine( "\nThe transfer amount did not match. Cancelling transfer action." );
+      double input = keypad.getInputFloat(); // receive input of transfer amount
+      if ( input == CANCELED ){
          return CANCELED;
       }
-      // check whether the user canceled or entered a valid amount
-      if ( input == CANCELED ) 
+      screen.displayMessage( "\nPlease enter the transfer amount again: " );
+      double input1 = keypad.getInputFloat(); // receive input of transfer amount for double check
+      if ( input1 == CANCELED ){
          return CANCELED;
-      else
-      {
-         return ( double ) input; // return dollar amount 
-      } // end else
+      }
+      if(input1 != input){
+         screen.displayMessageLine( "\nThe transfer amount does not match. Transfer action calceled." );
+         return CANCELED;
+      }
+
+      return ( double ) input; // return dollar amount 
+
    }
 }
