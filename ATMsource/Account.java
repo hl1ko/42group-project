@@ -6,7 +6,7 @@ public class Account
    private int accountNumber; // account number
    private int pin; // PIN for authentication
    private double availableBalance; // funds available for withdrawal
-   private double totalBalance; // funds available + pending deposits
+   private double totalBalance; // funds available + pending transfer
 
    // Account constructor initializes attributes
    public Account( int theAccountNumber, int thePIN, 
