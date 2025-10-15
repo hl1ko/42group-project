@@ -55,10 +55,10 @@ public class Transfer extends Transaction{
          screen.displayMessageLine("Recipient ID: " + targetAccountNumber);
          screen.displayMessageLine("Transfer amount: " + amount);
          screen.displayMessageLine("=====");
-         screen.displayMessageLine("Please enter 1 if and only if you did confirm that the transfer info above is correct and wish to proceed the following transfer action");
-         screen.displayMessage("Confirm?: ");
+         screen.displayMessageLine("Please double check the transfer info above.");
+         screen.displayMessage("Enter 1 to confirm this transfer action: ");
          if(keypad.getInput() != 1){
-            screen.displayMessageLine("Transfer Action canceled");
+            screen.displayMessageLine("Transfer action canceled.");
             return;
          }
 
