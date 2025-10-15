@@ -8,7 +8,7 @@ public class Withdrawal extends Transaction
    private CashDispenser cashDispenser; // reference to cash dispenser
 
    // constant corresponding to menu option to cancel
-   private final static int CANCELED = 4;
+   private final static int CANCELED = 6;
 
    // Withdrawal constructor
    public Withdrawal( int userAccountNumber, Screen atmScreen, 
@@ -92,17 +92,32 @@ public class Withdrawal extends Transaction
       Screen screen = getScreen(); // get screen reference
       
       // array of amounts to correspond to menu numbers
-      int amounts[] = { 0, 100, 500, 1000};
+      int amounts[] = { 0, 100, 200, 500, 800, 1000};
 
       // loop while no valid choice has been made
       while ( userChoice == 0 )
       {
          // display the menu
-         screen.displayMessageLine( "\nWithdrawal Menu:" );
+         screen.displayMessage( "\nAvailable banknote denominations: ");
+         screen.displayMessage( "$100, $500, $1000");
+
+         /*
+         screen.displayDollarAmount(100);
+         screen.displayMessage( ", ");
+         screen.displayDollarAmount(500);
+         screen.displayMessage( ", ");
+         screen.displayDollarAmount(1000);
+          */
+         screen.displayMessageLine( "");
+
+         screen.displayMessageLine( "Withdrawal Menu:" );
          screen.displayMessageLine( "1 - $100" );
-         screen.displayMessageLine( "2 - $500" );
-         screen.displayMessageLine( "3 - $1000" );
-         screen.displayMessageLine( "4 - Cancel transaction" );
+         screen.displayMessageLine( "2 - $200" );
+         screen.displayMessageLine( "3 - $500" );
+         screen.displayMessageLine( "4 - $800" );
+         screen.displayMessageLine( "5 - $1000" );
+         screen.displayMessageLine( "6 - Cancel transaction" );
+         screen.displayMessageLine( "X - Custom amount" );
          screen.displayMessage( "\nChoose a withdrawal amount: " );
 
          int input = keypad.getInput(); // get user input through keypad
@@ -113,14 +128,21 @@ public class Withdrawal extends Transaction
             case 1: // if the user chose a withdrawal amount 
             case 2: // (i.e., chose option 1, 2 or 3), return the
             case 3: // corresponding amount from amounts array
+            case 4:
+            case 5:
                userChoice = amounts[ input ]; // save user's choice
                break;       
             case CANCELED: // the user chose to cancel
                userChoice = CANCELED; // save user's choice
                break;
             default: // the user did not enter a value from 1-4
+            if(input % 100 == 0){
+               userChoice = input;
+            }else{
                screen.displayMessageLine( 
                   "\nIvalid selection. Try again." );
+            }
+               
          } // end switch
       } // end while
 
