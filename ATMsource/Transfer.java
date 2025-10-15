@@ -1,6 +1,6 @@
 
 public class Transfer extends Transaction{
-    private double amount; // amount to transfer
+    private float amount; // amount to transfer
     private Keypad keypad; // reference to keypad
     private final static int CANCELED = 0; // constant for cancel option
 
@@ -68,7 +68,7 @@ public class Transfer extends Transaction{
          screen.displayMessageLine("NOTE: The money just transfer will not be available until we verify the transacation.");
     }
 
-   private double promptForTransferAmount()
+   private float promptForTransferAmount()
    {
       Screen screen = getScreen(); // get reference to screen
 
@@ -87,7 +87,7 @@ public class Transfer extends Transaction{
          return CANCELED;
       else
       {
-         return ( double ) input; // return dollar amount 
+         return ( float ) input; // return dollar amount 
       } // end else
    }
 }
