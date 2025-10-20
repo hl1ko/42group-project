@@ -120,7 +120,7 @@ public class Withdrawal extends Transaction
          screen.displayMessageLine( "X - Custom amount" );
          screen.displayMessage( "\nChoose a withdrawal amount: " );
 
-         int input = keypad.getInput(); // get user input through keypad
+         int input = keypad.getInput_customcancel(CANCELED); // get user input through keypad
 
          // determine how to proceed based on the input value
          switch ( input )

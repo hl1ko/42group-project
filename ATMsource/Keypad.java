@@ -89,6 +89,15 @@ public class Keypad
         }
     }
 
+    public int getInput_customcancel(int CANCELED){
+        String inputString = callInput();
+        if (IntegerOrDouble(inputString) == 1){ //if 
+            return Integer.parseInt(inputString);
+        } else {
+            return CANCELED;
+        }
+    }
+
     public double getInputFloat(){
         String inputString = callInput();
         if(IntegerOrDouble(inputString) != 0){
