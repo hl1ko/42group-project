@@ -18,72 +18,81 @@ public class Transfer extends Transaction{
 
       int targetAccountNumber; //integer variable which its content will be inputted by users
 
+      screen.displayMessageLine("\nStarting transferring section...");
+      screen.displayMessageLine("You may enter '0' to cancel to transaction during the section.");
+
       //provide message to prompt user to input values
-      screen.displayMessage("Please enter Target Account Number (0 to cancel): ");
+      screen.displayMessage("\nEnter the target account number: ");
 
-      //looping statement inside the block if the account number entered by the user is same
-      do { 
-         targetAccountNumber = keypad.getInput();
-         if ( targetAccountNumber == 0 ){
-            screen.displayMessageLine("Transfer cancelled");
-            return;
-         }
-         if ( targetAccountNumber == getAccountNumber() ){
-            screen.displayMessageLine("You can not transfer to the same account.");
-            screen.displayMessage("Please enter again: ");
-         }
-      } while (targetAccountNumber == getAccountNumber() && targetAccountNumber != 0);
+      // receive target account number from user and store it
+      targetAccountNumber = keypad.getInput();
 
-      //this part is not looping to prevent 
-      if ( bankDatabase.checkAccountExist(targetAccountNumber) == false ){
-         screen.displayMessageLine("Target account does not exist.");
-         screen.displayMessageLine("Transfer cancelled.");
+      // return to main menu if user input zero
+      if ( targetAccountNumber == CANCELED ){
+         screen.displayMessageLine( "\nCanceling transaction..." );
          return;
       }
 
-      //assign value inputted by user to 
+      // check whether target account inputted by user is same as the logged account
+      // if not the transaction will be cancelled
+      if ( targetAccountNumber == getAccountNumber() ){
+         screen.displayMessageLine("\nYou cannot transfer to the same account.");
+         screen.displayMessageLine("Transaction cancelled.");
+         return;
+      }
+
+      // check whether target account inputted by user is exist
+      // if not the transaction will be cancelled
+      if ( !bankDatabase.checkAccountExist(targetAccountNumber) ){
+         screen.displayMessageLine("Target account does not exist.");
+         screen.displayMessageLine("Transaction cancelled.");
+         return;
+      }
+
+      // receive the value inputted by user and store it
       amount = promptForTransferAmount();
 
       //cancel and back to main menu if amount inputted by user is zero
       if ( amount == CANCELED ){
-         screen.displayMessageLine("Transfer cancelled.");
+         screen.displayMessageLine( "Transaction cancelled." );
          return;
       }
 
-      //cancel and back to main menu if the available balance of the targeted account is higher than the amount inputted
-      //i.e. Target available balance < user inputted amount
+      // cancel and back to main menu if the available balance of the account is lower than the amount inputted
+      // i.e. user inputted amount > available balance
       if ( bankDatabase.getAvailableBalance(getAccountNumber()) < amount ){
          screen.displayMessageLine("\nInsufficient funds in your account.");
-         screen.displayMessageLine("Transfer cancelled.");
+         screen.displayMessageLine( "\nCanceling transaction..." );
          return;
       }
 
-      //prompt user to input the money transfer recipient account number and its transfer amount
-      screen.displayMessageLine("=====");
+      // prompt user to input the money transfer recipient account number and its transfer amount
+      screen.displayMessageLine("\n----------------------------------------------------------------------");
       screen.displayMessageLine("Recipient account number: " + targetAccountNumber);
 
-      //prompt user the money values that will be tranferred
-      screen.displayMessage("Transfer amount: "); 
+      // prompt user the money values that will be tranferred
+      screen.displayMessage("Transfer amount         : "); 
       screen.displayDollarAmount(amount);
       screen.displayMessageLine("");
-      screen.displayMessageLine("=====");
+      screen.displayMessageLine("----------------------------------------------------------------------");
       screen.displayMessageLine("Please check the transfer info above.");
 
-      //let user to decide whether the transaction will continue or not
-      screen.displayMessageLine("Enter 1 to confirm this transfer action. To cancel the transaction, enter number other then 1.");
+      // let user to decide whether the transaction will continue or not
+      screen.displayMessageLine("\nEnter 1 to confirm the transfer action, or enter other number to cancel.");
       screen.displayMessage("Your input: ");
+
       if ( keypad.getInput() != 1 ){
-         screen.displayMessageLine("Transfer cancelled.");
-         return;  //cancel the transaction if the user input 1
+         screen.displayMessageLine( "\nCanceling transaction..." );
+         return;  // cancel the transaction if the user input 1
       }
 
-      //add the amount to the target account, and debit the amount from the user logged in.
+      // add the amount to the target account, and debit the amount from the user logged in.
       bankDatabase.debit(getAccountNumber(), amount);
       bankDatabase.credit(targetAccountNumber, amount);
 
-      //prompt user that the transaction is completed.
-      screen.displayMessageLine("Transfer success.");
-      screen.displayMessageLine("NOTE: The money just transfer will not be available until we verify the transacation.");
+      // prompt user that the transaction is completed.
+      screen.displayMessageLine("\nTransfer success.");
+      screen.displayMessageLine("NOTE: The money you attempt to transfer will only be available after we verify the transacation.");
    }
 
    private double promptForTransferAmount()
@@ -91,24 +100,24 @@ public class Transfer extends Transaction{
       Screen screen = getScreen(); // get reference to screen
 
       // prompt user to enter the first entry
-      screen.displayMessage( "\nPlease enter a transfer amount in " + 
-         "Dollars (or 0 to cancel) up to maximun of two digits (.00): " );
-      double input = keypad.getInputFloat(); 
-
-      // receive for the second entry for data vaildation
-      screen.displayMessage( "\nPlease enter the transfer amount again: " );
-      double input1 = keypad.getInputFloat();
-      if ( input1 != input ) {   //check if the second entry is equal to the first entry, if not the transaction would be cancelled
-         screen.displayMessageLine( "\nThe transfer amount did not match. Cancelling transfer action." );
+      screen.displayMessage( "\nPlease enter a transfer amount in dollars up to maximum of two digits (.00): ");
+      double input = keypad.getInputFloat();
+      
+      if ( input <= 0 ){
+         screen.displayMessageLine("\nThe amount must be greater than 0.");
          return CANCELED;
       }
 
-      // check whether the user canceled or entered a valid amount
-      if ( input == CANCELED ) 
+      // receive for the second entry for data vaildation
+      screen.displayMessage( "\nPlease re-enter the transfer amount: " );
+      double input1 = keypad.getInputFloat();
+
+      if ( input1 != input ) {   //check if the second entry is equal to the first entry, if not the transaction would be cancelled
+         screen.displayMessageLine( "\nThe transfer amount did not match.");
          return CANCELED;
-      else
-      {
-         return ( double ) input; // return dollar amount 
-      } // end else
+      }
+
+      return ( double ) input; // return dollar amount 
+
    }
 }
