@@ -114,7 +114,6 @@ public class Withdrawal extends Transaction
          // determine how to proceed based on the input value
          switch ( input )
          {  
-            case 0: 
             case 1: // if the user chose a withdrawal amount 
             case 2: // (i.e., chose option 1, 2 or 3), return the
             case 3: // corresponding amount from amounts array
