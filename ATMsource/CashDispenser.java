@@ -8,16 +8,64 @@ public class CashDispenser
    public int cash500Count;
    public int cash1000Count;
 
+   private final static int[] __init_BillsCount = {1,1,10000};
+   public int[] BillsCount;
+
+   public final static int[] BillsDeno = {1000, 500, 100};
+   public final static int[] BillsDenoMultiple = {(1000/500), (500/100), 0};
    // no-argument CashDispenser constructor initializes count to default
    public CashDispenser()
    {
+      BillsCount = __init_BillsCount;
+
       cash100Count = INITIAL_100_COUNT; // set count attribute to default
       cash500Count = INITIAL_500_COUNT;
       cash1000Count = INITIAL_1000_COUNT;
    } // end CashDispenser constructor
 
+   private int[] getWithdrawlBillsAmount( int amount ){
+      int[] Withdrawl = {0, 0, 0};
+      Withdrawl[0] = (amount/ 1000);
+      amount = amount % 1000;
+      Withdrawl[1] = (amount/ 500);
+      amount = amount % 500;
+      Withdrawl[2] = (amount/ 100);
+      return Withdrawl;
+   }
+
+   private void minusBills( int[] Withdrawal){
+      for( int i = 0 ; i < 3 ; i ++ ){
+         if(BillsCount[i] < Withdrawal[i] && i < 2){
+            int delta = Withdrawal[i] - BillsCount[i];
+            Withdrawal[i] = Withdrawal[i] - delta;
+            Withdrawal[i+1] = delta * BillsDenoMultiple[i];
+         }
+         BillsCount[i] -= Withdrawal[i];
+      }
+   }
+
+   public boolean isSufficientCashAvailable( int amount ){
+      int[] Withdrawal = getWithdrawlBillsAmount(amount);
+
+      if(((BillsCount[0] * 1000 + BillsCount[1] * 500 + BillsCount[2] * 100 )) < (amount)){
+         return false;
+      }
+      return true;
+   }
+
+   public void dispenseCash( int amount)
+   {
+      System.out.println("----TEST-------Returned BillsCount: " + BillsCount[0] + ", " + BillsCount[1] + ", " + BillsCount[2]);
+      int[] withdrawCash = {0, 0, 0};
+      withdrawCash = getWithdrawlBillsAmount(amount);
+      if(isSufficientCashAvailable(amount)){
+         minusBills(withdrawCash);
+      }
+      System.out.println("----TEST-------Returned BillsCount: " + BillsCount[0] + ", " + BillsCount[1] + ", " + BillsCount[2]);
+   }
+
    // simulates dispensing of specified amount of cash
-   public void dispenseCash( int amount )
+   public void dispenseCashfa( int amount )
    {
       while (amount >= 100){
          if (amount >= 1000 && cash1000Count > 0){
@@ -37,7 +85,7 @@ public class CashDispenser
    } // end method dispenseCash
 
    // indicates whether cash dispenser can dispense desired amount
-   public boolean isSufficientCashAvailable( int amount )
+   public boolean SufficientCashAvailable( int amount )
    {
       int cash100Needed = 0;
       int cash500Needed = 0;
