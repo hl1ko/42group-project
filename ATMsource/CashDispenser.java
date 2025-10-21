@@ -28,17 +28,17 @@ public class CashDispenser
 
    private int[] getWithdrawlBillsAmount( int amount ){
       int[] Withdrawl = {0, 0, 0};
-      Withdrawl[0] = (amount/ 1000);
-      amount = amount % 1000;
-      Withdrawl[1] = (amount/ 500);
-      amount = amount % 500;
-      Withdrawl[2] = (amount/ 100);
+      Withdrawl[0] = (amount/ BillsDeno[0]);
+      amount = amount % BillsDeno[0];
+      Withdrawl[1] = (amount/ BillsDeno[1]);
+      amount = amount % BillsDeno[1];
+      Withdrawl[2] = (amount/ BillsDeno[2]);
       return Withdrawl;
    }
 
    private void minusBills( int[] Withdrawal){
-      for( int i = 0 ; i < 3 ; i ++ ){
-         if(BillsCount[i] < Withdrawal[i] && i < 2){
+      for( int i = 0 ; i < Withdrawal.length ; i ++ ){
+         if(BillsCount[i] < Withdrawal[i] && i < (Withdrawal.length-1)){
             int delta = Withdrawal[i] - BillsCount[i];
             Withdrawal[i] = Withdrawal[i] - delta;
             Withdrawal[i+1] = delta * BillsDenoMultiple[i];
@@ -47,11 +47,9 @@ public class CashDispenser
       }
    }
    public boolean AnyBillsAvaliable (){
-      if((BillsCount[0] == 0) && (BillsCount[1] == 0) && (BillsCount[2] == 0)){
-         return false;
-      }
-      return true;
+      return !((BillsCount[0] == 0) && (BillsCount[1] == 0) && (BillsCount[2] == 0));
    }
+
    public boolean isSufficientCashAvailable( int amount ){
       if(((BillsCount[0] * BillsDeno[0] + BillsCount[1] * BillsDeno[1] + BillsCount[2] * BillsDeno[2] )) < (amount)){
          return false;
@@ -61,14 +59,13 @@ public class CashDispenser
 
    public String showAvaliableBills(){
       String outputString = "Available banknote denominations: ";
-      for(int i = 0; i < 3; i++){
+      for(int i = 0; i < BillsCount.length; i++){
          if(BillsCount[i] > 0){
             outputString = outputString + "$" + Integer.toString(BillsDeno[i]);
-            if(i < 2){
+            if(i < (BillsCount.length-1)){
                outputString = outputString + ", ";
             }     
          }
-         
       }
       return outputString;
    }
