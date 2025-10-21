@@ -14,19 +14,6 @@ public class Keypad
         input = new Scanner( System.in );    
     } // end no-argument Keypad constructor
 
-    /*
-    // return an integer value entered by user 
-    public int getInput()
-    {
-        return input.nextInt(); // we assume that user enters an integer  
-    } // end method getInput
-
-    public float getInputFloat()
-    {
-        return input.nextFloat(); // we assume that user enters an float  
-    } // end method getInputFloat
-    */
-
     private String callInput(){
         return input.next();
     }
@@ -86,6 +73,15 @@ public class Keypad
             return Integer.parseInt(inputString);
         } else {
             return 0;
+        }
+    }
+
+    public int getInput_customcancel(int CANCELED){
+        String inputString = callInput();
+        if (IntegerOrDouble(inputString) == 1){ //if 
+            return Integer.parseInt(inputString);
+        } else {
+            return CANCELED;
         }
     }
 

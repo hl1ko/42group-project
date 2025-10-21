@@ -11,7 +11,7 @@ public class ChequeAccount extends Account{
         if (amount >= 0.0)
             limitPerCheque = amount;
         else
-            throw new IllegalArgumentException("The data given is invalid");
+            throw new IllegalArgumentException("The amount given is invalid");
     }
 
     public double getChequeLimit(){
