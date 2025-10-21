@@ -51,10 +51,7 @@ public class CashDispenser
    }
 
    public boolean isSufficientCashAvailable( int amount ){
-      if(((BillsCount[0] * BillsDeno[0] + BillsCount[1] * BillsDeno[1] + BillsCount[2] * BillsDeno[2] )) < (amount)){
-         return false;
-      }
-      return true;
+      return ((BillsCount[0] * BillsDeno[0] + BillsCount[1] * BillsDeno[1] + BillsCount[2] * BillsDeno[2] )) >= (amount);
    }
 
    public String showAvaliableBills(){
