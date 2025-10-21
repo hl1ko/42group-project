@@ -109,11 +109,12 @@ public class Withdrawal extends Transaction
          screen.displayMessageLine( "----------------------------------------------------------------------" );
          screen.displayMessage( "Enter a custom amount or choose an option from menu: " );
 
-         int input = keypad.getInput(); // get user input through keypad
+         int input = keypad.getInput_customcancel(CANCELED); // get user input through keypad
 
          // determine how to proceed based on the input value
          switch ( input )
          {  
+            case 0: 
             case 1: // if the user chose a withdrawal amount 
             case 2: // (i.e., chose option 1, 2 or 3), return the
             case 3: // corresponding amount from amounts array
