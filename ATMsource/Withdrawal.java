@@ -33,6 +33,11 @@ public class Withdrawal extends Transaction
       BankDatabase bankDatabase = getBankDatabase(); 
       Screen screen = getScreen();
 
+      if(!cashDispenser.AnyBillsAvaliable()){
+         System.out.println("No cash in the machine lah. go away lah");
+         return;
+      }
+      
       // loop until cash is dispensed or the user cancels
       do
       {
@@ -98,7 +103,7 @@ public class Withdrawal extends Transaction
       while ( userChoice == -1 )
       {
          // display the menu
-         screen.displayMessageLine( "\nAvailable banknote denominations: $100, $500 and $1000");
+         screen.displayMessageLine( "\nAvailable banknote denominations: " + cashDispenser.showAvaliableBills());
          screen.displayMessageLine( "Withdrawal Menu:" );
          screen.displayMessageLine( "1 - $100" );
          screen.displayMessageLine( "2 - $200" );
@@ -109,7 +114,7 @@ public class Withdrawal extends Transaction
          screen.displayMessageLine( "----------------------------------------------------------------------" );
          screen.displayMessage( "Enter a custom amount or choose an option from menu: " );
 
-         int input = keypad.getInput_customcancel(CANCELED); // get user input through keypad
+         int input = keypad.getInput(); // get user input through keypad
 
          // determine how to proceed based on the input value
          switch ( input )

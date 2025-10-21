@@ -1,26 +1,29 @@
 public class CashDispenser 
 {
    // the default initial number of bills in the cash dispenser
-   private final static int INITIAL_100_COUNT = 10;
+
+   /* private final static int INITIAL_100_COUNT = 10;
    private final static int INITIAL_500_COUNT = 4;
    private final static int INITIAL_1000_COUNT = 0;
    public int cash100Count; // number of $100 bills remaining
    public int cash500Count;
-   public int cash1000Count;
+   public int cash1000Count; */
 
-   private final static int[] __init_BillsCount = {1,1,10000};
-   public int[] BillsCount;
+   private final static int[] __init_BillsCount = {1,1,1};
+   private final static int[] BillsDeno = {1000, 500, 100};
+   private final static int[] BillsDenoMultiple = {(1000/500), (500/100), 0}; // {2, 5, 0}
+   private int[] BillsCount;
 
-   public final static int[] BillsDeno = {1000, 500, 100};
-   public final static int[] BillsDenoMultiple = {(1000/500), (500/100), 0};
+   
    // no-argument CashDispenser constructor initializes count to default
    public CashDispenser()
    {
       BillsCount = __init_BillsCount;
 
-      cash100Count = INITIAL_100_COUNT; // set count attribute to default
+      /*cash100Count = INITIAL_100_COUNT; // set count attribute to default
       cash500Count = INITIAL_500_COUNT;
-      cash1000Count = INITIAL_1000_COUNT;
+      cash1000Count = INITIAL_1000_COUNT; */
+      
    } // end CashDispenser constructor
 
    private int[] getWithdrawlBillsAmount( int amount ){
@@ -43,29 +46,52 @@ public class CashDispenser
          BillsCount[i] -= Withdrawal[i];
       }
    }
-
+   public boolean AnyBillsAvaliable (){
+      if((BillsCount[0] == 0) && (BillsCount[1] == 0) && (BillsCount[2] == 0)){
+         return false;
+      }
+      return true;
+   }
    public boolean isSufficientCashAvailable( int amount ){
-      int[] Withdrawal = getWithdrawlBillsAmount(amount);
-
-      if(((BillsCount[0] * 1000 + BillsCount[1] * 500 + BillsCount[2] * 100 )) < (amount)){
+      if(((BillsCount[0] * BillsDeno[0] + BillsCount[1] * BillsDeno[1] + BillsCount[2] * BillsDeno[2] )) < (amount)){
          return false;
       }
       return true;
    }
 
+   public String showAvaliableBills(){
+      String outputString = "Available banknote denominations: ";
+      for(int i = 0; i < 3; i++){
+         if(BillsCount[i] > 0){
+            outputString = outputString + "$" + Integer.toString(BillsDeno[i]);
+            if(i < 2){
+               outputString = outputString + ", ";
+            }     
+         }
+         
+      }
+      return outputString;
+   }
+
    public void dispenseCash( int amount)
    {
-      System.out.println("----TEST-------Returned BillsCount: " + BillsCount[0] + ", " + BillsCount[1] + ", " + BillsCount[2]);
-      int[] withdrawCash = {0, 0, 0};
-      withdrawCash = getWithdrawlBillsAmount(amount);
+      //System.out.println("----TEST-------Returned BillsCount: " + BillsCount[0] + ", " + BillsCount[1] + ", " + BillsCount[2]);
+
+      int[] withdrawCash = getWithdrawlBillsAmount(amount);
       if(isSufficientCashAvailable(amount)){
          minusBills(withdrawCash);
       }
-      System.out.println("----TEST-------Returned BillsCount: " + BillsCount[0] + ", " + BillsCount[1] + ", " + BillsCount[2]);
+      
+      //System.out.println("----TEST-------Returned BillsCount: " + BillsCount[0] + ", " + BillsCount[1] + ", " + BillsCount[2]);
    }
 
+
+
+
    // simulates dispensing of specified amount of cash
-   public void dispenseCashfa( int amount )
+   /* 
+
+   public void OLD____dispenseCash( int amount )
    {
       while (amount >= 100){
          if (amount >= 1000 && cash1000Count > 0){
@@ -85,7 +111,7 @@ public class CashDispenser
    } // end method dispenseCash
 
    // indicates whether cash dispenser can dispense desired amount
-   public boolean SufficientCashAvailable( int amount )
+   public boolean OLD____isSufficientCashAvailable( int amount )
    {
       int cash100Needed = 0;
       int cash500Needed = 0;
@@ -108,5 +134,7 @@ public class CashDispenser
       }
 
       return cash100Needed <= cash100Count && cash500Needed <= cash500Count && cash1000Needed <= cash1000Count;
-   } // end method isSufficientCashAvailable
+   } // end method isSufficientCashAvailable 
+
+    */
 } // end class CashDispenser
