@@ -12,7 +12,7 @@ public class CashDispenser
    private final static int[] __init_BillsCount = {1,1,1};
    private final static int[] BillsDeno = {1000, 500, 100};
    private final static int[] BillsDenoMultiple = {(1000/500), (500/100), 0}; // {2, 5, 0}
-   private int[] BillsCount;
+   private final int[] BillsCount;
 
    
    // no-argument CashDispenser constructor initializes count to default
@@ -55,7 +55,7 @@ public class CashDispenser
    }
 
    public String showAvaliableBills(){
-      String outputString = "Available banknote denominations: ";
+      String outputString = "";
       for(int i = 0; i < BillsCount.length; i++){
          if(BillsCount[i] > 0){
             outputString = outputString + "$" + Integer.toString(BillsDeno[i]);
