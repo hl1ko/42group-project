@@ -34,7 +34,7 @@ public class Withdrawal extends Transaction
       Screen screen = getScreen();
 
       if(!cashDispenser.AnyBillsAvaliable()){
-         System.out.println("No cash in the machine lah. go away lah");
+         screen.displayMessageLine("This ATM is temporary disabled. Please use other ATM.");
          return;
       }
       
@@ -43,7 +43,11 @@ public class Withdrawal extends Transaction
       {
          // obtain a chosen withdrawal amount from the user 
          amount = displayMenuOfAmounts();
-         
+         if(!cashDispenser.canBillsHandleTheJob( amount )){
+            screen.displayMessageLine("Not enough bills in the ATM to handle your withdrawal request." +
+            "\n Please use other ATM.");
+            return;
+         }
          // check whether user chose a withdrawal amount or canceled
          if ( amount != CANCELED )
          {
