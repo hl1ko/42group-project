@@ -9,7 +9,7 @@ public class CashDispenser
    public int cash500Count;
    public int cash1000Count; */
 
-   private final static int[] __init_BillsCount = {1,1,1};
+   private final static int[] __init_BillsCount = {1,1,4};
    private final static int[] BillsDeno = {1000, 500, 100};
    private final static int[] BillsDenoMultiple = {(1000/500), (500/100), 0}; // {2, 5, 0}
    private final int[] BillsCount;
@@ -60,9 +60,11 @@ public class CashDispenser
       System.out.print("-------500----" + (amount % BillsDeno[1]));
       System.out.print("-------500----" + (BillsCount[2] * BillsDeno[2])); */
 
-      if((getCashSum()) >= (amount) && (amount % BillsDeno[1]) <= (BillsCount[2] * BillsDeno[2])){
+      if((getCashSum()) >= (amount)){
+         //System.out.println((amount % BillsDeno[1]) + ", " + (BillsCount[2] * BillsDeno[2]));
          if((amount % BillsDeno[1]) <= (BillsCount[2] * BillsDeno[2])){
-            if((amount % BillsDeno[0]) <= (BillsCount[1] * BillsDeno[1])){
+            //System.out.println(((amount % BillsDeno[0]) - (amount % BillsDeno[1])) + ", " + (BillsCount[1] * BillsDeno[1]));
+            if(((amount % BillsDeno[0]) - (amount % BillsDeno[1])) <= (BillsCount[1] * BillsDeno[1])){
                return true;
             }
          }
