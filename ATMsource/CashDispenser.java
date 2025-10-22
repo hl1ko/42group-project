@@ -25,7 +25,9 @@ public class CashDispenser
       cash1000Count = INITIAL_1000_COUNT; */
       
    } // end CashDispenser constructor
-
+   private int getCashSum(){
+      return (BillsCount[0] * BillsDeno[0] + BillsCount[1] * BillsDeno[1] + BillsCount[2] * BillsDeno[2]);
+   }
    private int[] getWithdrawlBillsAmount( int amount ){
       int[] Withdrawl = {0, 0, 0};
       Withdrawl[0] = (amount/ BillsDeno[0]);
@@ -49,9 +51,23 @@ public class CashDispenser
    public boolean AnyBillsAvaliable (){
       return !((BillsCount[0] == 0) && (BillsCount[1] == 0) && (BillsCount[2] == 0));
    }
-
    public boolean isSufficientCashAvailable( int amount ){
-      return ((BillsCount[0] * BillsDeno[0] + BillsCount[1] * BillsDeno[1] + BillsCount[2] * BillsDeno[2] )) >= (amount);
+      //System.out.println("----TEST-------> Returned BillsCount: " + BillsCount[0] + ", " + BillsCount[1] + ", " + BillsCount[2]);
+      int[] withdrawal = getWithdrawlBillsAmount(amount);
+      /* 
+      System.out.print("-------100----" + (amount % BillsDeno[1]));
+      System.out.print("-------100----" + (BillsCount[2] * BillsDeno[2]));
+      System.out.print("-------500----" + (amount % BillsDeno[1]));
+      System.out.print("-------500----" + (BillsCount[2] * BillsDeno[2])); */
+
+      if((getCashSum()) >= (amount) && (amount % BillsDeno[1]) <= (BillsCount[2] * BillsDeno[2])){
+         if((amount % BillsDeno[1]) <= (BillsCount[2] * BillsDeno[2])){
+            if((amount % BillsDeno[0]) <= (BillsCount[1] * BillsDeno[1])){
+               return true;
+            }
+         }
+      }
+      return false;
    }
 
    public String showAvaliableBills(){
@@ -69,14 +85,12 @@ public class CashDispenser
 
    public void dispenseCash( int amount)
    {
-      //System.out.println("----TEST-------Returned BillsCount: " + BillsCount[0] + ", " + BillsCount[1] + ", " + BillsCount[2]);
-
       int[] withdrawCash = getWithdrawlBillsAmount(amount);
       if(isSufficientCashAvailable(amount)){
          minusBills(withdrawCash);
       }
       
-      //System.out.println("----TEST-------Returned BillsCount: " + BillsCount[0] + ", " + BillsCount[1] + ", " + BillsCount[2]);
+      System.out.println("----TEST-------Returned BillsCount: " + BillsCount[0] + ", " + BillsCount[1] + ", " + BillsCount[2]);
    }
 
 
