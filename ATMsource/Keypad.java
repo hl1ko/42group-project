@@ -22,9 +22,9 @@ public class Keypad
         char[] inputChar = inputString.toCharArray();
         int count = 0;
         for(int i = 0; i < inputString.length(); i++){
-            if ( inputChar[i] == 46 )   // decimal 46 of ASCII code is .
+            if ( inputChar[i] == 46 )   // 
             {
-                count++; // loop through the array. count the number of .
+                count++;
             }
         }
         return switch (count) {
@@ -34,13 +34,13 @@ public class Keypad
         };
     }
 
-    private static int dotsPosition(String inputString){ // only be called once
+    private static int dotsPosition(String inputString){
         char[] inputChar = inputString.toCharArray();
         int position = 0;
 
         for(int i = 0; i < inputString.length(); i++){
             if ( inputChar[i] == 46 )
-                position = i; // the last position of the only . in the array (since it is called once)
+                position = i;
         }
 
         if ( position == 0 ) {
@@ -69,20 +69,20 @@ public class Keypad
 
     public int getInput(){
         String inputString = callInput();
-        if (IntegerOrDouble(inputString) == 1){ //if it is integer
+        if (IntegerOrDouble(inputString) == 1){ //if 
             return Integer.parseInt(inputString);
         } else {
-            return 0; // invalid case detected. return zero
+            return 0;
         }
     }
 
     public double getInputFloat(){
         String inputString = callInput();
-        if(IntegerOrDouble(inputString) != 0){ // if it is not invalid
-            BigDecimal bd = new BigDecimal(inputString).setScale(2, RoundingMode.DOWN); // round the double into 2 decimal places. always abandon decimal numbers after 2 decimal places by roundingmode.DOWN
-            return bd.doubleValue(); //return it 
+        if(IntegerOrDouble(inputString) != 0){
+            BigDecimal bd = new BigDecimal(inputString).setScale(2, RoundingMode.DOWN);
+            return bd.doubleValue();
         }else{
-            return 0; // invalid case detected. return zero
+            return 0;
         }
     }
 } // end class Keypad  

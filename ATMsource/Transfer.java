@@ -19,7 +19,7 @@ public class Transfer extends Transaction{
       int targetAccountNumber; //integer variable which its content will be inputted by users
 
       screen.displayMessageLine("\nStarting transferring section...");
-      screen.displayMessageLine("You may enter [0] to cancel to transaction during the section.");
+      screen.displayMessageLine("You may enter '0' to cancel to transaction during the section.");
 
       //provide message to prompt user to input values
       screen.displayMessage("\nEnter the target account number: ");
@@ -68,17 +68,17 @@ public class Transfer extends Transaction{
 
       // prompt user to input the money transfer recipient account number and its transfer amount
       screen.displayMessageLine("\n----------------------------------------------------------------------");
-      screen.displayMessageLine(" - Recipient account number : " + targetAccountNumber);
+      screen.displayMessageLine("Recipient account number: " + targetAccountNumber);
 
       // prompt user the money values that will be tranferred
-      screen.displayMessage(" - Transfer amount          : "); 
+      screen.displayMessage("Transfer amount         : "); 
       screen.displayDollarAmount(amount);
       screen.displayMessageLine("");
       screen.displayMessageLine("----------------------------------------------------------------------");
       screen.displayMessageLine("Please check the transfer info above.");
 
       // let user to decide whether the transaction will continue or not
-      screen.displayMessageLine("\nEnter [1] to confirm the transfer action, or enter other number to cancel.");
+      screen.displayMessageLine("\nEnter 1 to confirm the transfer action, or enter other number to cancel.");
       screen.displayMessage("Your input: ");
 
       if ( keypad.getInput() != 1 ){
