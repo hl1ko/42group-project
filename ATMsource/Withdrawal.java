@@ -33,7 +33,7 @@ public class Withdrawal extends Transaction
       BankDatabase bankDatabase = getBankDatabase(); 
       Screen screen = getScreen();
 
-      if(!cashDispenser.AnyBillsAvaliable()){
+      if(!cashDispenser.AnyBillsAvaliable()){ // if no bills in machine, tell user to go use other ATM
          screen.displayMessageLine("This ATM is temporary disabled. Please use other ATM.");
          return;
       }
@@ -109,12 +109,12 @@ public class Withdrawal extends Transaction
          // display the menu
          screen.displayMessageLine( "\nAvailable banknote denominations: " + cashDispenser.showAvaliableBills());
          screen.displayMessageLine( "Withdrawal Menu:" );
-         screen.displayMessageLine( "1 - $100" );
-         screen.displayMessageLine( "2 - $200" );
-         screen.displayMessageLine( "3 - $500" );
-         screen.displayMessageLine( "4 - $800" );
-         screen.displayMessageLine( "5 - $1000" );
-         screen.displayMessageLine( "0 - Cancel transaction" );
+         screen.displayMessageLine( "[1] - $100" );
+         screen.displayMessageLine( "[2] - $200" );
+         screen.displayMessageLine( "[3] - $500" );
+         screen.displayMessageLine( "[4] - $800" );
+         screen.displayMessageLine( "[5] - $1000" );
+         screen.displayMessageLine( "[0] - Cancel transaction" );
          screen.displayMessageLine( "----------------------------------------------------------------------" );
          screen.displayMessage( "Enter a custom amount or choose an option from menu: " );
 
