@@ -87,12 +87,10 @@ public class Transfer extends Transaction{
       }
 
       // add the amount to the target account, and debit the amount from the user logged in.
-      bankDatabase.debit(getAccountNumber(), amount);
-      bankDatabase.credit(targetAccountNumber, amount);
+      bankDatabase.transfer(getAccountNumber(), targetAccountNumber, amount);
 
       // prompt user that the transaction is completed.
       screen.displayMessageLine("\nTransfer success.");
-      screen.displayMessageLine("NOTE: The money you attempt to transfer will only be available after we verify the transacation.");
    }
 
    private double promptForTransferAmount()

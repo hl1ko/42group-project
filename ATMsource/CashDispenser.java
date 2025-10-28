@@ -29,7 +29,7 @@ public class CashDispenser
          if(BillsCount[i] < WithdrawlBills[i] && i < (WithdrawlBills.length-1)){
             int DeltaBills = WithdrawlBills[i] - BillsCount[i];
             WithdrawlBills[i] = WithdrawlBills[i] - DeltaBills;
-            WithdrawlBills[i+1] = DeltaBills * BillsDenoMultiple[i];
+            WithdrawlBills[i+1] = WithdrawlBills[i+1] + DeltaBills * BillsDenoMultiple[i];
          }
          BillsCount[i] -= WithdrawlBills[i];
       }

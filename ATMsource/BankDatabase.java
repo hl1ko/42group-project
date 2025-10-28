@@ -79,6 +79,12 @@ public class BankDatabase
    {
       getAccount( userAccountNumber ).debit( amount );
    } // end method debit
+
+   public void transfer( int from_AccountNumber, int to_AccountNumber, double amount )
+   {
+      getAccount( from_AccountNumber ).debit(amount);
+      getAccount( to_AccountNumber).credit(amount);
+   }
 } // end class BankDatabase
 
 
