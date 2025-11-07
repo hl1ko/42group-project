@@ -34,6 +34,21 @@ public class CashDispenser
          BillsCount[i] -= WithdrawlBills[i];
       }
    }
+   private int[] trialrunBills( int[] WithdrawlBills){
+      var mimicBills = new int[3];
+      mimicBills = BillsCount.clone();
+      System.out.println("Mimic: " + mimicBills[0] + ", " + mimicBills[1] + ", " + mimicBills[2]);
+      for( int i = 0 ; i < WithdrawlBills.length ; i ++ ){
+         if(mimicBills[i] < WithdrawlBills[i] && i < (WithdrawlBills.length-1)){
+            int DeltaBills = WithdrawlBills[i] - mimicBills[i];
+            WithdrawlBills[i] = WithdrawlBills[i] - DeltaBills;
+            WithdrawlBills[i+1] = WithdrawlBills[i+1] + DeltaBills * BillsDenoMultiple[i];
+         }
+         mimicBills[i] -= WithdrawlBills[i];
+      }
+      System.out.println("Mimic: " + mimicBills[0] + ", " + mimicBills[1] + ", " + mimicBills[2]);
+      return mimicBills;
+   }
 
    public boolean AnyBillsAvaliable (){
       return !((BillsCount[0] == 0) && (BillsCount[1] == 0) && (BillsCount[2] == 0));
@@ -42,12 +57,15 @@ public class CashDispenser
       return (getCashSum()) >= (amount);
    }
    public boolean canBillsHandleTheJob( int amount ){
-      if((amount % BillsDeno[1]) <= (BillsCount[2] * BillsDeno[2])){
-            if(((amount % BillsDeno[0]) - (amount % BillsDeno[1])) <= (BillsCount[1] * BillsDeno[1])){
-               return true;
-            }
+      var mimicBills = new int[3];
+      int[] withdrawCash = getWithdrawlBillsAmount(amount);
+      mimicBills = trialrunBills( withdrawCash);
+      for( int i = 0 ; i < mimicBills.length ; i ++ ){
+         if(mimicBills[i] < 0){
+            return false;
          }
-         return false;
+      }
+      return true;
    }
    public String showAvaliableBills(){
       String outputString = "";
@@ -60,9 +78,11 @@ public class CashDispenser
    }
    public void dispenseCash( int amount)
    {
+      System.out.println("Bill: " + BillsCount[0] + ", " + BillsCount[1] + ", " + BillsCount[2]);
       int[] withdrawCash = getWithdrawlBillsAmount(amount);
       if(isSufficientCashAvailable(amount)){
          calculateBills(withdrawCash);
       }
+      System.out.println("Bill: " + BillsCount[0] + ", " + BillsCount[1] + ", " + BillsCount[2]);
    }
 } // end class CashDispenser
