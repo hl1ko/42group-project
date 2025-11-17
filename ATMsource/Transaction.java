@@ -6,6 +6,9 @@ public abstract class Transaction
    private int accountNumber; // indicates account involved
    private Screen screen; // ATM's screen
    private BankDatabase bankDatabase; // account info database
+   
+   protected LogoutFrame logoutFrame;
+   public boolean logout = false;
 
    // Transaction constructor invoked by subclasses using super()
    public Transaction( int userAccountNumber, Screen atmScreen, 

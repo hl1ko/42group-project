@@ -19,7 +19,13 @@ public class Screen
    public void displayDollarAmount( double amount )
    {
       System.out.printf( "$%,.2f", amount );   
-   } // end method displayDollarAmount 
+   } // end method displayDollarAmount
+
+   public String dollarAmountToString( double amount )
+   {
+      return String.format( "HK$%,.2f", amount );   
+   }
+
 } // end class Screen
 
 

@@ -1,53 +1,169 @@
 // BalanceInquiry.java
 // Represents a balance inquiry ATM transaction
 
-public class BalanceInquiry extends Transaction
-{
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.border.*;
+
+public class BalanceInquiry extends Transaction {
+   private double availableBalance;
+   private double totalBalance;
+
    // BalanceInquiry constructor
-   public BalanceInquiry( int userAccountNumber, Screen atmScreen, 
-      BankDatabase atmBankDatabase )
-   {
-      super( userAccountNumber, atmScreen, atmBankDatabase );
+   public BalanceInquiry(int userAccountNumber, Screen atmScreen,
+         BankDatabase atmBankDatabase) {
+      super(userAccountNumber, atmScreen, atmBankDatabase);
    } // end BalanceInquiry constructor
 
    // performs the transaction
-   public void execute()
-   {
+   public void execute() {
       // get references to bank database and screen
       BankDatabase bankDatabase = getBankDatabase();
-      Screen screen = getScreen();
 
       // get the available balance for the account involved
-      double availableBalance = 
-         bankDatabase.getAvailableBalance( getAccountNumber() );
+      availableBalance = bankDatabase.getAvailableBalance(getAccountNumber());
 
       // get the total balance for the account involved
-      double totalBalance = 
-         bankDatabase.getTotalBalance( getAccountNumber() );
-      
-      // display the balance information on the screen
-      screen.displayMessageLine( "\nBalance Information:" );
-      screen.displayMessage( " - Available balance: " ); 
-      screen.displayDollarAmount( availableBalance );
-      screen.displayMessage( "\n - Total balance:     " );
-      screen.displayDollarAmount( totalBalance );
-      screen.displayMessageLine( "" );
+      totalBalance = bankDatabase.getTotalBalance(getAccountNumber());
+
+      // calling the UI
+      BalanceInquiryFrame balanceInquiryFrame = new BalanceInquiryFrame();
+      balanceInquiryFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      balanceInquiryFrame.setSize(800, 600); // set frame size
+      balanceInquiryFrame.setLocationRelativeTo(null);
+      balanceInquiryFrame.setVisible(true); // display frame
+
+      // Wait until the frame is disposed
+      while (balanceInquiryFrame.isDisplayable()) {
+         try {
+            Thread.sleep(100);  
+         } catch (InterruptedException e) {
+            e.printStackTrace();
+         }
+      }
+
+      if (logout) {
+         new LogoutFrame("Please take your card now.");
+      }
+
    } // end method execute
+
+   private class BalanceInquiryFrame extends JFrame {
+      private JButton cancelButton;
+      private JButton logoutButton;
+
+      private final Font FONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
+      private final Font NUMBERFONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
+      private final Border FONTBORDER = BorderFactory.createEmptyBorder(5, 3, 5, 0);
+      private final Border HEADFOOTBORDER = BorderFactory.createEmptyBorder(0, 5, 0, 0);
+      private final int PANELHEIGHT = 80;
+
+      private BalanceInquiryFrame() {
+         super("Balance Inquiry");
+         Screen screen = new Screen();
+
+         // header panel layout
+         JLabel header = new JLabel("Balance Inquiry");
+         header.setFont(FONTSTYLE);
+         header.setBorder(HEADFOOTBORDER);
+         header.setPreferredSize(new Dimension(800, PANELHEIGHT));
+
+         // center panel layout
+         JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+         centerPanel
+               .setBorder(BorderFactory.createEmptyBorder(60, 230, 0, 230));
+         centerPanel.setBackground(Color.GRAY);
+
+         // info panel layout
+         JPanel infoPanel = new JPanel();
+         infoPanel.setLayout(new GridLayout(9, 1));
+         infoPanel
+               .setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, Color.WHITE));
+         infoPanel.setPreferredSize(new Dimension(320, 270));
+         infoPanel.setBackground(Color.WHITE);
+
+         // labels for available balance
+         JLabel availableBalanceMsg = new JLabel("Available balance:");
+         availableBalanceMsg.setFont(FONTSTYLE);
+         availableBalanceMsg.setBorder(FONTBORDER);
+         JLabel showAvailableBalanceMsg = new JLabel(screen.dollarAmountToString(availableBalance));
+         showAvailableBalanceMsg.setFont(NUMBERFONTSTYLE);
+         showAvailableBalanceMsg.setBorder(FONTBORDER);
+
+         // labels for total balance
+         JLabel totalBalanceMsg = new JLabel("Total balance:");
+         totalBalanceMsg.setFont(FONTSTYLE);
+         totalBalanceMsg.setBorder(FONTBORDER);
+         JLabel showTotalBalanceMsg = new JLabel(screen.dollarAmountToString(totalBalance));
+         showTotalBalanceMsg.setFont(NUMBERFONTSTYLE);
+         showTotalBalanceMsg.setBorder(FONTBORDER);
+
+         // button for back to main menu
+         cancelButton = new JButton("Back to Main Menu");
+         cancelButton.setFont(FONTSTYLE);
+         // cancelButton.setBackground(Color.lightGray);
+         // cancelButton.setBorder(BorderFactory.createLineBorder(Color.white, 2));
+
+         // button for cancelling transaction
+         logoutButton = new JButton("Logout");
+         logoutButton.setFont(FONTSTYLE);
+
+         // labal for footer
+         JLabel footer = new JLabel("For further assistance, please contact customer support.");
+         footer.setFont(FONTSTYLE);
+         footer.setBorder(HEADFOOTBORDER);
+         footer.setPreferredSize(new Dimension(800, PANELHEIGHT));
+
+         // adding components to panels
+         infoPanel.add(availableBalanceMsg);
+         infoPanel.add(showAvailableBalanceMsg);
+         infoPanel.add(new JLabel());
+         infoPanel.add(totalBalanceMsg);
+         infoPanel.add(showTotalBalanceMsg);
+         infoPanel.add(new JLabel());
+         infoPanel.add(cancelButton);
+         infoPanel.add(new JLabel());
+         infoPanel.add(logoutButton);
+         centerPanel.add(infoPanel);
+
+         // adding panels to main frame
+         add(header, BorderLayout.NORTH);
+         add(centerPanel, BorderLayout.CENTER);
+         add(footer, BorderLayout.SOUTH);
+
+         // add fields to action handler
+         BalanceInquiryHeadler handler = new BalanceInquiryHeadler();
+         cancelButton.addActionListener(handler);
+         logoutButton.addActionListener(handler);
+      }
+
+      private class BalanceInquiryHeadler implements ActionListener {
+         public void actionPerformed(ActionEvent event) {
+            if (event.getSource() == cancelButton) {
+               dispose();  // close the GUI window
+            }
+
+            if (event.getSource() == logoutButton) {
+               logout = true; // user is attemptted to log out
+               dispose(); // close the GUI window
+            }
+         }
+      }
+   }
 } // end class BalanceInquiry
 
-
-
 /**************************************************************************
- * (C) Copyright 1992-2007 by Deitel & Associates, Inc. and               *
- * Pearson Education, Inc. All Rights Reserved.                           *
- *                                                                        *
- * DISCLAIMER: The authors and publisher of this book have used their     *
- * best efforts in preparing the book. These efforts include the          *
- * development, research, and testing of the theories and programs        *
- * to determine their effectiveness. The authors and publisher make       *
- * no warranty of any kind, expressed or implied, with regard to these    *
+ * (C) Copyright 1992-2007 by Deitel & Associates, Inc. and *
+ * Pearson Education, Inc. All Rights Reserved. *
+ * *
+ * DISCLAIMER: The authors and publisher of this book have used their *
+ * best efforts in preparing the book. These efforts include the *
+ * development, research, and testing of the theories and programs *
+ * to determine their effectiveness. The authors and publisher make *
+ * no warranty of any kind, expressed or implied, with regard to these *
  * programs or to the documentation contained in these books. The authors *
- * and publisher shall not be liable in any event for incidental or       *
- * consequential damages in connection with, or arising out of, the       *
- * furnishing, performance, or use of these programs.                     *
+ * and publisher shall not be liable in any event for incidental or *
+ * consequential damages in connection with, or arising out of, the *
+ * furnishing, performance, or use of these programs. *
  *************************************************************************/

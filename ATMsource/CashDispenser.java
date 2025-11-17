@@ -1,7 +1,8 @@
 public class CashDispenser 
 {
    // the default initial number of bills in the cash dispenser
-   private final static int[] __init_BillsCount = {1,1,11};
+   //private final static int[] __init_BillsCount = {1,1,11};
+   private final static int[] __init_BillsCount = {0,0,1};//testing
    private final static int[] BillsDeno = {1000, 500, 100};
    private final static int[] BillsDenoMultiple = {(1000/500), (500/100), 0}; // {2, 5, 0}
    private final int[] BillsCount;
@@ -67,14 +68,21 @@ public class CashDispenser
       }
       return true;
    }
-   public String showAvaliableBills(){
-      String outputString = "";
-      for(int i = 0; i < BillsCount.length; i++){
-         if(BillsCount[i] > 0){
-            outputString = outputString + "$" + Integer.toString(BillsDeno[i]) + "  "; 
+   public String showAvaliableBills(){   // edited by me to fit GUI login page
+      if (AnyBillsAvaliable()){
+         String outputString = "Notes available: ";
+
+         for (int i = 0; i < BillsCount.length; i++) {
+            if (BillsCount[i] > 0) {
+               outputString = outputString + "HK$" + Integer.toString(BillsDeno[i]) + "  "; 
+            }
          }
+
+         return outputString;
+
+      } else {
+         return "No available notes to this machine, consider use the other one.";
       }
-      return outputString;
    }
    public void dispenseCash( int amount)
    {
