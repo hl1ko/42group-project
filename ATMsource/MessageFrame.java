@@ -2,7 +2,7 @@ import java.awt.*;
 import javax.swing.*;
 
 public class MessageFrame extends JFrame{
-    public MessageFrame(String title, String message) {
+    public MessageFrame(String title, String message, int time) {
         super(title);
 
         setVisible(true); // display logout frame
@@ -15,7 +15,7 @@ public class MessageFrame extends JFrame{
         add(msg, BorderLayout.CENTER);
 
         try {
-            Thread.sleep(5000);  // wait 8 seconds after the window is closed by user112312
+            Thread.sleep(time);  
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

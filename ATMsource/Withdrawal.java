@@ -56,7 +56,7 @@ public class Withdrawal extends Transaction
 
       if(!cashDispenser.AnyBillsAvaliable()){
          screen.displayMessageLine("This ATM is temporary disabled. Please use other ATM.");
-         new MessageFrame("ATM disable","<html>This ATM is temporary disabled.<br></br>Please use other ATM.</html>");
+         new MessageFrame("ATM disable","<html>This ATM is temporary disabled.<br></br>Please use other ATM.</html>",5000);
          return;
       }
       
@@ -68,7 +68,7 @@ public class Withdrawal extends Transaction
          if(!cashDispenser.canBillsHandleTheJob( amount )){
             screen.displayMessageLine("Not enough bills in the ATM to handle your withdrawal request." +
             "\n Please use other ATM.");
-            new MessageFrame("Not enough bills", "<html>Not enough bills in the ATM to handle your withdrawal request.<br></br> Please use other ATM.</html");
+            new MessageFrame("Not enough bills", "<html>Not enough bills in the ATM to handle your withdrawal request.<br></br> Please use other ATM.</html", 5000);
             return;
          }
          // check whether user chose a withdrawal amount or canceled
@@ -94,16 +94,16 @@ public class Withdrawal extends Transaction
                   screen.displayMessageLine( 
                      "\nPlease take your cash now." );
                      logout = true;
-                     new MessageFrame("Take Card","<html>Withdrawal success.<br></br>Please take your card now.</html>");
-                     new MessageFrame("Take Cash","Please take your cash now.");
-                     new LogoutFrame("");
+                     new MessageFrame("Take Card","<html>Withdrawal success.<br></br>Please take your card now.</html>",3000);
+                     new MessageFrame("Take Cash","Please take your cash now.",3000);
+                     new MessageFrame("Logout","<html>Goodbye! Thank you.</html>",5000);
                } // end if
                else
                { // cash dispenser does not have enough cash
                   screen.displayMessageLine( 
                      "\nInsufficient cash available in the ATM." +
                      "\n\nPlease choose a smaller amount." );
-                     new MessageFrame("Insufficient cash","<html>Insufficient cash available in the ATM.<br></br>Please choose a smaller amount.</html>");
+                     new MessageFrame("Insufficient cash","<html>Insufficient cash available in the ATM.<br></br>Please choose a smaller amount.</html>", 3000);
                }
             } // end if
             else // not enough money available in user's account
@@ -111,7 +111,7 @@ public class Withdrawal extends Transaction
                screen.displayMessageLine( 
                   "\nInsufficient funds in your account." +
                   "\n\nPlease choose a smaller amount." );
-                  new MessageFrame("Insufficient funds", "<html>Insufficient funds in your account.<br></br>Please choose a smaller amount.</html>");
+                  new MessageFrame("Insufficient funds", "<html>Insufficient funds in your account.<br></br>Please choose a smaller amount.</html>",5000);
             } // end else
          } // end if
          else // user chose cancel menu option 

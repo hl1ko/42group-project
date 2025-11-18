@@ -44,7 +44,7 @@ public class BalanceInquiry extends Transaction {
       }
 
       if (logout) {
-         new LogoutFrame("Please take your card now.");
+         new MessageFrame("Logout","<html>Goodbye! Thank you.<br><br>Please take your card now.</html>",5000);
       }
 
    } // end method execute

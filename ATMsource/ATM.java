@@ -251,7 +251,7 @@ public class ATM {
             case EXIT: // user chose to terminate session
                screen.displayMessageLine("\nExiting the system...");
 
-               new LogoutFrame("Please take your card now.");
+               new MessageFrame("Logout","<html>Goodbye! Thank you.<br><br>Please take your card now.</html>",5000);
                
                userExited = true; // this ATM session should end
                break;
