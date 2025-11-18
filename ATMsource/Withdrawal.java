@@ -68,7 +68,7 @@ public class Withdrawal extends Transaction
          if(!cashDispenser.canBillsHandleTheJob( amount )){
             screen.displayMessageLine("Not enough bills in the ATM to handle your withdrawal request." +
             "\n Please use other ATM.");
-            new MessageFrame("Not enough bills", "<html>Not enough bills in the ATM to handle your withdrawal request.<br></br> Please use other ATM.</html", 5000);
+            new MessageFrame("Not enough bills", "<html>Not enough bills in the ATM to handle <br></br>your withdrawal request.<br></br> <br></br>Please use other ATM.</html", 5000);
             return;
          }
          // check whether user chose a withdrawal amount or canceled
