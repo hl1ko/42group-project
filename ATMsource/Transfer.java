@@ -12,6 +12,8 @@ public class Transfer extends Transaction{
 
    public void execute() 
    {
+      System.out.println("Called."); // for debug
+
       // get references to bank database and screen
       BankDatabase bankDatabase = getBankDatabase();
       Screen screen = getScreen();

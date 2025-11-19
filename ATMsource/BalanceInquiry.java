@@ -34,19 +34,6 @@ public class BalanceInquiry extends Transaction {
       balanceInquiryFrame.setLocationRelativeTo(null);
       balanceInquiryFrame.setVisible(true); // display frame
 
-      // Wait until the frame is disposed
-      while (balanceInquiryFrame.isDisplayable()) {
-         try {
-            Thread.sleep(100);  
-         } catch (InterruptedException e) {
-            e.printStackTrace();
-         }
-      }
-
-      if (logout) {
-         new LogoutFrame("Please take your card now.");
-      }
-
    } // end method execute
 
    private class BalanceInquiryFrame extends JFrame {
@@ -102,12 +89,14 @@ public class BalanceInquiry extends Transaction {
          // button for back to main menu
          cancelButton = new JButton("Back to Main Menu");
          cancelButton.setFont(FONTSTYLE);
-         // cancelButton.setBackground(Color.lightGray);
-         // cancelButton.setBorder(BorderFactory.createLineBorder(Color.white, 2));
+         cancelButton.setBackground(new Color (65,125,128));
+         cancelButton.setBackground( Color.WHITE );
 
          // button for cancelling transaction
          logoutButton = new JButton("Logout");
          logoutButton.setFont(FONTSTYLE);
+         logoutButton.setBackground(new Color (65,125,128));
+         logoutButton.setBackground( Color.WHITE );
 
          // labal for footer
          JLabel footer = new JLabel("For further assistance, please contact customer support.");
@@ -141,6 +130,7 @@ public class BalanceInquiry extends Transaction {
       private class BalanceInquiryHeadler implements ActionListener {
          public void actionPerformed(ActionEvent event) {
             if (event.getSource() == cancelButton) {
+               toMainMenu = true;
                dispose();  // close the GUI window
             }
 

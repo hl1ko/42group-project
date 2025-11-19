@@ -17,6 +17,12 @@ public class ATM {
    private static final int TRANSFER = 3;
    private static final int EXIT = 4;
 
+   protected int userInt = 0;
+   private boolean userExited;
+   private Transaction currentTransaction = null;
+
+   private int transactionType;
+
    // no-argument ATM constructor initializes instance variables
    public ATM() {
       userAuthenticated = false; // user is not authenticated to start
@@ -87,8 +93,9 @@ public class ATM {
          pinField.setEditable(false);
          resetButton = new JButton("Reset");
          resetButton.setFont(FONTSTYLE);
-         //accountField.setText("12345"); //For debug
-         //pinField.setText("54321");   //For debug
+
+         accountField.setText("12345"); //For debug
+         pinField.setText("54321");   //For debug
 
          // labels for footer
          JLabel availableNotesMsg = new JLabel(cashDispenser.showAvaliableBills(), SwingConstants.CENTER);
@@ -107,7 +114,6 @@ public class ATM {
          inputPanel.add(resetButton);
 
          centerPanel.add(inputPanel);
-         
 
          // adding panels to main frame
          add(northPanel, BorderLayout.NORTH);
@@ -136,13 +142,11 @@ public class ATM {
                      pinField.setEditable(true);
                      pinField.requestFocusInWindow();
                   } else {
-                     cancel("The given account number exceeds the maximum length of 9 digits", JOptionPane.WARNING_MESSAGE);
-                     accountField.requestFocusInWindow();
+                     cancel("The account number exceeds the maximum length of 9 digits.", JOptionPane.WARNING_MESSAGE);
                   }
 
                } else {
-                  JOptionPane.showMessageDialog(AuthenticatorFrame.this, "Nothing has been inputted for account number.");
-                  accountField.requestFocusInWindow();
+                  cancel("The account number field is empty.", JOptionPane.INFORMATION_MESSAGE);
                }
 
             } else if (event.getSource() == pinField) {
@@ -158,15 +162,15 @@ public class ATM {
                      currentAccountNumber = accountNumber; // save user's account #
                      dispose(); // close the GUI window
                   } else {
-                     cancel("The account information is not correct.", JOptionPane.WARNING_MESSAGE);
+                     cancel("Incorrect account information.", JOptionPane.WARNING_MESSAGE);
                   }
 
                } else {
-                  cancel("Nothing has been inputted for PIN.", JOptionPane.WARNING_MESSAGE);
+                  cancel("The PIN field is empty.", JOptionPane.WARNING_MESSAGE);
                }
 
             } else if (event.getSource() == resetButton) {
-               cancel("", JOptionPane.INFORMATION_MESSAGE);
+               cancel("Done.", JOptionPane.INFORMATION_MESSAGE);
             }
 
          }
@@ -177,7 +181,10 @@ public class ATM {
             accountField.setEditable(true);
             pinField.setEditable(false);
 
-            JOptionPane.showMessageDialog(AuthenticatorFrame.this, message + " The authenticate section is canceled.",
+            JLabel msgLabel = new JLabel("<html>" + message + "<br><br>Authenticate section canceled.</html>");
+            msgLabel.setFont(FONTSTYLE);
+
+            JOptionPane.showMessageDialog(AuthenticatorFrame.this, msgLabel,
                   "Authentication canceled", messageType);
 
             accountField.requestFocusInWindow();
@@ -186,119 +193,283 @@ public class ATM {
       }
    }
 
+   // display the main menu and return an input selection
+   private class MainMenuFrame extends JFrame {
+
+      private final Font FONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
+      //private final JLabel 
+
+      private JButton balanceButton;
+      private JButton withdrawalButton;
+      private JButton transferButton;
+      private JButton exitButton;
+      private JTextField inputField;
+
+      public MainMenuFrame () {
+         super ("ATM - Main Menu");
+         setLayout(new BorderLayout(10, 10));
+
+         // The top of the panel
+         JPanel topPanel = new JPanel();
+         JLabel title = new JLabel("Main Menu");
+         title.setFont(FONTSTYLE);
+         topPanel.add(title);
+         add(topPanel, BorderLayout.NORTH);
+
+         // Center panel
+         JPanel centerPanel = new JPanel();
+         centerPanel.setLayout(null);
+         add(centerPanel, BorderLayout.CENTER);
+
+         //Menu button
+         balanceButton = new JButton("1 - View my balance");
+         withdrawalButton = new JButton("2 - Withdraw cash");
+         transferButton = new JButton("3 - Transfer");
+         exitButton = new JButton("4 - Exit");
+
+         //The Front of the button
+         balanceButton.setFont(FONTSTYLE);
+         withdrawalButton.setFont(FONTSTYLE);
+         transferButton.setFont(FONTSTYLE);
+         exitButton.setFont(FONTSTYLE);
+
+         //Button position and size
+         balanceButton.setBounds(50,90,300,100);
+         withdrawalButton.setBounds(50,200,300,100);
+         transferButton.setBounds(430,90,300,100);
+         exitButton.setBounds(430,200,300,100);
+
+         //Button background
+         balanceButton.setBackground(new Color (65,125,128));
+         withdrawalButton.setBackground(new Color (65,125,128));
+         transferButton.setBackground(new Color (65,125,128));
+         exitButton.setBackground(new Color (65,125,128));
+
+         //Button background color
+         balanceButton.setBackground( Color.WHITE );
+         withdrawalButton.setBackground( Color.WHITE);
+         transferButton.setBackground( Color.WHITE);
+         exitButton.setBackground( Color.WHITE );
+
+         //Center panel button
+         centerPanel.add(balanceButton);
+         centerPanel.add(withdrawalButton);
+         centerPanel.add(transferButton);
+         centerPanel.add(exitButton);
+
+         //Buttom Panel 
+         JPanel buttomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+         JLabel footer = new JLabel ("Enter a choice:");
+         Font footerfont = new Font ("Verdana", Font.PLAIN, 30);
+         footer.setFont(footerfont);
+         buttomPanel.add(footer);
+
+         //Input field
+         inputField = new JTextField(28);
+         inputField.setFont(FONTSTYLE);
+         buttomPanel.add(inputField);
+         add(buttomPanel, BorderLayout.SOUTH);
+
+         inputField.requestFocus();
+
+         MenuButtonHandler handler = new MenuButtonHandler();
+         balanceButton.addActionListener(handler);
+         withdrawalButton.addActionListener(handler);
+         transferButton.addActionListener(handler);
+         exitButton.addActionListener(handler);
+         inputField.addActionListener(handler);
+      }
+
+      public void addNotify() {
+         super.addNotify();
+         inputField.requestFocusInWindow();
+      }
+
+      // return object of specified Transaction subclass
+      private class MenuButtonHandler implements ActionListener {
+         public void actionPerformed(ActionEvent event) {
+            
+            // determine which type of Transaction to create
+            if (event.getSource() == balanceButton) {
+               transactionType = BALANCE_INQUIRY;
+               executeTransaction();
+               dispose();
+            } else if (event.getSource() == withdrawalButton) {
+               transactionType = WITHDRAWAL;
+               executeTransaction();
+               dispose();
+            } else if (event.getSource() == transferButton) {
+               transactionType = TRANSFER;
+               executeTransaction();
+               dispose();
+            } else if (event.getSource() == exitButton) {
+               transactionType = EXIT;
+               userExited = true;
+               currentTransaction = null;
+               dispose();
+            } else if (event.getSource() == inputField) {
+               transactionType = Integer.parseInt(inputField.getText());
+
+               if (transactionType < 1 || transactionType > 3) {
+                  JLabel msgLabel = new JLabel("Your input is not within the range of choices");
+                  msgLabel.setFont(FONTSTYLE);
+                  JOptionPane.showMessageDialog(MainMenuFrame.this, msgLabel,
+                  "", 1);
+
+                  inputField.requestFocusInWindow();
+               }
+
+               executeTransaction();
+               dispose();
+            }
+
+         } // end method createTransaction
+
+         private void executeTransaction() {
+            currentTransaction = createTransaction(transactionType);
+            currentTransaction.execute();
+         }
+      }
+
+      private Transaction createTransaction(int type) {
+         Transaction temp = null; // temporary Transaction variable
+
+         // determine which type of Transaction to create
+         switch (type) {
+            case BALANCE_INQUIRY: // create new BalanceInquiry transaction
+               temp = new BalanceInquiry(
+                     currentAccountNumber, screen, bankDatabase);
+               break;
+            case WITHDRAWAL: // create new Withdrawal transaction
+               temp = new Withdrawal(currentAccountNumber, screen, bankDatabase, keypad, cashDispenser);
+               break;
+            case TRANSFER:
+               temp = new Transfer(currentAccountNumber, screen, bankDatabase, keypad);
+               break;
+         } // end switch
+
+         return temp; // return the newly created object
+      } // end method createTransaction
+      
    // start ATM
+   }
+
    public void run() {
       // welcome and authenticate user; perform transactions
       while (true) {
          authenticateUser();
          performTransactions(); // user is now authenticated
+         displayExitFrame(transactionType);
          userAuthenticated = false; // reset before next ATM session
          currentAccountNumber = 0; // reset before next ATM session
          screen.displayMessageLine("\nThank you! Goodbye!");
       } // end while
    } // end method run
 
-   // attempts to authenticate user against database
+   private void waitUntilNotDisplaying(JFrame f) {
+      while (f.isDisplayable()) {
+         try {
+            Thread.sleep(100);
+         } catch (InterruptedException e) {
+            e.printStackTrace();
+         }
+      }
+   }
+
+   private void displayExitFrame(int transactionType) {
+
+      switch (transactionType) {
+         case BALANCE_INQUIRY: // create new BalanceInquiry transaction
+            waitUntilNotDisplaying(new CancelTranscationFrame());
+            break;
+         case WITHDRAWAL: // create new Withdrawal transaction
+            Withdrawal withdrawal = (Withdrawal) currentTransaction;
+
+            switch (withdrawal.getStateNum()) {
+               case 0:
+                  waitUntilNotDisplaying(new MessageFrame("Not enough bills", "<html>Not enough bills in the ATM to handle your withdrawal request.<br></br> Please use other ATM.</html", 3));
+                  break;
+               case 1:
+                  waitUntilNotDisplaying(new MessageFrame("Not enough bills", "<html>Not enough bills in the ATM to handle your withdrawal request.<br></br> Please use other ATM.</html", 3));
+                  break;
+               case 2:
+                  waitUntilNotDisplaying(new MessageFrame("Take Card","<html>Withdrawal success.<br></br>Please take your card now.</html>", 3));
+                  waitUntilNotDisplaying(new MessageFrame("Take Cash","Please take your cash now.", 3));
+                  waitUntilNotDisplaying(new LogoutFrame(""));
+                  break;
+               case 3:
+                  waitUntilNotDisplaying(new MessageFrame("Insufficient cash","<html>Insufficient cash available in the ATM.<br></br>Please choose a smaller amount.</html>", 3));
+                  break;
+               case 4:
+                  waitUntilNotDisplaying(new MessageFrame("Insufficient funds", "<html>Insufficient funds in your account.<br></br>Please choose a smaller amount.</html>", 3));
+                  break;
+               case 5:
+                  waitUntilNotDisplaying(new CancelTranscationFrame());
+                  break;
+            }
+
+            break;
+         case TRANSFER:
+            new LogoutFrame("");
+            break;
+         case EXIT:
+            waitUntilNotDisplaying(new LogoutFrame(""));
+            break;
+      }
+   }
+
    private void authenticateUser() {
+      AuthenticatorFrame authenticatorFrame = new AuthenticatorFrame();
+      authenticatorFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      authenticatorFrame.setSize(800, 600); // set frame size
+      authenticatorFrame.setLocationRelativeTo(null);
+      authenticatorFrame.setVisible(true); // display frame
+      
+      // Wait until the frame is disposed
+      while (authenticatorFrame.isDisplayable()) {
+         try {
+            Thread.sleep(100);
+         } catch (InterruptedException e) {
+            e.printStackTrace();
+         }
+      }
+   }
+
+   // display the main menu and perform transactions
+   private void performTransactions() {
+      userExited = false; // user has not chosen to exit
+
       do {
          // calling the UI
-         AuthenticatorFrame authenticatorFrame = new AuthenticatorFrame();
-         authenticatorFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-         authenticatorFrame.setSize(800, 600); // set frame size
-         authenticatorFrame.setLocationRelativeTo(null);
-         authenticatorFrame.setVisible(true); // display frame
+         MainMenuFrame mainMenuFrame = new MainMenuFrame();
+         mainMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+         mainMenuFrame.setSize(800, 600); // set frame size
+         mainMenuFrame.setLocationRelativeTo(null);
+         mainMenuFrame.setVisible(true); // display frame
 
-         // Wait until the frame is disposed
-         while (authenticatorFrame.isDisplayable()) {
+         while (mainMenuFrame.isDisplayable()) {
             try {
                Thread.sleep(100);
             } catch (InterruptedException e) {
                e.printStackTrace();
             }
          }
-      } while (!userAuthenticated);
 
-   } // end method authenticateUser
+         while (currentTransaction != null && currentTransaction.getToMainMenuFlag() == false && currentTransaction.getLogoutFlag() == false) {
+            try {
+               Thread.sleep(100);
+            } catch (InterruptedException e) {
+               e.printStackTrace();
+            }
+         }
 
-   // display the main menu and perform transactions
-   private void performTransactions() {
-      // local variable to store transaction currently being processed
-      Transaction currentTransaction = null;
-      boolean userExited = false; // user has not chosen to exit
+         if (currentTransaction != null && currentTransaction.getLogoutFlag() == true) {  // if user attempt to logout from GUI
+            userExited = true;
+         }
 
-      // loop while user has not chosen option to exit system
-      while (!userExited) {
-         // show main menu and get user selection
-         int mainMenuSelection = displayMainMenu();
+      } while (!userExited);
 
-         // decide how to proceed based on user's menu selection
-         switch (mainMenuSelection) {
-            // user chose to perform one of three transaction types
-            case BALANCE_INQUIRY:
-            case WITHDRAWAL:
-            case TRANSFER:
-
-               // initialize as new object of chosen type
-               currentTransaction = createTransaction(mainMenuSelection);
-
-               currentTransaction.execute(); // execute transaction
-
-               if (currentTransaction.logout){  // if user attempt to logout from GUI
-                  userExited = true;
-               }
-
-               break;
-            case EXIT: // user chose to terminate session
-               screen.displayMessageLine("\nExiting the system...");
-
-               new LogoutFrame("Please take your card now.");
-               
-               userExited = true; // this ATM session should end
-               break;
-            default: // user did not enter an integer from 1-4
-               screen.displayMessageLine(
-                     "\nYou did not enter a valid selection. Try again.");
-               break;
-         } // end switch
-
-         
-
-      } // end while
-   } // end method performTransactions
-
-   // display the main menu and return an input selection
-   private int displayMainMenu() {
-
-      screen.displayMessageLine("\nMain menu:");
-      screen.displayMessageLine("1 - View my balance");
-      screen.displayMessageLine("2 - Withdraw cash");
-      screen.displayMessageLine("3 - Transfer");
-      screen.displayMessageLine("4 - Exit\n");
-      screen.displayMessage("Enter a choice: ");
-      return keypad.getInput(); // return user's selection
-   } // end method displayMainMenu
-
-   // return object of specified Transaction subclass
-   private Transaction createTransaction(int type) {
-      Transaction temp = null; // temporary Transaction variable
-
-      // determine which type of Transaction to create
-      switch (type) {
-         case BALANCE_INQUIRY: // create new BalanceInquiry transaction
-            temp = new BalanceInquiry(
-                  currentAccountNumber, screen, bankDatabase);
-            break;
-         case WITHDRAWAL: // create new Withdrawal transaction
-            temp = new Withdrawal(currentAccountNumber, screen, bankDatabase, keypad, cashDispenser);
-            break;
-         case TRANSFER:
-            temp = new Transfer(currentAccountNumber, screen, bankDatabase, keypad);
-            break;
-      } // end switch
-
-      return temp; // return the newly created object
-   } // end method createTransaction
-
+   } // end switch
 } // end class ATM
 
 

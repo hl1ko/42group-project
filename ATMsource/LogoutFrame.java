@@ -14,12 +14,25 @@ public class LogoutFrame extends JFrame {
         msg.setHorizontalAlignment(SwingConstants.CENTER);
         add(msg, BorderLayout.CENTER);
 
-        try {
-            Thread.sleep(8000);  // wait 8 seconds after the window is closed by user112312
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Timer timer = new Timer(3000, e -> dispose());
+        timer.setRepeats(false);
+        timer.start();
 
-        dispose();
+        setVisible(true);
+        
     }
 }
+
+/*
+
+
+
+
+
+
+
+
+
+
+
+*/

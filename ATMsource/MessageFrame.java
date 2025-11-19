@@ -1,12 +1,12 @@
 import java.awt.*;
 import javax.swing.*;
 
-public class MessageFrame extends JFrame{
-    public MessageFrame(String title, String message) {
+public class MessageFrame extends JFrame {
+    public MessageFrame(String title, String message, int displaySeconds) {
         super(title);
 
-        setVisible(true); // display logout frame
-        setSize(800, 600); // set frame size
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(800, 600);
         setLocationRelativeTo(null);
 
         JLabel msg = new JLabel(message);
@@ -14,12 +14,10 @@ public class MessageFrame extends JFrame{
         msg.setHorizontalAlignment(SwingConstants.CENTER);
         add(msg, BorderLayout.CENTER);
 
-        try {
-            Thread.sleep(5000);  // wait 8 seconds after the window is closed by user112312
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        dispose();
+        Timer timer = new Timer(displaySeconds * 1000, e -> dispose());
+        timer.setRepeats(false);
+        timer.start();
+
+        setVisible(true);
     }
-    
 }

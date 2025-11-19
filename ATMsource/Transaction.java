@@ -7,8 +7,8 @@ public abstract class Transaction
    private Screen screen; // ATM's screen
    private BankDatabase bankDatabase; // account info database
    
-   protected LogoutFrame logoutFrame;
-   public boolean logout = false;
+   protected boolean logout = false;
+   protected boolean toMainMenu = false;
 
    // Transaction constructor invoked by subclasses using super()
    public Transaction( int userAccountNumber, Screen atmScreen, 
@@ -36,6 +36,14 @@ public abstract class Transaction
    {
       return bankDatabase;
    } // end method getBankDatabase
+
+   public boolean getToMainMenuFlag() {
+      return toMainMenu;
+   }
+
+   public boolean getLogoutFlag() {
+      return logout;
+   }
 
    // perform the transaction (overridden by each subclass)
    abstract public void execute();
