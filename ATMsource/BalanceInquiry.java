@@ -34,6 +34,22 @@ public class BalanceInquiry extends Transaction {
       balanceInquiryFrame.setLocationRelativeTo(null);
       balanceInquiryFrame.setVisible(true); // display frame
 
+<<<<<<< HEAD
+=======
+      // Wait until the frame is disposed
+      while (balanceInquiryFrame.isDisplayable()) {
+         try {
+            Thread.sleep(100);  
+         } catch (InterruptedException e) {
+            e.printStackTrace();
+         }
+      }
+
+      if (logout) {
+         new MessageFrame("Logout","<html>Goodbye! Thank you.<br><br>Please take your card now.</html>",5000);
+      }
+
+>>>>>>> 55e2d2a1ef0c03106e0f1ebb1ec3c1a5e6018c4c
    } // end method execute
 
    private class BalanceInquiryFrame extends JFrame {
