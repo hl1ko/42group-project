@@ -55,13 +55,9 @@ public class Withdrawal extends Transaction
 
       if(!cashDispenser.AnyBillsAvaliable()){
          screen.displayMessageLine("This ATM is temporary disabled. Please use other ATM.");
-<<<<<<< HEAD
 
          stateNum = 0;
          //new MessageFrame("ATM disable","<html>This ATM is temporary disabled.<br></br>Please use other ATM.</html>", 3);
-=======
-         new MessageFrame("ATM disable","<html>This ATM is temporary disabled.<br></br>Please use other ATM.</html>",5000);
->>>>>>> 55e2d2a1ef0c03106e0f1ebb1ec3c1a5e6018c4c
          return;
       }
       
@@ -81,7 +77,6 @@ public class Withdrawal extends Transaction
       // check whether user chose a withdrawal amount or canceled
       if ( amount != CANCELED )
       {
-<<<<<<< HEAD
          // get available balance of account involved
          availableBalance = 
             bankDatabase.getAvailableBalance( getAccountNumber() );
@@ -139,66 +134,6 @@ public class Withdrawal extends Transaction
       logout = true;
 
    } 
-=======
-         // obtain a chosen withdrawal amount from the user 
-         amount = displayMenuOfAmounts();
-         if(!cashDispenser.canBillsHandleTheJob( amount )){
-            screen.displayMessageLine("Not enough bills in the ATM to handle your withdrawal request." +
-            "\n Please use other ATM.");
-            new MessageFrame("Not enough bills", "<html>Not enough bills in the ATM to handle <br></br>your withdrawal request.<br></br> <br></br>Please use other ATM.</html", 5000);
-            return;
-         }
-         // check whether user chose a withdrawal amount or canceled
-         if ( amount != CANCELED )
-         {
-            // get available balance of account involved
-            availableBalance = 
-               bankDatabase.getAvailableBalance( getAccountNumber() );
-      
-            // check whether the user has enough money in the account 
-            if ( amount <= availableBalance )
-            {   
-               // check whether the cash dispenser has enough money
-               if ( cashDispenser.isSufficientCashAvailable( amount ) )
-               {
-                  // update the account involved to reflect withdrawal
-                  bankDatabase.debit( getAccountNumber(), amount );
-                  
-                  cashDispenser.dispenseCash( amount ); // dispense cash
-                  cashDispensed = true; // cash was dispensed
-
-                  // instruct user to take cash
-                  screen.displayMessageLine( 
-                     "\nPlease take your cash now." );
-                     logout = true;
-                     new MessageFrame("Take Card","<html>Withdrawal success.<br></br>Please take your card now.</html>",3000);
-                     new MessageFrame("Take Cash","Please take your cash now.",3000);
-                     new MessageFrame("Logout","<html>Goodbye! Thank you.</html>",5000);
-               } // end if
-               else
-               { // cash dispenser does not have enough cash
-                  screen.displayMessageLine( 
-                     "\nInsufficient cash available in the ATM." +
-                     "\n\nPlease choose a smaller amount." );
-                     new MessageFrame("Insufficient cash","<html>Insufficient cash available in the ATM.<br></br>Please choose a smaller amount.</html>", 3000);
-               }
-            } // end if
-            else // not enough money available in user's account
-            {
-               screen.displayMessageLine( 
-                  "\nInsufficient funds in your account." +
-                  "\n\nPlease choose a smaller amount." );
-                  new MessageFrame("Insufficient funds", "<html>Insufficient funds in your account.<br></br>Please choose a smaller amount.</html>",5000);
-            } // end else
-         } // end if
-         else // user chose cancel menu option 
-         {
-            screen.displayMessageLine( "\nCanceling transaction..." );
-            new CancelTranscationFrame();
-            return; // return to main menu because user canceled
-         } // end else
-      } while ( !cashDispensed );
->>>>>>> 55e2d2a1ef0c03106e0f1ebb1ec3c1a5e6018c4c
 
 
    // display a menu of withdrawal amounts and the option to cancel;
