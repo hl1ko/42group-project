@@ -32,8 +32,8 @@ public class Transfer extends Transaction {
         JTextField inputbox1 = new JTextField();
         JLabel transferamount = new JLabel("Transfer amount: ");
         JTextField inputbox2 = new JTextField();
-        JButton submitbutton = new JButton("Submit");
-        JButton cancelbutton = new JButton("Cancel");
+        JButton submitbutton = new JButton("Transfer");
+        JButton cancelbutton = new JButton("Back to Main Menu");
 
         private TransferFrame() {
 
@@ -44,6 +44,7 @@ public class Transfer extends Transaction {
             JPanel CPanel = new JPanel();
             JPanel IPanel = new JPanel();
 
+            JPanel BPanel = new JPanel();
             //NPanel.setLayout(new BoxLayout(NPanel, BoxLayout.Y_AXIS));
             NPanel.setPreferredSize(new Dimension(800, PANELHEIGHT));
 
@@ -65,6 +66,8 @@ public class Transfer extends Transaction {
 
             IPanel.setLayout(new GridLayout(6, 1));
 
+            BPanel.setLayout(new GridLayout(1, 2));
+
             accountnumber.setPreferredSize(new Dimension(100, 20));
             inputbox1.setPreferredSize(new Dimension(100, 20));
             transferamount.setPreferredSize(new Dimension(100, 20));
@@ -78,11 +81,13 @@ public class Transfer extends Transaction {
             IPanel.add(inputbox1);
             IPanel.add(transferamount);
             IPanel.add(inputbox2);
-            IPanel.add(submitbutton);
-            IPanel.add(cancelbutton);
+            BPanel.add(cancelbutton);
+            BPanel.add(submitbutton);
+            IPanel.add(BPanel);
             //----------------------
             SPanel.add(footer);
             CPanel.add(IPanel);
+            //-----------------------------------
             add(CPanel, BorderLayout.CENTER);
             add(NPanel, BorderLayout.NORTH);
             add(SPanel, BorderLayout.SOUTH);
@@ -92,6 +97,40 @@ public class Transfer extends Transaction {
             inputbox2.addActionListener(handler);
             submitbutton.addActionListener(handler);
             cancelbutton.addActionListener(handler);
+
+            submitbutton.addKeyListener(new KeyListener() {
+
+                @Override
+                public void keyTyped(KeyEvent e) {
+
+                }
+
+                @Override
+                public void keyReleased(KeyEvent e) {
+
+                }
+
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                        int flag = checkFlag(validation(inputbox1.getText(), inputbox2.getText()));
+                    if (flag == 0) {
+                        targetAccountNumber = keypad.StringtoInt(inputbox1.getText());
+                        amount = keypad.StringtoDouble(inputbox2.getText());
+                        System.out.println("target account = " + targetAccountNumber);
+                        System.out.println("transfer amount = " + amount);
+                        firstsub = true;
+                        dispose();
+                        callCframe();
+                    } else {
+                        inputbox1.setEditable(true);
+                        inputbox2.setEditable(true);
+                        inputbox1.requestFocusInWindow();
+                    }
+                    }
+
+                }
+            });
         }
 
         private class eventhandler implements ActionListener {
@@ -117,7 +156,13 @@ public class Transfer extends Transaction {
                         firstsub = true;
                         dispose();
                         callCframe();
-                    } else if(flag == 1){
+                    } else {
+                        inputbox1.setEditable(true);
+                        inputbox2.setEditable(true);
+                        inputbox1.requestFocusInWindow();
+                    }
+
+                    /*else if(flag == 1){
                         inputbox1.setEditable(true);
                         inputbox2.setEditable(false);
                         inputbox1.requestFocusInWindow();
@@ -129,7 +174,7 @@ public class Transfer extends Transaction {
                         inputbox1.setEditable(true);
                         inputbox2.setEditable(true);
                         inputbox1.requestFocusInWindow();
-                    }
+                    } */
                 }
                 if (event.getSource() == cancelbutton) {
                     toMainMenu = true;
@@ -138,6 +183,7 @@ public class Transfer extends Transaction {
 
             }
         }
+
     }
 
     public class Confirmframe extends JFrame {
@@ -152,9 +198,10 @@ public class Transfer extends Transaction {
             JPanel SPanel = new JPanel();
             JPanel CPanel = new JPanel();
             JPanel IPanel = new JPanel();
+            JPanel BPanel = new JPanel();
 
-            NPanel.setBackground(Color.red);
-            SPanel.setBackground(Color.gray);
+            NPanel.setBackground(Color.white);
+            SPanel.setBackground(Color.white);
 
             CPanel.setBorder(BorderFactory.createEmptyBorder(95, 240, 0, 240));
             CPanel.setBackground(Color.GRAY);
@@ -168,15 +215,17 @@ public class Transfer extends Transaction {
             SPanel.setPreferredSize(new Dimension(100, 100));
 
             IPanel.setLayout(new GridLayout(6, 1));
+            BPanel.setLayout(new GridLayout(1, 2));
 
             //-------------------------------
             IPanel.add(new JLabel("Transfer target:"));
             IPanel.add(targetaccountBox1);
             IPanel.add(new JLabel("Transfer amount:"));
             IPanel.add(amountBox1);
-            IPanel.add(submitbutton);
-            IPanel.add(cancelbutton);
+            BPanel.add(submitbutton);
+            BPanel.add(cancelbutton);
             //-------------------------------
+            IPanel.add(BPanel);
             eventhandler handler = new eventhandler();
             submitbutton.addActionListener(handler);
             cancelbutton.addActionListener(handler);
