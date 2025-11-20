@@ -32,15 +32,11 @@ public class ATM {
    } // end no-argument ATM constructor
 
    private class AuthenticatorFrame extends JFrame {
-      private JLabel pinPrompt;
-      private JLabel accountPrompt;
       private JTextField accountField;
       private JPasswordField pinField;
       private JButton resetButton;
 
-      private final Font TITLE = new Font("Verdana", Font.PLAIN, 25);
       private final Font FONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
-      private final Font NUMBERFONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
       private final Border HEADFOOTBORDER = BorderFactory.createEmptyBorder(0, 5, 0, 0);
       private final int NORTHSOUTHPANELHEIGHT = 80;
 
@@ -66,23 +62,18 @@ public class ATM {
          inputPanel.setBackground(Color.WHITE);
 
          // labels for header
-         JLabel welcomeMsg = new JLabel("Welcome!");
-         welcomeMsg.setFont(TITLE);
+         CustomLabel welcomeMsg = new CustomLabel("Welcome!");
+         welcomeMsg.setSize(25);
 
          CustomLabel promptAccInfoMsg1 = new CustomLabel("To authenticate, input account info and press Enter.");
-
-         //JLabel promptAccInfoMsg1 = new JLabel("To authenticate, input account info and press Enter.");
-         //promptAccInfoMsg1.setFont(FONTSTYLE);
          
          // labels and fields for input panel
-         accountPrompt = new JLabel("Account number");
-         accountPrompt.setFont(FONTSTYLE);
+         CustomLabel accountPrompt = new CustomLabel("Account number");
          accountField = new JTextField();
-         accountField.setFont(NUMBERFONTSTYLE);
-         pinPrompt = new JLabel("PIN");
-         pinPrompt.setFont(FONTSTYLE);
+         accountField.setFont(FONTSTYLE);
+         CustomLabel pinPrompt = new CustomLabel("PIN");
          pinField = new JPasswordField();
-         pinField.setFont(NUMBERFONTSTYLE);
+         pinField.setFont(FONTSTYLE);
          pinField.setEditable(false);
          resetButton = new JButton("Reset");
          resetButton.setFont(FONTSTYLE);
@@ -94,10 +85,8 @@ public class ATM {
          /**************************************/
 
          // labels for footer
-         JLabel availableNotesMsg = new JLabel(cashDispenser.showAvaliableBills(), SwingConstants.CENTER);
-         availableNotesMsg.setFont(FONTSTYLE);
-         availableNotesMsg.setPreferredSize(new Dimension(800, NORTHSOUTHPANELHEIGHT));
-         availableNotesMsg.setBorder(HEADFOOTBORDER);
+         CustomLabel availableNotesMsg = new CustomLabel(cashDispenser.showAvaliableBills());
+         availableNotesMsg.usingTitleAndFooterStyle();
          
          // adding components to panels
          northPanel.add(welcomeMsg);
@@ -181,9 +170,8 @@ public class ATM {
             accountField.setEditable(true);
             pinField.setEditable(false);
 
-            JLabel msgLabel = new JLabel("<html>" + message + "<br><br>Authenticate section canceled.</html>");
-            msgLabel.setFont(FONTSTYLE);
-
+            CustomLabel msgLabel = new CustomLabel("<html>" + message + "<br><br>Authenticate section canceled.</html>");
+            
             JOptionPane.showMessageDialog(AuthenticatorFrame.this, msgLabel,"Authentication canceled", messageType);
 
             accountField.requestFocusInWindow();
@@ -208,8 +196,8 @@ public class ATM {
 
          // The top of the panel
          JPanel topPanel = new JPanel();
-         JLabel title = new JLabel("Main Menu");
-         title.setFont(FONTSTYLE);
+         CustomLabel title = new CustomLabel("Main Menu");
+         title.setSize(25);
          topPanel.add(title);
          add(topPanel, BorderLayout.NORTH);
 
@@ -250,9 +238,8 @@ public class ATM {
 
          //Buttom Panel 
          JPanel buttomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-         JLabel footer = new JLabel ("Enter a choice:");
-         Font footerfont = new Font ("Verdana", Font.PLAIN, 30);
-         footer.setFont(footerfont);
+         CustomLabel footer = new CustomLabel ("Enter a choice:");
+         footer.setSize(30);
          buttomPanel.add(footer);
 
          //Input field

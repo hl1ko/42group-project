@@ -41,68 +41,48 @@ public class BalanceInquiry extends Transaction {
       private JButton logoutButton;
 
       private final Font FONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
-      private final Font NUMBERFONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
-      private final Border FONTBORDER = BorderFactory.createEmptyBorder(5, 3, 5, 0);
-      private final Border HEADFOOTBORDER = BorderFactory.createEmptyBorder(0, 5, 0, 0);
-      private final int PANELHEIGHT = 80;
 
       private BalanceInquiryFrame() {
          super("Balance Inquiry");
          Screen screen = new Screen();
 
          // header panel layout
-         JLabel header = new JLabel("Balance Inquiry");
-         header.setFont(FONTSTYLE);
-         header.setBorder(HEADFOOTBORDER);
-         header.setPreferredSize(new Dimension(800, PANELHEIGHT));
+         CustomLabel header = new CustomLabel("Balance Inquiry");
+         header.usingTitleAndFooterStyle();
 
          // center panel layout
          JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-         centerPanel
-               .setBorder(BorderFactory.createEmptyBorder(60, 230, 0, 230));
+         centerPanel.setBorder(BorderFactory.createEmptyBorder(60, 230, 0, 230));
          centerPanel.setBackground(Color.GRAY);
 
          // info panel layout
          JPanel infoPanel = new JPanel();
          infoPanel.setLayout(new GridLayout(9, 1));
-         infoPanel
-               .setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, Color.WHITE));
+         infoPanel.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, Color.WHITE));
          infoPanel.setPreferredSize(new Dimension(320, 270));
          infoPanel.setBackground(Color.WHITE);
 
          // labels for available balance
-         JLabel availableBalanceMsg = new JLabel("Available balance:");
-         availableBalanceMsg.setFont(FONTSTYLE);
-         availableBalanceMsg.setBorder(FONTBORDER);
-         JLabel showAvailableBalanceMsg = new JLabel(screen.dollarAmountToString(availableBalance));
-         showAvailableBalanceMsg.setFont(NUMBERFONTSTYLE);
-         showAvailableBalanceMsg.setBorder(FONTBORDER);
+         CustomLabel availableBalanceMsg = new CustomLabel("Available balance:");
+         CustomLabel showAvailableBalanceMsg = new CustomLabel(screen.dollarAmountToString(availableBalance));
 
          // labels for total balance
-         JLabel totalBalanceMsg = new JLabel("Total balance:");
-         totalBalanceMsg.setFont(FONTSTYLE);
-         totalBalanceMsg.setBorder(FONTBORDER);
-         JLabel showTotalBalanceMsg = new JLabel(screen.dollarAmountToString(totalBalance));
-         showTotalBalanceMsg.setFont(NUMBERFONTSTYLE);
-         showTotalBalanceMsg.setBorder(FONTBORDER);
+         CustomLabel totalBalanceMsg = new CustomLabel("Total balance:");
+         CustomLabel showTotalBalanceMsg = new CustomLabel(screen.dollarAmountToString(totalBalance));
 
          // button for back to main menu
          cancelButton = new JButton("Back to Main Menu");
          cancelButton.setFont(FONTSTYLE);
-         cancelButton.setBackground(new Color (65,125,128));
          cancelButton.setBackground( Color.WHITE );
 
          // button for cancelling transaction
          logoutButton = new JButton("Logout");
          logoutButton.setFont(FONTSTYLE);
-         logoutButton.setBackground(new Color (65,125,128));
          logoutButton.setBackground( Color.WHITE );
 
          // labal for footer
-         JLabel footer = new JLabel("For further assistance, please contact customer support.");
-         footer.setFont(FONTSTYLE);
-         footer.setBorder(HEADFOOTBORDER);
-         footer.setPreferredSize(new Dimension(800, PANELHEIGHT));
+         CustomLabel footer = new CustomLabel("For further assistance, please contact customer support.");
+         footer.usingTitleAndFooterStyle();
 
          // adding components to panels
          infoPanel.add(availableBalanceMsg);
