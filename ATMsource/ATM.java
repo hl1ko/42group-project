@@ -17,10 +17,8 @@ public class ATM {
    private static final int TRANSFER = 3;
    private static final int EXIT = 4;
 
-   protected int userInt = 0;
    private boolean userExited;
    private Transaction currentTransaction = null;
-
    private int transactionType;
 
    // no-argument ATM constructor initializes instance variables
@@ -40,6 +38,7 @@ public class ATM {
       private JPasswordField pinField;
       private JButton resetButton;
 
+      private final Font TITLE = new Font("Verdana", Font.PLAIN, 25);
       private final Font FONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
       private final Font NUMBERFONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
       private final Border HEADFOOTBORDER = BorderFactory.createEmptyBorder(0, 5, 0, 0);
@@ -56,30 +55,24 @@ public class ATM {
 
          // center panel layout
          JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-         centerPanel
-               .setBorder(BorderFactory.createEmptyBorder(95, 240, 0, 240));
+         centerPanel.setBorder(BorderFactory.createEmptyBorder(95, 240, 0, 240));
          centerPanel.setBackground(Color.GRAY);
 
          // input panel layout
          JPanel inputPanel = new JPanel();
          inputPanel.setLayout(new GridLayout(6, 1));
-         inputPanel
-               .setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, Color.WHITE));
+         inputPanel.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, Color.WHITE));
          inputPanel.setPreferredSize(new Dimension(300, 200));
          inputPanel.setBackground(Color.WHITE);
 
-         /* 
-         JPanel southPanel = new JPanel();
-         southPanel.setLayout(new GridLayout(2, 1));
-         southPanel.setPreferredSize(new Dimension(800, NORTHSOUTHPANELHEIGHT));
-         southPanel.setBorder(HEADFOOTBORDER);
-         */
-
          // labels for header
          JLabel welcomeMsg = new JLabel("Welcome!");
-         welcomeMsg.setFont(new Font("Verdana", Font.PLAIN, 25));
-         JLabel promptAccInfoMsg1 = new JLabel("To authenticate, input account info and press Enter.");
-         promptAccInfoMsg1.setFont(FONTSTYLE);
+         welcomeMsg.setFont(TITLE);
+
+         CustomLabel promptAccInfoMsg1 = new CustomLabel("To authenticate, input account info and press Enter.");
+
+         //JLabel promptAccInfoMsg1 = new JLabel("To authenticate, input account info and press Enter.");
+         //promptAccInfoMsg1.setFont(FONTSTYLE);
          
          // labels and fields for input panel
          accountPrompt = new JLabel("Account number");
@@ -94,8 +87,11 @@ public class ATM {
          resetButton = new JButton("Reset");
          resetButton.setFont(FONTSTYLE);
 
-         accountField.setText("12345"); //For debug
-         pinField.setText("54321");   //For debug
+         /**************************************/
+         //For debug
+         accountField.setText("12345"); 
+         pinField.setText("54321");   
+         /**************************************/
 
          // labels for footer
          JLabel availableNotesMsg = new JLabel(cashDispenser.showAvaliableBills(), SwingConstants.CENTER);
@@ -149,7 +145,9 @@ public class ATM {
                   cancel("The account number field is empty.", JOptionPane.INFORMATION_MESSAGE);
                }
 
-            } else if (event.getSource() == pinField) {
+            }
+            
+            if (event.getSource() == pinField) {
                accountNumber = Integer.parseInt(accountField.getText());
 
                if (pinField.getPassword().length > 0) {
@@ -169,7 +167,9 @@ public class ATM {
                   cancel("The PIN field is empty.", JOptionPane.WARNING_MESSAGE);
                }
 
-            } else if (event.getSource() == resetButton) {
+            }
+            
+            if (event.getSource() == resetButton) {
                cancel("Done.", JOptionPane.INFORMATION_MESSAGE);
             }
 
@@ -184,8 +184,7 @@ public class ATM {
             JLabel msgLabel = new JLabel("<html>" + message + "<br><br>Authenticate section canceled.</html>");
             msgLabel.setFont(FONTSTYLE);
 
-            JOptionPane.showMessageDialog(AuthenticatorFrame.this, msgLabel,
-                  "Authentication canceled", messageType);
+            JOptionPane.showMessageDialog(AuthenticatorFrame.this, msgLabel,"Authentication canceled", messageType);
 
             accountField.requestFocusInWindow();
          }
@@ -197,8 +196,6 @@ public class ATM {
    private class MainMenuFrame extends JFrame {
 
       private final Font FONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
-      //private final JLabel 
-
       private JButton balanceButton;
       private JButton withdrawalButton;
       private JButton transferButton;
@@ -206,7 +203,7 @@ public class ATM {
       private JTextField inputField;
 
       public MainMenuFrame () {
-         super ("ATM - Main Menu");
+         super ("Main Menu");
          setLayout(new BorderLayout(10, 10));
 
          // The top of the panel
@@ -238,12 +235,6 @@ public class ATM {
          withdrawalButton.setBounds(50,200,300,100);
          transferButton.setBounds(430,90,300,100);
          exitButton.setBounds(430,200,300,100);
-
-         //Button background
-         balanceButton.setBackground(new Color (65,125,128));
-         withdrawalButton.setBackground(new Color (65,125,128));
-         transferButton.setBackground(new Color (65,125,128));
-         exitButton.setBackground(new Color (65,125,128));
 
          //Button background color
          balanceButton.setBackground( Color.WHITE );
@@ -410,7 +401,6 @@ public class ATM {
 
             break;
          case TRANSFER:
-            new LogoutFrame("");
             break;
          case EXIT:
             waitUntilNotDisplaying(new LogoutFrame(""));
