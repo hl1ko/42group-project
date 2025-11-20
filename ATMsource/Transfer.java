@@ -412,9 +412,12 @@ public class Transfer extends Transaction {
             screen.waitUntilNotDisplaying(new MessageFrame("Transfer sucess.", "Transfer sucess.", 3));
 
             new Timer(3000, e -> {
-                bankDatabase.transfer(getAccountNumber(), targetAccountNumber, amount);
+                
                 toMainMenu = true;
             }).start();
+            SwingUtilities.invokeLater(() -> {
+                bankDatabase.transfer(getAccountNumber(), targetAccountNumber, amount);
+            });
             dispose();
 
         }
