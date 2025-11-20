@@ -41,6 +41,7 @@ public class Transfer extends Transaction {
             JPanel BPanel = new JPanel();
 
             NPanel.setPreferredSize(new Dimension(800, PANELHEIGHT));
+            NPanel.setBackground(Color.white);
 
             JLabel footer = new JLabel("For further assistance, please contact customer support.");
             footer.setFont(FONTSTYLE);
@@ -73,14 +74,19 @@ public class Transfer extends Transaction {
             IPanel.add(transferamount);
             IPanel.add(inputbox2);
             IPanel.add(new JLabel());
+            IPanel.add(new JLabel("Avaliabe Balance: " + screen.dollarAmountToString(bankDatabase.getAvailableBalance(getAccountNumber()))));
+            IPanel.add(new JLabel());
             IPanel.add(BPanel);
             //---------------------------
+            SPanel.add(footer);
             CPanel.add(IPanel);
             //---------------------------
-            add(NPanel);
-            add(SPanel);
-            add(CPanel);
+            add(NPanel, BorderLayout.NORTH);
+            add(SPanel, BorderLayout.SOUTH);
+            add(CPanel, BorderLayout.CENTER);
+
             inputbox2.requestFocusInWindow();
+
             eventhandler handler = new eventhandler();
             inputbox2.addActionListener(handler);
             submitButton.addActionListener(handler);
@@ -211,6 +217,9 @@ public class Transfer extends Transaction {
             IPanel.add(inputbox1);
             BPanel.add(cancelbutton);
             BPanel.add(submitbutton);
+            IPanel.add(new JLabel());
+            IPanel.add(new JLabel());
+            IPanel.add(new JLabel());
             IPanel.add(BPanel);
             //----------------------
             SPanel.add(footer);
@@ -343,6 +352,7 @@ public class Transfer extends Transaction {
             IPanel.add(targetaccountBox1);
             IPanel.add(new JLabel("Transfer amount:"));
             IPanel.add(amountBox1);
+            IPanel.add(new JLabel());
             BPanel.add(submitbutton);
             BPanel.add(cancelbutton);
             //-------------------------------
