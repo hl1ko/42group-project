@@ -110,7 +110,7 @@ public class Transfer extends Transaction {
 
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER && e.getSource() == submitButton) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     if (e.getSource() == submitButton) {
                         submit();
                     }
@@ -294,7 +294,12 @@ public class Transfer extends Transaction {
         }
 
         private void submit() {
-            if (validateTarget(inputbox1.getText()) == 0) {
+            if(checkEmptyField(inputbox1)){
+                System.out.println(inputbox1.getText());
+                reset();
+                return;
+            }
+            if (validateTarget(inputbox1) == 0) {
                 targetAccountNumber = keypad.StringtoInt(inputbox1.getText());
                 System.out.println("target account = " + targetAccountNumber);
                 dispose();
@@ -410,13 +415,14 @@ public class Transfer extends Transaction {
         private void submit() {
 
             screen.waitUntilNotDisplaying(new MessageFrame("Transfer sucess.", "Transfer sucess.", 3));
-
+            System.out.println(getAccountNumber() + " -> " + targetAccountNumber + ": " + amount);
+            
             new Timer(3000, e -> {
-                
+                bankDatabase.transfer(getAccountNumber(), targetAccountNumber, amount);
                 toMainMenu = true;
             }).start();
             SwingUtilities.invokeLater(() -> {
-                bankDatabase.transfer(getAccountNumber(), targetAccountNumber, amount);
+                
             });
             dispose();
 
@@ -480,12 +486,13 @@ public class Transfer extends Transaction {
         }
         errormsg = errormsg + "</html>";
         if (errorflag != 0) {
-            screen.showMessage1(errormsg);
+            screen.showMessage1(errormsg, "Unexpected Input");
         }
         return errorflag;
     }
 
-    private int validateTarget(String inputString1) {
+    private int validateTarget(JTextField inputbox1) {
+        String inputString1 = inputbox1.getText();
         targetAccountNumber = Integer.parseInt(inputString1);
 
         int errorflag = 0;
@@ -506,19 +513,19 @@ public class Transfer extends Transaction {
             errorflag = 2;
         }
 
-        if (targetAccountNumber == 0) {
-            screen.displayMessageLine("\nTransfer target is essential");
-            screen.displayMessageLine("\nCanceling transaction...");
+        if (inputbox1.getText().isEmpty()) {
+            screen.displayMessageLine("Target account does not exist.");
+            screen.displayMessageLine("Transaction cancelled.");
 
-            errormsg = errormsg + "Transfer target is essential.<br><br>" + "";
-            //screen.showMessage1("Insufficient funds in your account.");
+            errormsg = errormsg + "Target account is essential<br><br>" + "";
+            //screen.showMessage1("Target account does not exist.");
             errorflag = 3;
         }
 
         errormsg = errormsg + "</html>";
         System.out.println("haha: \n" + errormsg);
         if (errorflag != 0) {
-            screen.showMessage1(errormsg);
+            screen.showMessage1(errormsg, "Unexpected Input");
         }
         return errorflag;
     }
@@ -526,6 +533,14 @@ public class Transfer extends Transaction {
     public void execute() {
         toMainMenu = false;
         callTframe();
+    }
+
+    private boolean checkEmptyField(JTextField inputbox1){
+        if (inputbox1.getText().length() == 0){
+            screen.showMessage1("<html>Missing essential information.<br><br></html>", "Unexpected Input");
+            return true;
+        }
+        return false;
     }
 
     /*private double promptForTransferAmount() {
