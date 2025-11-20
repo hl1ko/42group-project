@@ -34,7 +34,7 @@ public class Screen {
         });
     }
 
-    public void showMessage1(String inputString) {
+    public void showMessage1(String inputString, String title) {
         SwingUtilities.invokeLater(() -> {
             JFrame f = new JFrame();
             f.setUndecorated(true);
@@ -45,7 +45,7 @@ public class Screen {
 
             JLabel msgLabel = new JLabel(inputString);
             //msgLabel.setFont(FONTSTYLE);
-            JOptionPane.showMessageDialog(null, msgLabel, inputString, JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, msgLabel, title, JOptionPane.INFORMATION_MESSAGE);
             f.setVisible(true);
             f.setVisible(false);
         });

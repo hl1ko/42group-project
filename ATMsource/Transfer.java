@@ -51,12 +51,13 @@ public class Transfer extends Transaction {
             //SPanel.setLayout(new BoxLayout(NPanel, BoxLayout.Y_AXIS));
             SPanel.setPreferredSize(new Dimension(800, PANELHEIGHT));
 
-            CPanel.setBorder(BorderFactory.createEmptyBorder(95, 240, 0, 240));
+            CPanel.setBorder(BorderFactory.createEmptyBorder(20, 80, 0, 80));
             CPanel.setBackground(Color.GRAY);
+            CPanel.setPreferredSize(new Dimension(800, 400));
 
             IPanel.setLayout(new GridLayout(6, 1));
             IPanel.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, Color.WHITE));
-            IPanel.setPreferredSize(new Dimension(300, 200));
+            IPanel.setPreferredSize(new Dimension(400, 300));
             IPanel.setBackground(Color.WHITE);
 
             IPanel.setLayout(new GridLayout(6, 1));
@@ -110,7 +111,7 @@ public class Transfer extends Transaction {
 
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER && e.getSource() == submitButton) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     if (e.getSource() == submitButton) {
                         submit();
                     }
@@ -172,8 +173,10 @@ public class Transfer extends Transaction {
         private final int PANELHEIGHT = 80;
         JLabel accountnumber = new JLabel("Target Account Number: ");
         JTextField inputbox1 = new JTextField();
-        JButton submitbutton = new JButton("Transfer");
-        JButton cancelbutton = new JButton("Back to Main Menu");
+        //JButton submitbutton = new JButton("Transfer");
+
+        Wbutton submitbutton = new Wbutton("Transfer!");
+        Wbutton cancelbutton = new Wbutton("Back to Main Menu!");
 
         private TransferFrame() {
 
@@ -239,7 +242,8 @@ public class Transfer extends Transaction {
             cancelbutton.addKeyListener(keyhandler);
         }
 
-        private class keylisten implements  KeyListener{
+        private class keylisten implements KeyListener {
+
             @Override
             public void keyTyped(KeyEvent e) {
 
@@ -262,6 +266,7 @@ public class Transfer extends Transaction {
                 }
             }
         }
+
         private class eventhandler implements ActionListener {
 
             public void actionPerformed(ActionEvent event) {
@@ -271,20 +276,6 @@ public class Transfer extends Transaction {
                 }
                 if (event.getSource() == submitbutton) {
                     submit();
-
-                    /*else if(flag == 1){
-                        inputbox1.setEditable(true);
-                        inputbox2.setEditable(false);
-                        inputbox1.requestFocusInWindow();
-                    }else if(flag == 2){
-                        inputbox1.setEditable(false);
-                        inputbox2.setEditable(true);
-                        inputbox2.requestFocusInWindow();
-                    }else if(flag == 3){
-                        inputbox1.setEditable(true);
-                        inputbox2.setEditable(true);
-                        inputbox1.requestFocusInWindow();
-                    } */
                 }
                 if (event.getSource() == cancelbutton) {
                     cancel();
@@ -294,7 +285,12 @@ public class Transfer extends Transaction {
         }
 
         private void submit() {
-            if (validateTarget(inputbox1.getText()) == 0) {
+            if (checkEmptyField(inputbox1)) {
+                System.out.println(inputbox1.getText());
+                reset();
+                return;
+            }
+            if (validateTarget(inputbox1) == 0) {
                 targetAccountNumber = keypad.StringtoInt(inputbox1.getText());
                 System.out.println("target account = " + targetAccountNumber);
                 dispose();
@@ -313,6 +309,20 @@ public class Transfer extends Transaction {
             inputbox1.setText("");
             inputbox1.setEditable(true);
             inputbox1.requestFocusInWindow();
+        }
+    }
+
+    public class Wbutton extends JButton {
+
+        private final Font FONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
+        Dimension buttonSize = new Dimension(100, 35);
+
+        public Wbutton(String label) {
+            this.setText(label);
+            this.setFont(FONTSTYLE);
+            this.setPreferredSize(buttonSize);
+            this.setBackground(new Color(65, 125, 128));
+            this.setBackground(Color.WHITE);
         }
     }
 
@@ -408,15 +418,15 @@ public class Transfer extends Transaction {
         }
 
         private void submit() {
-
+            dispose();
             screen.waitUntilNotDisplaying(new MessageFrame("Transfer sucess.", "Transfer sucess.", 3));
-
+            System.out.println(getAccountNumber() + " -> " + targetAccountNumber + ": " + amount);
             new Timer(3000, e -> {
-                bankDatabase.transfer(getAccountNumber(), targetAccountNumber, amount);
                 toMainMenu = true;
             }).start();
-            dispose();
-
+            SwingUtilities.invokeLater(() -> {
+                bankDatabase.transfer(getAccountNumber(), targetAccountNumber, amount);
+            });
         }
 
         private void cancel() {
@@ -477,12 +487,13 @@ public class Transfer extends Transaction {
         }
         errormsg = errormsg + "</html>";
         if (errorflag != 0) {
-            screen.showMessage1(errormsg);
+            screen.showMessage1(errormsg, "Unexpected Input");
         }
         return errorflag;
     }
 
-    private int validateTarget(String inputString1) {
+    private int validateTarget(JTextField inputbox1) {
+        String inputString1 = inputbox1.getText();
         targetAccountNumber = Integer.parseInt(inputString1);
 
         int errorflag = 0;
@@ -503,19 +514,19 @@ public class Transfer extends Transaction {
             errorflag = 2;
         }
 
-        if (targetAccountNumber == 0) {
-            screen.displayMessageLine("\nTransfer target is essential");
-            screen.displayMessageLine("\nCanceling transaction...");
+        if (inputbox1.getText().isEmpty()) {
+            screen.displayMessageLine("Target account does not exist.");
+            screen.displayMessageLine("Transaction cancelled.");
 
-            errormsg = errormsg + "Transfer target is essential.<br><br>" + "";
-            //screen.showMessage1("Insufficient funds in your account.");
+            errormsg = errormsg + "Target account is essential<br><br>" + "";
+            //screen.showMessage1("Target account does not exist.");
             errorflag = 3;
         }
 
         errormsg = errormsg + "</html>";
         System.out.println("haha: \n" + errormsg);
         if (errorflag != 0) {
-            screen.showMessage1(errormsg);
+            screen.showMessage1(errormsg, "Unexpected Input");
         }
         return errorflag;
     }
@@ -523,6 +534,14 @@ public class Transfer extends Transaction {
     public void execute() {
         toMainMenu = false;
         callTframe();
+    }
+
+    private boolean checkEmptyField(JTextField inputbox1) {
+        if (inputbox1.getText().length() == 0) {
+            screen.showMessage1("<html>Missing essential information.<br><br></html>", "Unexpected Input");
+            return true;
+        }
+        return false;
     }
 
     /*private double promptForTransferAmount() {

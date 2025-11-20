@@ -191,7 +191,6 @@ public class Withdrawal extends Transaction
 
       return userChoice; // return withdrawal amount or CANCELED
    } // end method displayMenuOfAmounts
-
    private class WithdrawalFrame extends JFrame {
       private JButton confirmButton;
       private JButton cancelButton;
