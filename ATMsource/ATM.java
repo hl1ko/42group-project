@@ -62,16 +62,16 @@ public class ATM {
          inputPanel.setBackground(Color.WHITE);
 
          // labels for header
-         CustomLabel welcomeMsg = new CustomLabel("Welcome!");
+         Universial_Label welcomeMsg = new Universial_Label("Welcome!");
          welcomeMsg.setSize(25);
 
-         CustomLabel promptAccInfoMsg1 = new CustomLabel("To authenticate, input account info and press Enter.");
+         Universial_Label promptAccInfoMsg1 = new Universial_Label("To authenticate, input account info and press Enter.");
          
          // labels and fields for input panel
-         CustomLabel accountPrompt = new CustomLabel("Account number");
+         Universial_Label accountPrompt = new Universial_Label("Account number");
          accountField = new JTextField();
          accountField.setFont(FONTSTYLE);
-         CustomLabel pinPrompt = new CustomLabel("PIN");
+         Universial_Label pinPrompt = new Universial_Label("PIN");
          pinField = new JPasswordField();
          pinField.setFont(FONTSTYLE);
          pinField.setEditable(false);
@@ -85,7 +85,7 @@ public class ATM {
          /**************************************/
 
          // labels for footer
-         CustomLabel availableNotesMsg = new CustomLabel(cashDispenser.showAvaliableBills());
+         Universial_Label availableNotesMsg = new Universial_Label(cashDispenser.showAvaliableBills());
          availableNotesMsg.usingTitleAndFooterStyle();
          
          // adding components to panels
@@ -170,7 +170,7 @@ public class ATM {
             accountField.setEditable(true);
             pinField.setEditable(false);
 
-            CustomLabel msgLabel = new CustomLabel("<html>" + message + "<br><br>Authenticate section canceled.</html>");
+            Universial_Label msgLabel = new Universial_Label("<html>" + message + "<br><br>Authenticate section canceled.</html>");
             
             JOptionPane.showMessageDialog(AuthenticatorFrame.this, msgLabel,"Authentication canceled", messageType);
 
@@ -196,7 +196,7 @@ public class ATM {
 
          // The top of the panel
          JPanel topPanel = new JPanel();
-         CustomLabel title = new CustomLabel("Main Menu");
+         Universial_Label title = new Universial_Label("Main Menu");
          title.setSize(25);
          topPanel.add(title);
          add(topPanel, BorderLayout.NORTH);
@@ -238,7 +238,7 @@ public class ATM {
 
          //Buttom Panel 
          JPanel buttomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-         CustomLabel footer = new CustomLabel ("Enter a choice:");
+         Universial_Label footer = new Universial_Label ("Enter a choice:");
          footer.setSize(30);
          buttomPanel.add(footer);
 

@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class Wbutton extends JButton {
+public class Universial_Button extends JButton {
 
     private final Font FONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
     Dimension buttonSize = new Dimension(100, 35);
@@ -11,7 +11,7 @@ public class Wbutton extends JButton {
     Color HoverColor = Color.gray;
 
     //this.setBackground(new Color(65, 125, 128));
-    public Wbutton(String label, Color ShowColor, Color HoverColor) {
+    public Universial_Button(String label, Color ShowColor, Color HoverColor) {
         ShowingColor = ShowColor;
         HoverColor = HoverColor;
 
@@ -24,7 +24,7 @@ public class Wbutton extends JButton {
 
     }
 
-    public Wbutton(String label) {
+    public Universial_Button(String label) {
         this.setText(label);
         this.setFont(FONTSTYLE);
         this.setPreferredSize(buttonSize);

@@ -500,7 +500,7 @@ public class Withdrawal extends Transaction
             }
 
             if (event.getSource() == customAmount) {
-               if (Integer.parseInt(customAmount.getText()) % 100 != 0) {
+               if (keypad.StringtoDouble(customAmount.getText()) % 100 != 0) {
                   JOptionPane.showMessageDialog(null, "Make sure the custom amount is divisible by 100 and try again.",
                         "Invalid value", JOptionPane.PLAIN_MESSAGE);
                } else {

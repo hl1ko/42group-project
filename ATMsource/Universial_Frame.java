@@ -3,7 +3,7 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
-public class Wframe extends JFrame {
+public class Universial_Frame extends JFrame {
 
     private final Font FONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
     private final Font NUMBERFONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
@@ -16,7 +16,7 @@ public class Wframe extends JFrame {
     JLabel NorthLabel = new JLabel("", SwingConstants.CENTER);
     JLabel SouthLabel = new JLabel("For further assistance, please contact customer support.", SwingConstants.CENTER);
 
-    public Wframe() {
+    public Universial_Frame() {
         LabelInit();
         NPanel.add(NorthLabel);
         SPanel.add(SouthLabel);

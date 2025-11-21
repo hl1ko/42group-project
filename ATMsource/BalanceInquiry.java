@@ -4,7 +4,6 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.border.*;
 
 public class BalanceInquiry extends Transaction {
    private double availableBalance;
@@ -47,7 +46,7 @@ public class BalanceInquiry extends Transaction {
          Screen screen = new Screen();
 
          // header panel layout
-         CustomLabel header = new CustomLabel("Balance Inquiry");
+         Universial_Label header = new Universial_Label("Balance Inquiry");
          header.usingTitleAndFooterStyle();
 
          // center panel layout
@@ -63,12 +62,12 @@ public class BalanceInquiry extends Transaction {
          infoPanel.setBackground(Color.WHITE);
 
          // labels for available balance
-         CustomLabel availableBalanceMsg = new CustomLabel("Available balance:");
-         CustomLabel showAvailableBalanceMsg = new CustomLabel(screen.dollarAmountToString(availableBalance));
+         Universial_Label availableBalanceMsg = new Universial_Label("Available balance:");
+         Universial_Label showAvailableBalanceMsg = new Universial_Label(screen.dollarAmountToString(availableBalance));
 
          // labels for total balance
-         CustomLabel totalBalanceMsg = new CustomLabel("Total balance:");
-         CustomLabel showTotalBalanceMsg = new CustomLabel(screen.dollarAmountToString(totalBalance));
+         Universial_Label totalBalanceMsg = new Universial_Label("Total balance:");
+         Universial_Label showTotalBalanceMsg = new Universial_Label(screen.dollarAmountToString(totalBalance));
 
          // button for back to main menu
          cancelButton = new JButton("Back to Main Menu");
@@ -81,7 +80,7 @@ public class BalanceInquiry extends Transaction {
          logoutButton.setBackground( Color.WHITE );
 
          // labal for footer
-         CustomLabel footer = new CustomLabel("For further assistance, please contact customer support.");
+         Universial_Label footer = new Universial_Label("For further assistance, please contact customer support.");
          footer.usingTitleAndFooterStyle();
 
          // adding components to panels

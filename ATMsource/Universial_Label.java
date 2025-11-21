@@ -2,12 +2,14 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 
-public class CustomLabel extends JLabel {
+public class Universial_Label extends JLabel {
     private final Font FONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
     private final Border HEADFOOTBORDER = BorderFactory.createEmptyBorder(0, 5, 0, 0);
-
-    public CustomLabel(String message) {
+    public Universial_Label(String message) {
         this.setText(message);
+        this.setFont(FONTSTYLE);
+    }
+    public Universial_Label() {
         this.setFont(FONTSTYLE);
     }
 

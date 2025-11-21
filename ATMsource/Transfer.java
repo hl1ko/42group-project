@@ -2,7 +2,6 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.border.*;
 
 public class Transfer extends Transaction {
 
@@ -12,7 +11,6 @@ public class Transfer extends Transaction {
     private int targetAccountNumber;
     private double amount; // amount to transfer
     private Keypad keypad; // reference to keypad
-    private final static int CANCELED = 0; // constant for cancel option
 
     public Transfer(int userAccountNumber, Screen atmScreen, //constructor for initializing objects
             BankDatabase atmBankDatabase, Keypad atmKeypad) {
@@ -20,49 +18,47 @@ public class Transfer extends Transaction {
         keypad = atmKeypad;  //additional constructor implemention to initialize extra object variable
     } // end Transfer constructor
 
-    public class AmountFrame extends Wframe {
+    private class AmountFrame extends Universial_Frame {
 
-        private final Font FONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
-        private final Font NUMBERFONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
-        private final Border FONTBORDER = BorderFactory.createEmptyBorder(5, 3, 5, 0);
-        private final Border HEADFOOTBORDER = BorderFactory.createEmptyBorder(0, 5, 0, 0);
-        private final int PANELHEIGHT = 80;
-        JLabel transferamount = new JLabel("Transfer amount: ");
-        JTextField inputbox2 = new JTextField();
-        Wbutton submitButton = new Wbutton("Submit");
-        Wbutton cancelButton = new Wbutton("Cancel");
-        
-        
+        Universial_Label transferamount = new Universial_Label("Transfer amount: ");
+        Universial_Textfield inputbox1 = new Universial_Textfield();
+        Universial_Label doubleinput = new Universial_Label("Transfer amount: ");
+        Universial_Textfield inputbox2 = new Universial_Textfield();
+        Universial_Button submitButton = new Universial_Button("Submit");
+        Universial_Button cancelButton = new Universial_Button("Cancel");
+
         private AmountFrame() {
-            
-            inputbox2.setEditable(true);
-            JPanel CPanel = new JPanel();
+
+            inputbox1.setEditable(true);
             JPanel IPanel = new JPanel();
             JPanel BPanel = new JPanel();
-            
+
             CPanel.setBorder(BorderFactory.createEmptyBorder(20, 80, 0, 80));
             CPanel.setBackground(Color.GRAY);
             CPanel.setPreferredSize(new Dimension(800, 400));
 
-            IPanel.setLayout(new GridLayout(6, 1));
+            IPanel.setLayout(new GridLayout(7, 1));
             IPanel.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, Color.WHITE));
             IPanel.setPreferredSize(new Dimension(400, 300));
             IPanel.setBackground(Color.WHITE);
 
-            IPanel.setLayout(new GridLayout(6, 1));
             BPanel.setLayout(new GridLayout(1, 2));
 
             transferamount.setPreferredSize(new Dimension(100, 20));
-            inputbox2.setPreferredSize(new Dimension(100, 20));
+            inputbox1.setPreferredSize(new Dimension(100, 20));
+
+            doubleinput.setVisible(false);
+            inputbox2.setVisible(false);
             //---------------------------
             BPanel.add(cancelButton);
             BPanel.add(submitButton);
             //---------------------------
+            IPanel.add(new Universial_Label("Transfering to: " + targetAccountNumber));
             IPanel.add(transferamount);
+            IPanel.add(inputbox1);
+            IPanel.add(doubleinput);
             IPanel.add(inputbox2);
-            IPanel.add(new JLabel());
-            IPanel.add(new JLabel("Avaliabe Balance: " + screen.dollarAmountToString(bankDatabase.getAvailableBalance(getAccountNumber()))));
-            IPanel.add(new JLabel());
+            IPanel.add(new Universial_Label("Avaliabe Balance: " + screen.dollarAmountToString(bankDatabase.getAvailableBalance(getAccountNumber()))));
             IPanel.add(BPanel);
             //---------------------------
             CPanel.add(IPanel);
@@ -70,15 +66,17 @@ public class Transfer extends Transaction {
 
             add(CPanel, BorderLayout.CENTER);
 
-            inputbox2.requestFocusInWindow();
+            inputbox1.requestFocusInWindow();
 
             eventhandler handler = new eventhandler();
+            inputbox1.addActionListener(handler);
             inputbox2.addActionListener(handler);
             submitButton.addActionListener(handler);
             cancelButton.addActionListener(handler);
 
             keylisten keyhandler = new keylisten();
             submitButton.addKeyListener(keyhandler);
+            cancelButton.addKeyListener(keyhandler);
         }
 
         private class keylisten implements KeyListener {
@@ -97,7 +95,7 @@ public class Transfer extends Transaction {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     if (e.getSource() == submitButton) {
-                        submit();
+                        dios();
                     }
                     if (e.getSource() == cancelButton) {
                         cancel();
@@ -108,13 +106,18 @@ public class Transfer extends Transaction {
 
         private class eventhandler implements ActionListener {
 
+            @Override
             public void actionPerformed(ActionEvent event) {
+                if (event.getSource() == inputbox1) {
+                    inputbox1.setEditable(false);
+                    submitButton.requestFocusInWindow();
+                }
                 if (event.getSource() == inputbox2) {
                     inputbox2.setEditable(false);
                     submitButton.requestFocusInWindow();
                 }
                 if (event.getSource() == submitButton) {
-                    submit();
+                    dios();
                 }
                 if (event.getSource() == cancelButton) {
                     cancel();
@@ -123,9 +126,38 @@ public class Transfer extends Transaction {
             }
         }
 
-        public void submit() {
-            amount = keypad.StringtoDouble(inputbox2.getText());
-            if (validateAmount(inputbox2.getText()) == 0) {
+        private void dios() {
+            if (inputbox2.isVisible() && doubleinput.isVisible()) {
+                if (checkEmptyField(inputbox2)) {
+                    inputbox2.setEditable(true);
+                    inputbox2.requestFocusInWindow();
+                    return;
+                }
+                submit();
+            } else {
+                if (checkEmptyField(inputbox1)) {
+                    reset();
+                    return;
+                }
+                if (validateAmount(inputbox1.getText()) == 0) {
+                    inputbox1.setEditable(false);
+                    doubleinput.setVisible(true);
+                    inputbox2.setEditable(true);
+                    inputbox2.setVisible(true);
+                    inputbox2.requestFocusInWindow();
+                } else {
+                    reset();
+                }
+            }
+        }
+
+        private void submit() {
+            if (!doubleCheckAmount(inputbox1, inputbox2)) {
+                screen.showMessage1("Failed double check.", "Unexpected Input");
+                reset();
+                return;
+            }
+            if (validateAmount(inputbox1.getText()) == 0) {
                 amount = keypad.StringtoDouble(inputbox2.getText());
                 System.out.println("transfer amount = " + amount);
                 callCframe();
@@ -136,30 +168,29 @@ public class Transfer extends Transaction {
 
         }
 
-        public void cancel() {
+        private void cancel() {
             toMainMenu = true;
             dispose();
         }
 
-        public void reset() {
+        private void reset() {
+            inputbox1.setText("");
+            inputbox1.setEditable(true);
             inputbox2.setText("");
             inputbox2.setEditable(true);
-            inputbox2.requestFocusInWindow();
+            doubleinput.setVisible(false);
+            inputbox2.setVisible(false);
+            inputbox1.requestFocusInWindow();
         }
     }
 
-    public class TransferFrame extends Wframe {
+    private class TransferFrame extends Universial_Frame {
 
-        private final Font FONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
-        private final Font NUMBERFONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
-        private final Border FONTBORDER = BorderFactory.createEmptyBorder(5, 3, 5, 0);
-        private final Border HEADFOOTBORDER = BorderFactory.createEmptyBorder(0, 5, 0, 0);
-        private final int PANELHEIGHT = 80;
-        JLabel accountnumber = new JLabel("Target Account Number: ");
-        JTextField inputbox1 = new JTextField();
+        Universial_Label accountnumber = new Universial_Label("Target Account Number: ");
+        Universial_Textfield inputbox1 = new Universial_Textfield();
 
-        Wbutton submitbutton = new Wbutton("Transfer!");
-        Wbutton cancelbutton = new Wbutton("Back to Main Menu!");
+        Universial_Button submitbutton = new Universial_Button("Transfer!");
+        Universial_Button cancelbutton = new Universial_Button("Back to Main Menu!");
 
         private TransferFrame() {
             inputbox1.setEditable(true);
@@ -232,6 +263,7 @@ public class Transfer extends Transaction {
 
         private class eventhandler implements ActionListener {
 
+            @Override
             public void actionPerformed(ActionEvent event) {
                 if (event.getSource() == inputbox1) {
                     inputbox1.setEditable(false);
@@ -253,7 +285,7 @@ public class Transfer extends Transaction {
                 reset();
                 return;
             }
-            if (validateTarget(inputbox1) == 0) {
+            if (!validateTarget(inputbox1)) {
                 targetAccountNumber = keypad.StringtoInt(inputbox1.getText());
                 System.out.println("target account = " + targetAccountNumber);
                 dispose();
@@ -275,16 +307,15 @@ public class Transfer extends Transaction {
         }
     }
 
+    private class Confirmframe extends Universial_Frame {
 
-    public class Confirmframe extends Wframe {
+        Universial_Label targetaccountBox1 = new Universial_Label(String.valueOf(targetAccountNumber));
+        Universial_Label amountBox1 = new Universial_Label(screen.dollarAmountToString(amount));
 
-        JLabel targetaccountBox1 = new JLabel(String.valueOf(targetAccountNumber));
-        JLabel amountBox1 = new JLabel(screen.dollarAmountToString(amount));
-        Wbutton submitbutton = new Wbutton("Submit");
-        Wbutton cancelbutton = new Wbutton("Cancel");
+        Universial_Button submitbutton = new Universial_Button("Submit");
+        Universial_Button cancelbutton = new Universial_Button("Cancel");
 
         private Confirmframe() {
-            JPanel CPanel = new JPanel();
             JPanel IPanel = new JPanel();
             JPanel BPanel = new JPanel();
 
@@ -296,14 +327,13 @@ public class Transfer extends Transaction {
             IPanel.setPreferredSize(new Dimension(300, 200));
             IPanel.setBackground(Color.WHITE);
 
-
             IPanel.setLayout(new GridLayout(6, 1));
             BPanel.setLayout(new GridLayout(1, 2));
 
             //-------------------------------
-            IPanel.add(new JLabel("Transfer target:"));
+            IPanel.add(new Universial_Label("Transfer target:"));
             IPanel.add(targetaccountBox1);
-            IPanel.add(new JLabel("Transfer amount:"));
+            IPanel.add(new Universial_Label("Transfer amount:"));
             IPanel.add(amountBox1);
             IPanel.add(new JLabel());
             BPanel.add(submitbutton);
@@ -323,6 +353,7 @@ public class Transfer extends Transaction {
         }
 
         private class eventhandler implements ActionListener {
+
             @Override
             public void actionPerformed(ActionEvent event) {
                 if (event.getSource() == submitbutton) {
@@ -363,12 +394,13 @@ public class Transfer extends Transaction {
             dispose();
             screen.waitUntilNotDisplaying(new MessageFrame("Transfer sucess.", "Transfer sucess.", 3));
             System.out.println(getAccountNumber() + " -> " + targetAccountNumber + ": " + amount);
+
             new Timer(3000, e -> {
                 logout = true;
             }).start();
             SwingUtilities.invokeLater(() -> {
+
                 bankDatabase.transfer(getAccountNumber(), targetAccountNumber, amount);
-                
             });
         }
 
@@ -406,18 +438,23 @@ public class Transfer extends Transaction {
         Cframe.setVisible(true); // display frame
     }
 
+    private boolean doubleCheckAmount(JTextField field1, JTextField field2) {
+        return (field1.getText()).equals(field2.getText());
+    }
+
     private int validateAmount(String inputString1) {
         int errorflag = 0;
         String errormsg = "";
         errormsg = errormsg + "<html>";
         amount = keypad.StringtoDouble(inputString1);
+
         if (bankDatabase.getAvailableBalance(getAccountNumber()) < amount) {
             screen.displayMessageLine("\nInsufficient funds in your account.");
             screen.displayMessageLine("\nCanceling transaction...");
 
             errormsg = errormsg + "Insufficient funds in your account.<br><br>" + "";
             //screen.showMessage1("Insufficient funds in your account.");
-            errorflag = 1;
+            errorflag = 2;
         }
 
         if (amount <= 0) {
@@ -426,7 +463,7 @@ public class Transfer extends Transaction {
 
             errormsg = errormsg + "Transfer can not be smaller or equals than zero.<br><br>" + "";
             //screen.showMessage1("Insufficient funds in your account.");
-            errorflag = 2;
+            errorflag = 3;
         }
         errormsg = errormsg + "</html>";
         if (errorflag != 0) {
@@ -435,18 +472,15 @@ public class Transfer extends Transaction {
         return errorflag;
     }
 
-    private int validateTarget(JTextField inputbox1) {
+    private boolean validateTarget(JTextField inputbox1) {
         String inputString1 = inputbox1.getText();
         targetAccountNumber = Integer.parseInt(inputString1);
 
-        int errorflag = 0;
+        boolean errorflag = false;
         String errormsg = "<html>";
         if (targetAccountNumber == getAccountNumber()) {
-            screen.displayMessageLine("\nYou cannot transfer to the same account.");
-            screen.displayMessageLine("Transaction cancelled.");
             errormsg = errormsg + "You cannot transfer to the same account.<br><br>" + "";
-            //screen.showMessage1("You cannot transfer to the same account.");
-            errorflag = 1;
+            errorflag = true;
         }
         if (!bankDatabase.checkAccountExist(targetAccountNumber)) {
             screen.displayMessageLine("Target account does not exist.");
@@ -454,7 +488,7 @@ public class Transfer extends Transaction {
 
             errormsg = errormsg + "Target account does not exist.<br><br>" + "";
             //screen.showMessage1("Target account does not exist.");
-            errorflag = 2;
+            errorflag = true;
         }
 
         if (inputbox1.getText().isEmpty()) {
@@ -463,12 +497,12 @@ public class Transfer extends Transaction {
 
             errormsg = errormsg + "Target account is essential<br><br>" + "";
             //screen.showMessage1("Target account does not exist.");
-            errorflag = 3;
+            errorflag = true;
         }
 
         errormsg = errormsg + "</html>";
         System.out.println("haha: \n" + errormsg);
-        if (errorflag != 0) {
+        if (errorflag) {
             screen.showMessage1(errormsg, "Unexpected Input");
         }
         return errorflag;
@@ -479,35 +513,11 @@ public class Transfer extends Transaction {
         callTframe();
     }
 
-    private boolean checkEmptyField(JTextField inputbox1) {
-        if (inputbox1.getText().length() == 0) {
+    private boolean checkEmptyField(Universial_Textfield inputbo1) {
+        if (inputbo1.getText().length() == 0) {
             screen.showMessage1("<html>Missing essential information.<br><br></html>", "Unexpected Input");
             return true;
         }
         return false;
     }
-
-    /*private double promptForTransferAmount() {
-        Screen screen = getScreen(); // get reference to screen
-
-        // prompt user to enter the first entry
-        screen.displayMessage("\nPlease enter a transfer amount in dollars up to maximum of two digits (.00): ");
-        double input = keypad.getInputFloat();
-
-        if (input <= 0) {
-            screen.displayMessageLine("\nThe amount must be greater than 0.");
-            return CANCELED;
-        }
-
-        // receive for the second entry for data vaildation
-        screen.displayMessage("\nPlease re-enter the transfer amount: ");
-        double input1 = keypad.getInputFloat();
-
-        if (input1 != input) {   //check if the second entry is equal to the first entry, if not the transaction would be cancelled
-            screen.displayMessageLine("\nThe transfer amount did not match.");
-            return CANCELED;
-        }
-
-        return (double) input; // return dollar amount 
-    } */
 }
