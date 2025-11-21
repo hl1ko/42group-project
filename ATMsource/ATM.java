@@ -390,7 +390,7 @@ public class ATM {
 
    }
 
-      private void waitUntilNotDisplaying(JFrame f) {
+   private void waitUntilNotDisplaying(JFrame f) {
       while (f.isDisplayable()) {
          try {
             Thread.sleep(100);
