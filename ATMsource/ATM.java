@@ -122,11 +122,10 @@ public class ATM {
                if (accountField.getText().length() > 0) {
 
                   if (accountField.getText().length() <= 9) {
-                     accountNumber = Integer.parseInt(accountField.getText());
                      accountField.setEditable(false);
                      pinField.setEditable(true);
                      pinField.requestFocusInWindow();
-                  } else {
+                  } else { 
                      cancel("The account number exceeds the maximum length of 9 digits.", JOptionPane.WARNING_MESSAGE);
                   }
 
@@ -171,7 +170,6 @@ public class ATM {
             pinField.setEditable(false);
 
             CustomLabel msgLabel = new CustomLabel("<html>" + message + "<br><br>Authenticate section canceled.</html>");
-            
             JOptionPane.showMessageDialog(AuthenticatorFrame.this, msgLabel,"Authentication canceled", messageType);
 
             accountField.requestFocusInWindow();
@@ -182,24 +180,23 @@ public class ATM {
 
    // display the main menu and return an input selection
    private class MainMenuFrame extends JFrame {
-
-      private final Font FONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
       private JButton balanceButton;
       private JButton withdrawalButton;
       private JButton transferButton;
       private JButton exitButton;
       private JTextField inputField;
 
+      private final Font FONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
+
       public MainMenuFrame () {
          super ("Main Menu");
          setLayout(new BorderLayout(10, 10));
 
          // The top of the panel
-         JPanel topPanel = new JPanel();
          CustomLabel title = new CustomLabel("Main Menu");
+         title.usingTitleAndFooterStyle();
          title.setSize(25);
-         topPanel.add(title);
-         add(topPanel, BorderLayout.NORTH);
+         add(title, BorderLayout.NORTH);
 
          // Center panel
          JPanel centerPanel = new JPanel();
@@ -239,11 +236,11 @@ public class ATM {
          //Buttom Panel 
          JPanel buttomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
          CustomLabel footer = new CustomLabel ("Enter a choice:");
-         footer.setSize(30);
+         footer.setSize(25);
          buttomPanel.add(footer);
 
          //Input field
-         inputField = new JTextField(28);
+         inputField = new JTextField(2);
          inputField.setFont(FONTSTYLE);
          buttomPanel.add(inputField);
          add(buttomPanel, BorderLayout.SOUTH);
@@ -281,14 +278,12 @@ public class ATM {
                executeTransaction();
                dispose();
             } else if (event.getSource() == exitButton) {
-               transactionType = EXIT;
-               userExited = true;
-               currentTransaction = null;
+               exit();
                dispose();
             } else if (event.getSource() == inputField) {
                transactionType = Integer.parseInt(inputField.getText());
 
-               if (transactionType < 1 || transactionType > 3) {
+               if (transactionType < BALANCE_INQUIRY || transactionType > EXIT) {
                   JLabel msgLabel = new JLabel("Your input is not within the range of choices");
                   msgLabel.setFont(FONTSTYLE);
                   JOptionPane.showMessageDialog(MainMenuFrame.this, msgLabel,
@@ -304,8 +299,18 @@ public class ATM {
          } // end method createTransaction
 
          private void executeTransaction() {
-            currentTransaction = createTransaction(transactionType);
-            currentTransaction.execute();
+            if (transactionType != EXIT) {
+               currentTransaction = createTransaction(transactionType);
+               currentTransaction.execute();
+            } else {
+               exit();
+            }
+         }
+
+         private void exit() {
+            transactionType = EXIT;
+            userExited = true;
+            currentTransaction = null;
          }
       }
 
@@ -358,7 +363,8 @@ public class ATM {
 
       switch (transactionType) {
          case BALANCE_INQUIRY: // create new BalanceInquiry transaction
-            waitUntilNotDisplaying(new CancelTranscationFrame());
+            waitUntilNotDisplaying(new MessageFrame("Take Card","<html>Please take your card now.</html>", 3));
+            waitUntilNotDisplaying(new LogoutFrame(3));
             break;
          case WITHDRAWAL: // create new Withdrawal transaction
             Withdrawal withdrawal = (Withdrawal) currentTransaction;
@@ -373,7 +379,7 @@ public class ATM {
                case 2:
                   waitUntilNotDisplaying(new MessageFrame("Take Card","<html>Withdrawal success.<br></br>Please take your card now.</html>", 3));
                   waitUntilNotDisplaying(new MessageFrame("Take Cash","Please take your cash now.", 3));
-                  waitUntilNotDisplaying(new LogoutFrame(""));
+                  waitUntilNotDisplaying(new LogoutFrame(3));
                   break;
                case 3:
                   waitUntilNotDisplaying(new MessageFrame("Insufficient cash","<html>Insufficient cash available in the ATM.<br></br>Please choose a smaller amount.</html>", 3));
@@ -382,15 +388,18 @@ public class ATM {
                   waitUntilNotDisplaying(new MessageFrame("Insufficient funds", "<html>Insufficient funds in your account.<br></br>Please choose a smaller amount.</html>", 3));
                   break;
                case 5:
-                  waitUntilNotDisplaying(new CancelTranscationFrame());
+                  waitUntilNotDisplaying(new LogoutFrame(3));
                   break;
             }
 
             break;
          case TRANSFER:
+
+
             break;
          case EXIT:
-            waitUntilNotDisplaying(new LogoutFrame(""));
+            waitUntilNotDisplaying(new MessageFrame("Take Card","<html>Please take your card now.</html>", 3));
+            waitUntilNotDisplaying(new LogoutFrame(3));
             break;
       }
    }
