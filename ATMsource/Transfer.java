@@ -20,7 +20,7 @@ public class Transfer extends Transaction {
         keypad = atmKeypad;  //additional constructor implemention to initialize extra object variable
     } // end Transfer constructor
 
-    public class AmountFrame extends JFrame {
+    public class AmountFrame extends Wframe {
 
         private final Font FONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
         private final Font NUMBERFONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
@@ -29,28 +29,17 @@ public class Transfer extends Transaction {
         private final int PANELHEIGHT = 80;
         JLabel transferamount = new JLabel("Transfer amount: ");
         JTextField inputbox2 = new JTextField();
-        JButton submitButton = new JButton("Submit");
-        JButton cancelButton = new JButton("Cancel");
-
+        Wbutton submitButton = new Wbutton("Submit");
+        Wbutton cancelButton = new Wbutton("Cancel");
+        
+        
         private AmountFrame() {
+            
             inputbox2.setEditable(true);
-            JPanel NPanel = new JPanel();
-            JPanel SPanel = new JPanel();
             JPanel CPanel = new JPanel();
             JPanel IPanel = new JPanel();
             JPanel BPanel = new JPanel();
-
-            NPanel.setPreferredSize(new Dimension(800, PANELHEIGHT));
-            NPanel.setBackground(Color.white);
-
-            JLabel footer = new JLabel("For further assistance, please contact customer support.");
-            footer.setFont(FONTSTYLE);
-            footer.setBorder(HEADFOOTBORDER);
-            footer.setPreferredSize(new Dimension(800, PANELHEIGHT));
-
-            //SPanel.setLayout(new BoxLayout(NPanel, BoxLayout.Y_AXIS));
-            SPanel.setPreferredSize(new Dimension(800, PANELHEIGHT));
-
+            
             CPanel.setBorder(BorderFactory.createEmptyBorder(20, 80, 0, 80));
             CPanel.setBackground(Color.GRAY);
             CPanel.setPreferredSize(new Dimension(800, 400));
@@ -65,9 +54,6 @@ public class Transfer extends Transaction {
 
             transferamount.setPreferredSize(new Dimension(100, 20));
             inputbox2.setPreferredSize(new Dimension(100, 20));
-
-            submitButton.setPreferredSize(new Dimension(100, 20));
-            cancelButton.setPreferredSize(new Dimension(100, 20));
             //---------------------------
             BPanel.add(cancelButton);
             BPanel.add(submitButton);
@@ -79,11 +65,9 @@ public class Transfer extends Transaction {
             IPanel.add(new JLabel());
             IPanel.add(BPanel);
             //---------------------------
-            SPanel.add(footer);
             CPanel.add(IPanel);
             //---------------------------
-            add(NPanel, BorderLayout.NORTH);
-            add(SPanel, BorderLayout.SOUTH);
+
             add(CPanel, BorderLayout.CENTER);
 
             inputbox2.requestFocusInWindow();
@@ -164,7 +148,7 @@ public class Transfer extends Transaction {
         }
     }
 
-    public class TransferFrame extends JFrame {
+    public class TransferFrame extends Wframe {
 
         private final Font FONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
         private final Font NUMBERFONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
@@ -173,36 +157,21 @@ public class Transfer extends Transaction {
         private final int PANELHEIGHT = 80;
         JLabel accountnumber = new JLabel("Target Account Number: ");
         JTextField inputbox1 = new JTextField();
-        //JButton submitbutton = new JButton("Transfer");
 
         Wbutton submitbutton = new Wbutton("Transfer!");
         Wbutton cancelbutton = new Wbutton("Back to Main Menu!");
 
         private TransferFrame() {
-
             inputbox1.setEditable(true);
-            JPanel NPanel = new JPanel();
-            JPanel SPanel = new JPanel();
-            JPanel CPanel = new JPanel();
             JPanel IPanel = new JPanel();
             JPanel BPanel = new JPanel();
-            //NPanel.setLayout(new BoxLayout(NPanel, BoxLayout.Y_AXIS));
-            NPanel.setPreferredSize(new Dimension(800, PANELHEIGHT));
 
-            JLabel footer = new JLabel("For further assistance, please contact customer support.");
-            footer.setFont(FONTSTYLE);
-            footer.setBorder(HEADFOOTBORDER);
-            footer.setPreferredSize(new Dimension(800, PANELHEIGHT));
-
-            //SPanel.setLayout(new BoxLayout(NPanel, BoxLayout.Y_AXIS));
-            SPanel.setPreferredSize(new Dimension(800, PANELHEIGHT));
-
-            CPanel.setBorder(BorderFactory.createEmptyBorder(95, 240, 0, 240));
+            CPanel.setBorder(BorderFactory.createEmptyBorder(40, 120, 40, 120));
             CPanel.setBackground(Color.GRAY);
 
             IPanel.setLayout(new GridLayout(6, 1));
             IPanel.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, Color.WHITE));
-            IPanel.setPreferredSize(new Dimension(300, 200));
+            IPanel.setPreferredSize(new Dimension(500, 300));
             IPanel.setBackground(Color.WHITE);
 
             IPanel.setLayout(new GridLayout(6, 1));
@@ -211,9 +180,6 @@ public class Transfer extends Transaction {
 
             accountnumber.setPreferredSize(new Dimension(100, 20));
             inputbox1.setPreferredSize(new Dimension(100, 20));
-
-            submitbutton.setPreferredSize(new Dimension(100, 20));
-            cancelbutton.setPreferredSize(new Dimension(100, 20));
 
             //----------------------
             IPanel.add(accountnumber);
@@ -225,12 +191,9 @@ public class Transfer extends Transaction {
             IPanel.add(new JLabel());
             IPanel.add(BPanel);
             //----------------------
-            SPanel.add(footer);
             CPanel.add(IPanel);
             //-----------------------------------
             add(CPanel, BorderLayout.CENTER);
-            add(NPanel, BorderLayout.NORTH);
-            add(SPanel, BorderLayout.SOUTH);
 
             eventhandler handler = new eventhandler();
             inputbox1.addActionListener(handler);
@@ -312,36 +275,18 @@ public class Transfer extends Transaction {
         }
     }
 
-    public class Wbutton extends JButton {
 
-        private final Font FONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
-        Dimension buttonSize = new Dimension(100, 35);
-
-        public Wbutton(String label) {
-            this.setText(label);
-            this.setFont(FONTSTYLE);
-            this.setPreferredSize(buttonSize);
-            this.setBackground(new Color(65, 125, 128));
-            this.setBackground(Color.WHITE);
-        }
-    }
-
-    public class Confirmframe extends JFrame {
+    public class Confirmframe extends Wframe {
 
         JLabel targetaccountBox1 = new JLabel(String.valueOf(targetAccountNumber));
         JLabel amountBox1 = new JLabel(screen.dollarAmountToString(amount));
-        JButton submitbutton = new JButton("Submit");
-        JButton cancelbutton = new JButton("Cancel");
+        Wbutton submitbutton = new Wbutton("Submit");
+        Wbutton cancelbutton = new Wbutton("Cancel");
 
         private Confirmframe() {
-            JPanel NPanel = new JPanel();
-            JPanel SPanel = new JPanel();
             JPanel CPanel = new JPanel();
             JPanel IPanel = new JPanel();
             JPanel BPanel = new JPanel();
-
-            NPanel.setBackground(Color.white);
-            SPanel.setBackground(Color.white);
 
             CPanel.setBorder(BorderFactory.createEmptyBorder(95, 240, 0, 240));
             CPanel.setBackground(Color.GRAY);
@@ -351,8 +296,6 @@ public class Transfer extends Transaction {
             IPanel.setPreferredSize(new Dimension(300, 200));
             IPanel.setBackground(Color.WHITE);
 
-            NPanel.setPreferredSize(new Dimension(800, 80));
-            SPanel.setPreferredSize(new Dimension(100, 100));
 
             IPanel.setLayout(new GridLayout(6, 1));
             BPanel.setLayout(new GridLayout(1, 2));
@@ -376,12 +319,11 @@ public class Transfer extends Transaction {
             cancelbutton.addKeyListener(keyhandler);
 
             CPanel.add(IPanel);
-            add(NPanel, BorderLayout.NORTH);
             add(CPanel, BorderLayout.CENTER);
         }
 
         private class eventhandler implements ActionListener {
-
+            @Override
             public void actionPerformed(ActionEvent event) {
                 if (event.getSource() == submitbutton) {
                     submit();
@@ -422,10 +364,11 @@ public class Transfer extends Transaction {
             screen.waitUntilNotDisplaying(new MessageFrame("Transfer sucess.", "Transfer sucess.", 3));
             System.out.println(getAccountNumber() + " -> " + targetAccountNumber + ": " + amount);
             new Timer(3000, e -> {
-                toMainMenu = true;
+                logout = true;
             }).start();
             SwingUtilities.invokeLater(() -> {
                 bankDatabase.transfer(getAccountNumber(), targetAccountNumber, amount);
+                
             });
         }
 
