@@ -78,12 +78,6 @@ public class ATM {
          resetButton = new JButton("Reset");
          resetButton.setFont(FONTSTYLE);
 
-         /**************************************/
-         //For debug
-         accountField.setText("12345"); 
-         pinField.setText("54321");   
-         /**************************************/
-
          // labels for footer
          CustomLabel availableNotesMsg = new CustomLabel(cashDispenser.showAvaliableBills());
          availableNotesMsg.usingTitleAndFooterStyle();
@@ -264,23 +258,30 @@ public class ATM {
       private class MenuButtonHandler implements ActionListener {
          public void actionPerformed(ActionEvent event) {
             
-            // determine which type of Transaction to create
             if (event.getSource() == balanceButton) {
                transactionType = BALANCE_INQUIRY;
                executeTransaction();
-               dispose();
-            } else if (event.getSource() == withdrawalButton) {
+               dispose();  // close the GUI window
+            } 
+            
+            if (event.getSource() == withdrawalButton) {
                transactionType = WITHDRAWAL;
                executeTransaction();
-               dispose();
-            } else if (event.getSource() == transferButton) {
+               dispose();  // close the GUI window
+            } 
+            
+            if (event.getSource() == transferButton) {
                transactionType = TRANSFER;
                executeTransaction();
-               dispose();
-            } else if (event.getSource() == exitButton) {
+               dispose();  // close the GUI window
+            } 
+            
+            if (event.getSource() == exitButton) {
                exit();
-               dispose();
-            } else if (event.getSource() == inputField) {
+               dispose();  // close the GUI window
+            } 
+            
+            if (event.getSource() == inputField) {
                transactionType = Integer.parseInt(inputField.getText());
 
                if (transactionType < BALANCE_INQUIRY || transactionType > EXIT) {
@@ -296,7 +297,7 @@ public class ATM {
                dispose();
             }
 
-         } // end method createTransaction
+         } 
 
          private void executeTransaction() {
             if (transactionType != EXIT) {
@@ -362,7 +363,7 @@ public class ATM {
 
    // display the main menu and perform transactions
    private void performTransactions() {
-      userExited = false; // user has not chosen to exit
+      userExited = false; // user has not been logged out
 
       do {
          // calling the UI
