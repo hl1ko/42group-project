@@ -77,12 +77,7 @@ public class ATM {
          pinField.setEditable(false);
          resetButton = new JButton("Reset");
          resetButton.setFont(FONTSTYLE);
-
-         /**************************************/
-         //For debug
-         accountField.setText("12345"); 
-         pinField.setText("54321");   
-         /**************************************/
+         resetButton.setBackground(Color.WHITE);
 
          // labels for footer
          Universial_Label availableNotesMsg = new Universial_Label(cashDispenser.showAvaliableBills());
@@ -122,11 +117,10 @@ public class ATM {
                if (accountField.getText().length() > 0) {
 
                   if (accountField.getText().length() <= 9) {
-                     accountNumber = Integer.parseInt(accountField.getText());
                      accountField.setEditable(false);
                      pinField.setEditable(true);
                      pinField.requestFocusInWindow();
-                  } else {
+                  } else { 
                      cancel("The account number exceeds the maximum length of 9 digits.", JOptionPane.WARNING_MESSAGE);
                   }
 
@@ -137,9 +131,9 @@ public class ATM {
             }
             
             if (event.getSource() == pinField) {
-               accountNumber = Integer.parseInt(accountField.getText());
-
-               if (pinField.getPassword().length > 0) {
+               
+               if (pinField.getPassword().length == 5) {
+                  accountNumber = Integer.parseInt(accountField.getText());
                   pin = Integer.parseInt(new String(pinField.getPassword()));
 
                   // set userAuthenticated to boolean value returned by database
@@ -153,7 +147,7 @@ public class ATM {
                   }
 
                } else {
-                  cancel("The PIN field is empty.", JOptionPane.WARNING_MESSAGE);
+                  cancel("The PIN should be consist of 5 digits.", JOptionPane.WARNING_MESSAGE);
                }
 
             }
@@ -182,13 +176,13 @@ public class ATM {
 
    // display the main menu and return an input selection
    private class MainMenuFrame extends JFrame {
-
-      private final Font FONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
       private JButton balanceButton;
       private JButton withdrawalButton;
       private JButton transferButton;
       private JButton exitButton;
       private JTextField inputField;
+
+      private final Font FONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
 
       public MainMenuFrame () {
          super ("Main Menu");
@@ -198,8 +192,7 @@ public class ATM {
          JPanel topPanel = new JPanel();
          Universial_Label title = new Universial_Label("Main Menu");
          title.setSize(25);
-         topPanel.add(title);
-         add(topPanel, BorderLayout.NORTH);
+         add(title, BorderLayout.NORTH);
 
          // Center panel
          JPanel centerPanel = new JPanel();
@@ -243,7 +236,7 @@ public class ATM {
          buttomPanel.add(footer);
 
          //Input field
-         inputField = new JTextField(28);
+         inputField = new JTextField(2);
          inputField.setFont(FONTSTYLE);
          buttomPanel.add(inputField);
          add(buttomPanel, BorderLayout.SOUTH);
@@ -267,45 +260,63 @@ public class ATM {
       private class MenuButtonHandler implements ActionListener {
          public void actionPerformed(ActionEvent event) {
             
-            // determine which type of Transaction to create
             if (event.getSource() == balanceButton) {
                transactionType = BALANCE_INQUIRY;
                executeTransaction();
-               dispose();
-            } else if (event.getSource() == withdrawalButton) {
+               dispose();  // close the GUI window
+            } 
+            
+            if (event.getSource() == withdrawalButton) {
                transactionType = WITHDRAWAL;
                executeTransaction();
-               dispose();
-            } else if (event.getSource() == transferButton) {
+               dispose();  // close the GUI window
+            } 
+            
+            if (event.getSource() == transferButton) {
                transactionType = TRANSFER;
                executeTransaction();
-               dispose();
-            } else if (event.getSource() == exitButton) {
-               transactionType = EXIT;
-               userExited = true;
-               currentTransaction = null;
-               dispose();
-            } else if (event.getSource() == inputField) {
+               dispose();  // close the GUI window
+            } 
+            
+            if (event.getSource() == exitButton) {
+               exit();
+               dispose();  // close the GUI window
+            } 
+            
+            if (event.getSource() == inputField) {
                transactionType = Integer.parseInt(inputField.getText());
 
-               if (transactionType < 1 || transactionType > 3) {
+               if (transactionType >= BALANCE_INQUIRY && transactionType <= EXIT) {
+                  executeTransaction();
+                  dispose();
+               } else {
+                  inputField.setText("");
+               
                   JLabel msgLabel = new JLabel("Your input is not within the range of choices");
                   msgLabel.setFont(FONTSTYLE);
                   JOptionPane.showMessageDialog(MainMenuFrame.this, msgLabel,
                   "", 1);
 
                   inputField.requestFocusInWindow();
-               }
+               } 
 
-               executeTransaction();
-               dispose();
             }
 
-         } // end method createTransaction
+         } 
 
          private void executeTransaction() {
-            currentTransaction = createTransaction(transactionType);
-            currentTransaction.execute();
+            if (transactionType != EXIT) {
+               currentTransaction = createTransaction(transactionType);
+               currentTransaction.execute();
+            } else {
+               exit();
+            }
+         }
+
+         private void exit() {
+            transactionType = EXIT;
+            userExited = true;
+            currentTransaction = null;
          }
       }
 
@@ -344,57 +355,6 @@ public class ATM {
       } // end while
    } // end method run
 
-   private void waitUntilNotDisplaying(JFrame f) {
-      while (f.isDisplayable()) {
-         try {
-            Thread.sleep(100);
-         } catch (InterruptedException e) {
-            e.printStackTrace();
-         }
-      }
-   }
-
-   private void displayExitFrame(int transactionType) {
-
-      switch (transactionType) {
-         case BALANCE_INQUIRY: // create new BalanceInquiry transaction
-            waitUntilNotDisplaying(new CancelTranscationFrame());
-            break;
-         case WITHDRAWAL: // create new Withdrawal transaction
-            Withdrawal withdrawal = (Withdrawal) currentTransaction;
-
-            switch (withdrawal.getStateNum()) {
-               case 0:
-                  waitUntilNotDisplaying(new MessageFrame("Not enough bills", "<html>Not enough bills in the ATM to handle your withdrawal request.<br></br> Please use other ATM.</html", 3));
-                  break;
-               case 1:
-                  waitUntilNotDisplaying(new MessageFrame("Not enough bills", "<html>Not enough bills in the ATM to handle your withdrawal request.<br></br> Please use other ATM.</html", 3));
-                  break;
-               case 2:
-                  waitUntilNotDisplaying(new MessageFrame("Take Card","<html>Withdrawal success.<br></br>Please take your card now.</html>", 3));
-                  waitUntilNotDisplaying(new MessageFrame("Take Cash","Please take your cash now.", 3));
-                  waitUntilNotDisplaying(new LogoutFrame(""));
-                  break;
-               case 3:
-                  waitUntilNotDisplaying(new MessageFrame("Insufficient cash","<html>Insufficient cash available in the ATM.<br></br>Please choose a smaller amount.</html>", 3));
-                  break;
-               case 4:
-                  waitUntilNotDisplaying(new MessageFrame("Insufficient funds", "<html>Insufficient funds in your account.<br></br>Please choose a smaller amount.</html>", 3));
-                  break;
-               case 5:
-                  waitUntilNotDisplaying(new CancelTranscationFrame());
-                  break;
-            }
-
-            break;
-         case TRANSFER:
-            break;
-         case EXIT:
-            waitUntilNotDisplaying(new LogoutFrame(""));
-            break;
-      }
-   }
-
    private void authenticateUser() {
       AuthenticatorFrame authenticatorFrame = new AuthenticatorFrame();
       authenticatorFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -403,18 +363,12 @@ public class ATM {
       authenticatorFrame.setVisible(true); // display frame
       
       // Wait until the frame is disposed
-      while (authenticatorFrame.isDisplayable()) {
-         try {
-            Thread.sleep(100);
-         } catch (InterruptedException e) {
-            e.printStackTrace();
-         }
-      }
+      while (authenticatorFrame.isDisplayable()) {}
    }
 
    // display the main menu and perform transactions
    private void performTransactions() {
-      userExited = false; // user has not chosen to exit
+      userExited = false; // user has not been logged out
 
       do {
          // calling the UI
@@ -424,13 +378,7 @@ public class ATM {
          mainMenuFrame.setLocationRelativeTo(null);
          mainMenuFrame.setVisible(true); // display frame
 
-         while (mainMenuFrame.isDisplayable()) {
-            try {
-               Thread.sleep(100);
-            } catch (InterruptedException e) {
-               e.printStackTrace();
-            }
-         }
+         while (mainMenuFrame.isDisplayable()) {}
 
          while (currentTransaction != null && currentTransaction.getToMainMenuFlag() == false && currentTransaction.getLogoutFlag() == false) {
             try {
@@ -446,7 +394,58 @@ public class ATM {
 
       } while (!userExited);
 
-   } // end switch
+   }
+
+   private void waitUntilNotDisplaying(JFrame f) {
+      while (f.isDisplayable()) {
+      }
+   }
+
+   private void displayExitFrame(int transactionType) {
+
+      switch (transactionType) {
+         case BALANCE_INQUIRY: // create new BalanceInquiry transaction
+            waitUntilNotDisplaying(new MessageFrame("Take Card","<html>Please take your card now.</html>", 3));
+            waitUntilNotDisplaying(new LogoutFrame(3));
+            break;
+         case WITHDRAWAL: // create new Withdrawal transaction
+            Withdrawal withdrawal = (Withdrawal) currentTransaction;
+
+            switch (withdrawal.getStateNum()) {
+               case 0:
+                  waitUntilNotDisplaying(new MessageFrame("Not enough bills", "<html>Not enough bills in the ATM to handle your withdrawal request.<br></br>Please use other ATM.</html>", 3));
+                  break;
+               case 1:
+                  waitUntilNotDisplaying(new MessageFrame("Not enough bills", "<html>Not enough bills in the ATM to handle your withdrawal request.<br></br> Please use other ATM.</html>", 3));
+                  break;
+               case 2:
+                  waitUntilNotDisplaying(new MessageFrame("Take Card","<html>Withdrawal success.<br></br>Please take your card now.</html>", 3));
+                  waitUntilNotDisplaying(new MessageFrame("Take Cash","Please take your cash now.", 3));
+                  waitUntilNotDisplaying(new LogoutFrame(3));
+                  break;
+               case 3:
+                  waitUntilNotDisplaying(new MessageFrame("Insufficient cash","<html>Insufficient cash available in the ATM.<br></br>Please choose a smaller amount.</html>", 3));
+                  break;
+               case 4:
+                  waitUntilNotDisplaying(new MessageFrame("Insufficient funds", "<html>Insufficient funds in your account.<br></br>Please choose a smaller amount.</html>", 3));
+                  break;
+               case 5:
+                  waitUntilNotDisplaying(new LogoutFrame(3));
+                  break;
+            }
+
+            break;
+         case TRANSFER:
+
+
+            break;
+         case EXIT:
+            waitUntilNotDisplaying(new MessageFrame("Take Card","<html>Please take your card now.</html>", 3));
+            waitUntilNotDisplaying(new LogoutFrame(3));
+            break;
+      }
+   }
+   
 } // end class ATM
 
 
