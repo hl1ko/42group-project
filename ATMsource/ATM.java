@@ -77,6 +77,7 @@ public class ATM {
          pinField.setEditable(false);
          resetButton = new JButton("Reset");
          resetButton.setFont(FONTSTYLE);
+         resetButton.setBackground(Color.WHITE);
 
          // labels for footer
          CustomLabel availableNotesMsg = new CustomLabel(cashDispenser.showAvaliableBills());
@@ -284,17 +285,20 @@ public class ATM {
             if (event.getSource() == inputField) {
                transactionType = Integer.parseInt(inputField.getText());
 
-               if (transactionType < BALANCE_INQUIRY || transactionType > EXIT) {
+               if (transactionType >= BALANCE_INQUIRY && transactionType <= EXIT) {
+                  executeTransaction();
+                  dispose();
+               } else {
+                  inputField.setText("");
+               
                   JLabel msgLabel = new JLabel("Your input is not within the range of choices");
                   msgLabel.setFont(FONTSTYLE);
                   JOptionPane.showMessageDialog(MainMenuFrame.this, msgLabel,
                   "", 1);
 
                   inputField.requestFocusInWindow();
-               }
+               } 
 
-               executeTransaction();
-               dispose();
             }
 
          } 
@@ -408,10 +412,10 @@ public class ATM {
 
             switch (withdrawal.getStateNum()) {
                case 0:
-                  waitUntilNotDisplaying(new MessageFrame("Not enough bills", "<html>Not enough bills in the ATM to handle your withdrawal request.<br></br> Please use other ATM.</html", 3));
+                  waitUntilNotDisplaying(new MessageFrame("Not enough bills", "<html>Not enough bills in the ATM to handle your withdrawal request.<br></br>Please use other ATM.</html>", 3));
                   break;
                case 1:
-                  waitUntilNotDisplaying(new MessageFrame("Not enough bills", "<html>Not enough bills in the ATM to handle your withdrawal request.<br></br> Please use other ATM.</html", 3));
+                  waitUntilNotDisplaying(new MessageFrame("Not enough bills", "<html>Not enough bills in the ATM to handle your withdrawal request.<br></br> Please use other ATM.</html>", 3));
                   break;
                case 2:
                   waitUntilNotDisplaying(new MessageFrame("Take Card","<html>Withdrawal success.<br></br>Please take your card now.</html>", 3));
