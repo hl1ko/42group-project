@@ -136,9 +136,9 @@ public class ATM {
             }
             
             if (event.getSource() == pinField) {
-               accountNumber = Integer.parseInt(accountField.getText());
-
-               if (pinField.getPassword().length > 0) {
+               
+               if (pinField.getPassword().length == 5) {
+                  accountNumber = Integer.parseInt(accountField.getText());
                   pin = Integer.parseInt(new String(pinField.getPassword()));
 
                   // set userAuthenticated to boolean value returned by database
@@ -152,7 +152,7 @@ public class ATM {
                   }
 
                } else {
-                  cancel("The PIN field is empty.", JOptionPane.WARNING_MESSAGE);
+                  cancel("The PIN should be consist of 5 digits.", JOptionPane.WARNING_MESSAGE);
                }
 
             }
