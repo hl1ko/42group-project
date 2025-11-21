@@ -349,7 +349,48 @@ public class ATM {
       } // end while
    } // end method run
 
-   private void waitUntilNotDisplaying(JFrame f) {
+   private void authenticateUser() {
+      AuthenticatorFrame authenticatorFrame = new AuthenticatorFrame();
+      authenticatorFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      authenticatorFrame.setSize(800, 600); // set frame size
+      authenticatorFrame.setLocationRelativeTo(null);
+      authenticatorFrame.setVisible(true); // display frame
+      
+      // Wait until the frame is disposed
+      while (authenticatorFrame.isDisplayable()) {}
+   }
+
+   // display the main menu and perform transactions
+   private void performTransactions() {
+      userExited = false; // user has not chosen to exit
+
+      do {
+         // calling the UI
+         MainMenuFrame mainMenuFrame = new MainMenuFrame();
+         mainMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+         mainMenuFrame.setSize(800, 600); // set frame size
+         mainMenuFrame.setLocationRelativeTo(null);
+         mainMenuFrame.setVisible(true); // display frame
+
+         while (mainMenuFrame.isDisplayable()) {}
+
+         while (currentTransaction != null && currentTransaction.getToMainMenuFlag() == false && currentTransaction.getLogoutFlag() == false) {
+            try {
+               Thread.sleep(100);
+            } catch (InterruptedException e) {
+               e.printStackTrace();
+            }
+         }
+
+         if (currentTransaction != null && currentTransaction.getLogoutFlag() == true) {  // if user attempt to logout from GUI
+            userExited = true;
+         }
+
+      } while (!userExited);
+
+   }
+
+      private void waitUntilNotDisplaying(JFrame f) {
       while (f.isDisplayable()) {
          try {
             Thread.sleep(100);
@@ -403,59 +444,7 @@ public class ATM {
             break;
       }
    }
-
-   private void authenticateUser() {
-      AuthenticatorFrame authenticatorFrame = new AuthenticatorFrame();
-      authenticatorFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      authenticatorFrame.setSize(800, 600); // set frame size
-      authenticatorFrame.setLocationRelativeTo(null);
-      authenticatorFrame.setVisible(true); // display frame
-      
-      // Wait until the frame is disposed
-      while (authenticatorFrame.isDisplayable()) {
-         try {
-            Thread.sleep(100);
-         } catch (InterruptedException e) {
-            e.printStackTrace();
-         }
-      }
-   }
-
-   // display the main menu and perform transactions
-   private void performTransactions() {
-      userExited = false; // user has not chosen to exit
-
-      do {
-         // calling the UI
-         MainMenuFrame mainMenuFrame = new MainMenuFrame();
-         mainMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-         mainMenuFrame.setSize(800, 600); // set frame size
-         mainMenuFrame.setLocationRelativeTo(null);
-         mainMenuFrame.setVisible(true); // display frame
-
-         while (mainMenuFrame.isDisplayable()) {
-            try {
-               Thread.sleep(100);
-            } catch (InterruptedException e) {
-               e.printStackTrace();
-            }
-         }
-
-         while (currentTransaction != null && currentTransaction.getToMainMenuFlag() == false && currentTransaction.getLogoutFlag() == false) {
-            try {
-               Thread.sleep(100);
-            } catch (InterruptedException e) {
-               e.printStackTrace();
-            }
-         }
-
-         if (currentTransaction != null && currentTransaction.getLogoutFlag() == true) {  // if user attempt to logout from GUI
-            userExited = true;
-         }
-
-      } while (!userExited);
-
-   } // end switch
+   
 } // end class ATM
 
 
