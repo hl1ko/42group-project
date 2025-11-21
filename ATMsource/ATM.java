@@ -392,11 +392,6 @@ public class ATM {
 
    private void waitUntilNotDisplaying(JFrame f) {
       while (f.isDisplayable()) {
-         try {
-            Thread.sleep(100);
-         } catch (InterruptedException e) {
-            e.printStackTrace();
-         }
       }
    }
 
