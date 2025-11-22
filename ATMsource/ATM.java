@@ -34,7 +34,7 @@ public class ATM {
    private class AuthenticatorFrame extends JFrame {
       private JTextField accountField;
       private JPasswordField pinField;
-      private JButton resetButton;
+      private Universial_Button resetButton;
 
       private final Font FONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
       private final Border HEADFOOTBORDER = BorderFactory.createEmptyBorder(0, 5, 0, 0);
@@ -75,9 +75,7 @@ public class ATM {
          pinField = new JPasswordField();
          pinField.setFont(FONTSTYLE);
          pinField.setEditable(false);
-         resetButton = new JButton("Reset");
-         resetButton.setFont(FONTSTYLE);
-         resetButton.setBackground(Color.WHITE);
+         resetButton = new Universial_Button("Reset");
 
          // labels for footer
          Universial_Label availableNotesMsg = new Universial_Label(cashDispenser.showAvaliableBills());
@@ -176,10 +174,10 @@ public class ATM {
 
    // display the main menu and return an input selection
    private class MainMenuFrame extends JFrame {
-      private JButton balanceButton;
-      private JButton withdrawalButton;
-      private JButton transferButton;
-      private JButton exitButton;
+      private Universial_Button balanceButton;
+      private Universial_Button withdrawalButton;
+      private Universial_Button transferButton;
+      private Universial_Button exitButton;
       private JTextField inputField;
 
       private final Font FONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
@@ -189,7 +187,6 @@ public class ATM {
          setLayout(new BorderLayout(10, 10));
 
          // The top of the panel
-         JPanel topPanel = new JPanel();
          Universial_Label title = new Universial_Label("Main Menu");
          title.setSize(25);
          add(title, BorderLayout.NORTH);
@@ -200,28 +197,16 @@ public class ATM {
          add(centerPanel, BorderLayout.CENTER);
 
          //Menu button
-         balanceButton = new JButton("1 - View my balance");
-         withdrawalButton = new JButton("2 - Withdraw cash");
-         transferButton = new JButton("3 - Transfer");
-         exitButton = new JButton("4 - Exit");
-
-         //The Front of the button
-         balanceButton.setFont(FONTSTYLE);
-         withdrawalButton.setFont(FONTSTYLE);
-         transferButton.setFont(FONTSTYLE);
-         exitButton.setFont(FONTSTYLE);
+         balanceButton = new Universial_Button("1 - View my balance");
+         withdrawalButton = new Universial_Button("2 - Withdraw cash");
+         transferButton = new Universial_Button("3 - Transfer");
+         exitButton = new Universial_Button("4 - Exit");
 
          //Button position and size
          balanceButton.setBounds(50,90,300,100);
          withdrawalButton.setBounds(50,200,300,100);
          transferButton.setBounds(430,90,300,100);
          exitButton.setBounds(430,200,300,100);
-
-         //Button background color
-         balanceButton.setBackground( Color.WHITE );
-         withdrawalButton.setBackground( Color.WHITE);
-         transferButton.setBackground( Color.WHITE);
-         exitButton.setBackground( Color.WHITE );
 
          //Center panel button
          centerPanel.add(balanceButton);
@@ -405,32 +390,32 @@ public class ATM {
 
       switch (transactionType) {
          case BALANCE_INQUIRY: // create new BalanceInquiry transaction
-            waitUntilNotDisplaying(new MessageFrame("Take Card","<html>Please take your card now.</html>", 3));
-            waitUntilNotDisplaying(new LogoutFrame(3));
+            waitUntilNotDisplaying(new MessageFrame("Take Card","<html>Please take your card now.</html>", 5));
+            waitUntilNotDisplaying(new LogoutFrame(5));
             break;
          case WITHDRAWAL: // create new Withdrawal transaction
             Withdrawal withdrawal = (Withdrawal) currentTransaction;
 
             switch (withdrawal.getStateNum()) {
                case 0:
-                  waitUntilNotDisplaying(new MessageFrame("Not enough bills", "<html>Not enough bills in the ATM to handle your withdrawal request.<br></br>Please use other ATM.</html>", 3));
+                  waitUntilNotDisplaying(new MessageFrame("Not enough bills", "<html>Not enough bills in the ATM to handle your withdrawal request.<br></br>Please use other ATM.</html>", 5));
                   break;
                case 1:
-                  waitUntilNotDisplaying(new MessageFrame("Not enough bills", "<html>Not enough bills in the ATM to handle your withdrawal request.<br></br> Please use other ATM.</html>", 3));
+                  waitUntilNotDisplaying(new MessageFrame("Not enough bills", "<html>Not enough bills in the ATM to handle your withdrawal request.<br></br> Please use other ATM.</html>", 5));
                   break;
                case 2:
-                  waitUntilNotDisplaying(new MessageFrame("Take Card","<html>Withdrawal success.<br></br>Please take your card now.</html>", 3));
-                  waitUntilNotDisplaying(new MessageFrame("Take Cash","Please take your cash now.", 3));
-                  waitUntilNotDisplaying(new LogoutFrame(3));
+                  waitUntilNotDisplaying(new MessageFrame("Take Card","<html>Withdrawal success.<br></br>Please take your card now.</html>", 5));
+                  waitUntilNotDisplaying(new MessageFrame("Take Cash","Please take your cash now.", 5));
+                  waitUntilNotDisplaying(new LogoutFrame(5));
                   break;
                case 3:
-                  waitUntilNotDisplaying(new MessageFrame("Insufficient cash","<html>Insufficient cash available in the ATM.<br></br>Please choose a smaller amount.</html>", 3));
+                  waitUntilNotDisplaying(new MessageFrame("Insufficient cash","<html>Insufficient cash available in the ATM.<br></br>Please choose a smaller amount.</html>", 5));
                   break;
                case 4:
-                  waitUntilNotDisplaying(new MessageFrame("Insufficient funds", "<html>Insufficient funds in your account.<br></br>Please choose a smaller amount.</html>", 3));
+                  waitUntilNotDisplaying(new MessageFrame("Insufficient funds", "<html>Insufficient funds in your account.<br></br>Please choose a smaller amount.</html>", 5));
                   break;
                case 5:
-                  waitUntilNotDisplaying(new LogoutFrame(3));
+                  waitUntilNotDisplaying(new LogoutFrame(5));
                   break;
             }
 
@@ -441,7 +426,7 @@ public class ATM {
             break;
          case EXIT:
             waitUntilNotDisplaying(new MessageFrame("Take Card","<html>Please take your card now.</html>", 3));
-            waitUntilNotDisplaying(new LogoutFrame(3));
+            waitUntilNotDisplaying(new LogoutFrame(5));
             break;
       }
    }

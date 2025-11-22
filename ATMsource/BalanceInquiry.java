@@ -36,8 +36,8 @@ public class BalanceInquiry extends Transaction {
    } // end method execute
 
    private class BalanceInquiryFrame extends JFrame {
-      private JButton cancelButton;
-      private JButton logoutButton;
+      private Universial_Button cancelButton;
+      private Universial_Button logoutButton;
 
       private final Font FONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
 
@@ -70,14 +70,10 @@ public class BalanceInquiry extends Transaction {
          Universial_Label showTotalBalanceMsg = new Universial_Label(screen.dollarAmountToString(totalBalance));
 
          // button for back to main menu
-         cancelButton = new JButton("Back to Main Menu");
-         cancelButton.setFont(FONTSTYLE);
-         cancelButton.setBackground( Color.WHITE );
+         cancelButton = new Universial_Button("Back to Main Menu");
 
          // button for cancelling transaction
-         logoutButton = new JButton("Logout");
-         logoutButton.setFont(FONTSTYLE);
-         logoutButton.setBackground( Color.WHITE );
+         logoutButton = new Universial_Button("Logout");
 
          // labal for footer
          Universial_Label footer = new Universial_Label("For further assistance, please contact customer support.");
