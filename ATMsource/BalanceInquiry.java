@@ -39,7 +39,6 @@ public class BalanceInquiry extends Transaction {
       private Universial_Button cancelButton;
       private Universial_Button logoutButton;
 
-      private final Font FONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
 
       private BalanceInquiryFrame() {
          super("Balance Inquiry");

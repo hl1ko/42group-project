@@ -5,6 +5,7 @@ import javax.swing.border.Border;
 public class Universial_Label extends JLabel {
     private final Font FONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
     private final Border HEADFOOTBORDER = BorderFactory.createEmptyBorder(0, 5, 0, 0);
+    
     public Universial_Label(String message) {
         this.setText(message);
         this.setFont(FONTSTYLE);
