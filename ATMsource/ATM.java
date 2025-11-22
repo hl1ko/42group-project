@@ -228,7 +228,7 @@ public class ATM {
 
          inputField.requestFocus();
 
-         MenuButtonHandler handler = new MenuButtonHandler();
+         MenuHandler handler = new MenuHandler();
          balanceButton.addActionListener(handler);
          withdrawalButton.addActionListener(handler);
          transferButton.addActionListener(handler);
@@ -242,7 +242,7 @@ public class ATM {
       }
 
       // return object of specified Transaction subclass
-      private class MenuButtonHandler implements ActionListener {
+      private class MenuHandler implements ActionListener {
          public void actionPerformed(ActionEvent event) {
             
             if (event.getSource() == balanceButton) {
