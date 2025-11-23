@@ -430,7 +430,7 @@ public class ATM {
                 }
                 break;
             case TRANSFER:
-                waitUntilNotDisplaying(new MessageFrame("Transfer sucess.", "Transfer sucess.", 5));
+                waitUntilNotDisplaying(new MessageFrame("Transfer success.", "Transfer success.", 5));
                 waitUntilNotDisplaying(new MessageFrame("Take your card now", "Please take your card now", 5));
                 break;
             case EXIT:
