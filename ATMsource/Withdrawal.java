@@ -91,7 +91,6 @@ public class Withdrawal extends Transaction {
         private WithdrawOButton withdrawJOption3;
         private WithdrawOButton withdrawJOption4;
         private WithdrawOButton withdrawJOption5;
-        private WithdrawOButton withdrawJOption6;
         private Universal_Textfield customAmount;
         private Universal_Label showWithdrawAmount;
 
@@ -99,7 +98,6 @@ public class Withdrawal extends Transaction {
         private final Font NUMBERFONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
         private final Border FONTBORDER = BorderFactory.createEmptyBorder(5, 3, 5, 0);
         private final Border HEADFOOTBORDER = BorderFactory.createEmptyBorder(0, 5, 0, 0);
-        private final int PANELHEIGHT = 80;
 
         private WithdrawalFrame() {
 
@@ -142,14 +140,12 @@ public class Withdrawal extends Transaction {
             withdrawJOption3 = new WithdrawOButton("3 - $500", 500);
             withdrawJOption4 = new WithdrawOButton("4 - $800", 800);
             withdrawJOption5 = new WithdrawOButton("5 - $1000", 1000);
-            withdrawJOption6 = new WithdrawOButton("6 - $2000", 2000);
 
             optionPanel.add(withdrawJOption1);
             optionPanel.add(withdrawJOption2);
             optionPanel.add(withdrawJOption3);
             optionPanel.add(withdrawJOption4);
             optionPanel.add(withdrawJOption5);
-            optionPanel.add(withdrawJOption6);
 
             JPanel customPanel = new JPanel();
             customPanel.setLayout(new GridLayout(1, 2));
@@ -159,7 +155,6 @@ public class Withdrawal extends Transaction {
             Universal_Label withdrawJOption0 = new Universal_Label("or enter a custom amount (hkd):", NUMBERFONTSTYLE);
             withdrawJOption0.setBorder(FONTBORDER);
 
-            //
             customAmount = new Universal_Textfield();
             customAmount.setFont(NUMBERFONTSTYLE);
             customAmount.requestFocusInWindow();
@@ -168,12 +163,9 @@ public class Withdrawal extends Transaction {
             customPanel.add(customAmount);
 
             Universal_Label withdrawAmount = new Universal_Label("withdraw amount (hkd):", NUMBERFONTSTYLE);
-            // withdrawAmount.setBorder(FONTBORDER);
-            // withdrawAmount.setPreferredSize(buttonSize);
 
             showWithdrawAmount = new Universal_Label("0");
             showWithdrawAmount.setFont(NUMBERFONTSTYLE);
-            // showWithdrawAmount.setBorder(FONTBORDER);
             showWithdrawAmount.setPreferredSize(new Dimension(120, 35));
             showWithdrawAmount.setBackground(new Color(65, 125, 128));
             showWithdrawAmount.setBackground(Color.WHITE);
@@ -183,15 +175,12 @@ public class Withdrawal extends Transaction {
             JPanel showAmountPanel = new JPanel();
             showAmountPanel.setLayout(new GridLayout(1, 2));
             showAmountPanel.setBackground(Color.WHITE);
-            // showAmountPanel.setPreferredSize(new Dimension(515,35));
 
             JPanel groupPanel = new JPanel();
             groupPanel.setLayout(new GridLayout(1, 2));
 
             showAmountPanel.add(withdrawAmount);
-            // showAmountPanel.add(new JLabel());
             showAmountPanel.add(showWithdrawAmount);
-            // showAmountPanel.add(resetButton);
 
             JPanel buttonPanel = new JPanel();
             buttonPanel.setLayout(new GridLayout(1, 3));
@@ -275,7 +264,6 @@ public class Withdrawal extends Transaction {
                     amount = Integer.parseInt(showWithdrawAmount.getText());
                     if(amount>=100){
                         dispose(); // close the GUI window
-                        //performWithdrawal();
                         performWithdrawal();
                         logout = true;
                     }else{
