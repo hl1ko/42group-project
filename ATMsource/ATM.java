@@ -401,7 +401,6 @@ public class ATM {
         switch (transactionType) {
             case BALANCE_INQUIRY: // create new BalanceInquiry transaction
                 waitUntilNotDisplaying(new MessageFrame("Take Card", "<html>Please take your card now.</html>", 5));
-                waitUntilNotDisplaying(new LogoutFrame(5));
                 break;
             case WITHDRAWAL: // create new Withdrawal transaction
                 Withdrawal withdrawal = (Withdrawal) currentTransaction;
@@ -409,33 +408,36 @@ public class ATM {
                 switch (withdrawal.getStateNum()) {
                     case 0:
                         waitUntilNotDisplaying(new MessageFrame("Not enough bills", "<html>Not enough bills in the ATM to handle your withdrawal request.<br></br>Please use other ATM.</html>", 5));
+                        waitUntilNotDisplaying(new MessageFrame("Take Card", "<html>Goodbye, please take your card now.</html>", 5));
                         break;
                     case 1:
                         waitUntilNotDisplaying(new MessageFrame("Not enough bills", "<html>Not enough bills in the ATM to handle your withdrawal request.<br></br> Please use other ATM.</html>", 5));
+                        waitUntilNotDisplaying(new MessageFrame("Take Card", "<html>Goodbye, please take your card now.</html>", 5));
                         break;
                     case 2:
                         waitUntilNotDisplaying(new MessageFrame("Take Card", "<html>Withdrawal success.<br></br>Please take your card now.</html>", 5));
                         waitUntilNotDisplaying(new MessageFrame("Take Cash", "Please take your cash now.", 5));
-                        waitUntilNotDisplaying(new LogoutFrame(5));
                         break;
                     case 3:
                         waitUntilNotDisplaying(new MessageFrame("Insufficient cash", "<html>Insufficient cash available in the ATM.<br></br>Please choose a smaller amount.</html>", 5));
+                        waitUntilNotDisplaying(new MessageFrame("Take Card", "<html>Goodbye, please take your card now.</html>", 5));
                         break;
                     case 4:
                         waitUntilNotDisplaying(new MessageFrame("Insufficient funds", "<html>Insufficient funds in your account.<br></br>Please choose a smaller amount.</html>", 5));
+                        waitUntilNotDisplaying(new MessageFrame("Take Card", "<html>Goodbye, please take your card now.</html>", 5));
                         break;
                     case 5:
                         waitUntilNotDisplaying(new MessageFrame("Disabled", "<html>The ATM is temporary disabled.<br></br>Please use other ATM.</html>", 5));
+                        waitUntilNotDisplaying(new MessageFrame("Take Card", "<html>Goodbye, please take your card now.</html>", 5));
                         break;
                 }
                 break;
             case TRANSFER:
                 waitUntilNotDisplaying(new MessageFrame("Transfer success.", "Transfer success.", 5));
-                waitUntilNotDisplaying(new MessageFrame("Take your card now", "Please take your card now", 5));
+                waitUntilNotDisplaying(new MessageFrame("Take Card", "<html>Goodbye, please take your card now.</html>", 5));
                 break;
             case EXIT:
-                waitUntilNotDisplaying(new MessageFrame("Take Card", "<html>Please take your card now.</html>", 3));
-                waitUntilNotDisplaying(new LogoutFrame(5));
+                waitUntilNotDisplaying(new MessageFrame("Take Card", "<html>Goodbye, please take your card now.</html>", 5));
                 break;
         }
     }
