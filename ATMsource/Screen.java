@@ -51,25 +51,6 @@ public class Screen {
         });
     }
 
-    /*public void showMultipleLineMessage(String inputString) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame f = new JFrame();
-            f.setUndecorated(true);
-            f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            f.setSize(800, 600);
-            f.setLocationRelativeTo(null);
-            // Add components here if needed
-
-            JTextArea msg = new JTextArea(inputString);
-            msg.setLineWrap(true);
-            msg.setWrapStyleWord(true);
-            JScrollPane scrollPane = new JScrollPane(msg);
-            JOptionPane.showMessageDialog(null, scrollPane);
-            f.setVisible(true);
-            f.setVisible(false);
-        });
-
-    } */
 } // end class Screen
 
 /**
