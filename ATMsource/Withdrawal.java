@@ -36,7 +36,7 @@ public class Withdrawal extends Transaction {
         if (cashDispenser.AnyBillsAvaliable()) {
             callWFrame();
         } else {
-             stateNum = 6;
+             stateNum = 5;
             logout = true;
         }
 
@@ -57,10 +57,6 @@ public class Withdrawal extends Transaction {
 
     private void performWithdrawal() {
         double availableBalance = bankDatabase.getAvailableBalance(getAccountNumber()); // amount available for withdrawal
-        if (amount == CANCELED) {
-            stateNum = 5;
-            return;
-        }
         if (amount > availableBalance) {
             stateNum = 4;
             return;
@@ -146,7 +142,7 @@ public class Withdrawal extends Transaction {
             withdrawJOption3 = new WithdrawOButton("3 - $500", 500);
             withdrawJOption4 = new WithdrawOButton("4 - $800", 800);
             withdrawJOption5 = new WithdrawOButton("5 - $1000", 1000);
-            withdrawJOption6 = new WithdrawOButton("5 - $2000", 2000);
+            withdrawJOption6 = new WithdrawOButton("6 - $2000", 2000);
 
             optionPanel.add(withdrawJOption1);
             optionPanel.add(withdrawJOption2);
@@ -277,10 +273,19 @@ public class Withdrawal extends Transaction {
 
                 if (event.getSource() == confirmButton) {
                     amount = Integer.parseInt(showWithdrawAmount.getText());
-                    dispose(); // close the GUI window
-                    //performWithdrawal();
-                    performWithdrawal();
-                    logout = true;
+                    if(amount>=100){
+                        dispose(); // close the GUI window
+                        //performWithdrawal();
+                        performWithdrawal();
+                        logout = true;
+                    }else{
+                        showWithdrawAmount.setText("0");
+                        customAmount.setText("");
+                        JOptionPane.showMessageDialog(null, "The custom amount should be at least 100.\nOr you can press \"Back to Main Menu\" to cancel withdrawal.",
+                                "Invalid value", JOptionPane.PLAIN_MESSAGE);
+                        return;
+                    }
+                    
                 }
 
                 if (event.getSource() == cancelButton) {
