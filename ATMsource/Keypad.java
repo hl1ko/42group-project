@@ -56,7 +56,7 @@ public class Keypad {
         }
     }
 
-    private static int IntegerOrDouble(String inputString) {
+    public static int IntegerOrDouble(String inputString) {
         switch (dotsCount(inputString)) {
             case 0: // no dots -> integer
                 return 1;

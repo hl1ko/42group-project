@@ -18,14 +18,14 @@ public class Transfer extends Transaction {
         keypad = atmKeypad;  //additional constructor implemention to initialize extra object variable
     } // end Transfer constructor
 
-    private class AmountFrame extends Universial_Frame {
+    private class AmountFrame extends Universal_Frame {
 
-        Universial_Label transferamount = new Universial_Label("Transfer amount: ");
-        Universial_Textfield inputbox1 = new Universial_Textfield();
-        Universial_Label doubleinput = new Universial_Label("Transfer amount: ");
-        Universial_Textfield inputbox2 = new Universial_Textfield();
-        Universial_Button submitButton = new Universial_Button("Submit");
-        Universial_Button cancelButton = new Universial_Button("Cancel");
+        Universal_Label transferamount = new Universal_Label("Transfer amount: ");
+        Universal_Textfield inputbox1 = new Universal_Textfield();
+        Universal_Label doubleinput = new Universal_Label("Double Input: ");
+        Universal_Textfield inputbox2 = new Universal_Textfield();
+        Universal_Button submitButton = new Universal_Button("Submit");
+        Universal_Button cancelButton = new Universal_Button("Cancel");
 
         private AmountFrame() {
 
@@ -53,12 +53,12 @@ public class Transfer extends Transaction {
             BPanel.add(cancelButton);
             BPanel.add(submitButton);
             //---------------------------
-            IPanel.add(new Universial_Label("Transfering to: " + targetAccountNumber));
+            IPanel.add(new Universal_Label("Transfering to: " + targetAccountNumber));
             IPanel.add(transferamount);
             IPanel.add(inputbox1);
             IPanel.add(doubleinput);
             IPanel.add(inputbox2);
-            IPanel.add(new Universial_Label("Avaliabe Balance: " + screen.dollarAmountToString(bankDatabase.getAvailableBalance(getAccountNumber()))));
+            IPanel.add(new Universal_Label("Avaliabe Balance: " + screen.dollarAmountToString(bankDatabase.getAvailableBalance(getAccountNumber()))));
             IPanel.add(BPanel);
             //---------------------------
             CPanel.add(IPanel);
@@ -160,7 +160,7 @@ public class Transfer extends Transaction {
             if (validateAmount(inputbox1.getText()) == 0) {
                 amount = keypad.StringtoDouble(inputbox2.getText());
                 System.out.println("transfer amount = " + amount);
-                callCframe();
+                callFrame(new Confirmframe());
                 dispose();
             } else {
                 reset();
@@ -184,19 +184,19 @@ public class Transfer extends Transaction {
         }
     }
 
-    private class TransferFrame extends Universial_Frame {
+    private class TransferFrame extends Universal_Frame {
 
-        Universial_Label accountnumber = new Universial_Label("Target Account Number: ");
-        Universial_Textfield inputbox1 = new Universial_Textfield();
+        Universal_Label accountnumber = new Universal_Label("Target Account Number: ");
+        Universal_Textfield inputbox1 = new Universal_Textfield();
 
-        Universial_Button submitbutton = new Universial_Button("Transfer!");
-        Universial_Button cancelbutton = new Universial_Button("Back to Main Menu!");
+        Universal_Button submitbutton = new Universal_Button("Transfer!");
+        Universal_Button cancelbutton = new Universal_Button("Back to Main Menu!");
 
         private TransferFrame() {
             inputbox1.setEditable(true);
             JPanel IPanel = new JPanel();
             JPanel BPanel = new JPanel();
-
+            setNorthText("Transfer");
             CPanel.setBorder(BorderFactory.createEmptyBorder(40, 120, 40, 120));
             CPanel.setBackground(Color.GRAY);
 
@@ -266,6 +266,11 @@ public class Transfer extends Transaction {
             @Override
             public void actionPerformed(ActionEvent event) {
                 if (event.getSource() == inputbox1) {
+                    if (inputbox1.getText().contains(".")) {
+                        JOptionPane.showMessageDialog(null, "Detected invalid character.",
+                                "Invalid value", JOptionPane.PLAIN_MESSAGE);
+                        return;
+                    }
                     inputbox1.setEditable(false);
                     submitbutton.requestFocusInWindow();
                 }
@@ -289,7 +294,7 @@ public class Transfer extends Transaction {
                 targetAccountNumber = keypad.StringtoInt(inputbox1.getText());
                 System.out.println("target account = " + targetAccountNumber);
                 dispose();
-                callAframe();
+                callFrame(new AmountFrame());
             } else {
                 reset();
             }
@@ -307,18 +312,18 @@ public class Transfer extends Transaction {
         }
     }
 
-    private class Confirmframe extends Universial_Frame {
+    private class Confirmframe extends Universal_Frame {
 
-        Universial_Label targetaccountBox1 = new Universial_Label(String.valueOf(targetAccountNumber));
-        Universial_Label amountBox1 = new Universial_Label(screen.dollarAmountToString(amount));
+        Universal_Label targetaccountBox1 = new Universal_Label(String.valueOf(targetAccountNumber));
+        Universal_Label amountBox1 = new Universal_Label(screen.dollarAmountToString(amount));
 
-        Universial_Button submitbutton = new Universial_Button("Submit");
-        Universial_Button cancelbutton = new Universial_Button("Cancel");
+        Universal_Button submitbutton = new Universal_Button("Submit");
+        Universal_Button cancelbutton = new Universal_Button("Cancel");
 
         private Confirmframe() {
             JPanel IPanel = new JPanel();
             JPanel BPanel = new JPanel();
-
+            setNorthText("Validate Transfer Information");
             CPanel.setBorder(BorderFactory.createEmptyBorder(95, 240, 0, 240));
             CPanel.setBackground(Color.GRAY);
 
@@ -331,9 +336,9 @@ public class Transfer extends Transaction {
             BPanel.setLayout(new GridLayout(1, 2));
 
             //-------------------------------
-            IPanel.add(new Universial_Label("Transfer target:"));
+            IPanel.add(new Universal_Label("Transfer target    :"));
             IPanel.add(targetaccountBox1);
-            IPanel.add(new Universial_Label("Transfer amount:"));
+            IPanel.add(new Universal_Label("Transfer amount ($): "));
             IPanel.add(amountBox1);
             IPanel.add(new JLabel());
             BPanel.add(submitbutton);
@@ -369,12 +374,10 @@ public class Transfer extends Transaction {
 
             @Override
             public void keyTyped(KeyEvent e) {
-
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
-
             }
 
             @Override
@@ -392,50 +395,24 @@ public class Transfer extends Transaction {
 
         private void submit() {
             dispose();
-            screen.waitUntilNotDisplaying(new MessageFrame("Transfer sucess.", "Transfer sucess.", 3));
             System.out.println(getAccountNumber() + " -> " + targetAccountNumber + ": " + amount);
-
-            new Timer(3000, e -> {
-                logout = true;
-            }).start();
-            SwingUtilities.invokeLater(() -> {
-
-                bankDatabase.transfer(getAccountNumber(), targetAccountNumber, amount);
-            });
+            logout = true;
+            bankDatabase.transfer(getAccountNumber(), targetAccountNumber, amount);
         }
 
         private void cancel() {
             dispose();
-            callTframe();
+            callFrame(new TransferFrame());
         }
     }
 
-    private void callAframe() {
-        SwingUtilities.invokeLater(() -> {
-            AmountFrame Aframe = new AmountFrame();
-            Aframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            Aframe.setSize(800, 600);
-            Aframe.setLocationRelativeTo(null);
-            Aframe.setVisible(true);
-        });
-    }
 
-    private void callTframe() {
-        SwingUtilities.invokeLater(() -> {
-            TransferFrame frame = new TransferFrame();
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(800, 600);
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-        });
-    }
 
-    private void callCframe() {
-        Confirmframe Cframe = new Confirmframe();
-        Cframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Cframe.setSize(800, 600); // set frame size
-        Cframe.setLocationRelativeTo(null);
-        Cframe.setVisible(true); // display frame
+    private void callFrame(JFrame j){
+        j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        j.setSize(800, 600); // set frame size
+        j.setLocationRelativeTo(null);
+        j.setVisible(true); // display frame
     }
 
     private boolean doubleCheckAmount(JTextField field1, JTextField field2) {
@@ -509,11 +486,10 @@ public class Transfer extends Transaction {
     }
 
     public void execute() {
-        toMainMenu = false;
-        callTframe();
+        callFrame(new TransferFrame());
     }
 
-    private boolean checkEmptyField(Universial_Textfield inputbo1) {
+    private boolean checkEmptyField(Universal_Textfield inputbo1) {
         if (inputbo1.getText().length() == 0) {
             screen.showMessage1("<html>Missing essential information.<br><br></html>", "Unexpected Input");
             return true;

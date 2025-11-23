@@ -36,8 +36,8 @@ public class BalanceInquiry extends Transaction {
    } // end method execute
 
    private class BalanceInquiryFrame extends JFrame {
-      private Universial_Button cancelButton;
-      private Universial_Button logoutButton;
+      private Universal_Button cancelButton;
+      private Universal_Button logoutButton;
 
 
       private BalanceInquiryFrame() {
@@ -45,7 +45,7 @@ public class BalanceInquiry extends Transaction {
          Screen screen = new Screen();
 
          // header panel layout
-         Universial_Label header = new Universial_Label("Balance Inquiry");
+         Universal_Label header = new Universal_Label("Balance Inquiry");
          header.usingTitleAndFooterStyle();
 
          // center panel layout
@@ -61,21 +61,21 @@ public class BalanceInquiry extends Transaction {
          infoPanel.setBackground(Color.WHITE);
 
          // labels for available balance
-         Universial_Label availableBalanceMsg = new Universial_Label("Available balance:");
-         Universial_Label showAvailableBalanceMsg = new Universial_Label(screen.dollarAmountToString(availableBalance));
+         Universal_Label availableBalanceMsg = new Universal_Label("Available balance:");
+         Universal_Label showAvailableBalanceMsg = new Universal_Label(screen.dollarAmountToString(availableBalance));
 
          // labels for total balance
-         Universial_Label totalBalanceMsg = new Universial_Label("Total balance:");
-         Universial_Label showTotalBalanceMsg = new Universial_Label(screen.dollarAmountToString(totalBalance));
+         Universal_Label totalBalanceMsg = new Universal_Label("Total balance:");
+         Universal_Label showTotalBalanceMsg = new Universal_Label(screen.dollarAmountToString(totalBalance));
 
          // button for back to main menu
-         cancelButton = new Universial_Button("Back to Main Menu");
+         cancelButton = new Universal_Button("Back to Main Menu");
 
          // button for cancelling transaction
-         logoutButton = new Universial_Button("Logout");
+         logoutButton = new Universal_Button("Logout");
 
          // labal for footer
-         Universial_Label footer = new Universial_Label("For further assistance, please contact customer support.");
+         Universal_Label footer = new Universal_Label("For further assistance, please contact customer support.");
          footer.usingTitleAndFooterStyle();
 
          // adding components to panels

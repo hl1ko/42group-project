@@ -1,7 +1,7 @@
 public class CashDispenser 
 {
    // the default initial number of bills in the cash dispenser
-   private final static int[] __init_BillsCount = {1,1,11};
+   private final static int[] __init_BillsCount = {99,99,99};
    //private final static int[] __init_BillsCount = {0,0,1};//testing
    private final static int[] BillsDeno = {1000, 500, 100};
    private final static int[] BillsDenoMultiple = {(1000/500), (500/100), 0}; // {2, 5, 0}

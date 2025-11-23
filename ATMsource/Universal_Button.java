@@ -2,17 +2,17 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class Universial_Button extends JButton {
+public class Universal_Button extends JButton {
 
     private final Font FONTSTYLE = new Font("Verdana", Font.PLAIN, 20);
     Dimension buttonSize = new Dimension(100, 35);
     Color ShowingColor = Color.white;
-    Color HoverColor = Color.gray;
+    Color SelectedColor = Color.gray;
 
     //this.setBackground(new Color(65, 125, 128));
-    public Universial_Button(String label, Color ShowColor, Color HoverColor) {
+    public Universal_Button(String label, Color ShowColor, Color HoverColor) {
         ShowingColor = ShowColor;
-        HoverColor = HoverColor;
+        SelectedColor = HoverColor;
 
         this.setText(label);
         this.setFont(FONTSTYLE);
@@ -23,7 +23,7 @@ public class Universial_Button extends JButton {
 
     }
 
-    public Universial_Button(String label) {
+    public Universal_Button(String label) {
         this.setText(label);
         this.setFont(FONTSTYLE);
         this.setPreferredSize(buttonSize);
@@ -54,12 +54,10 @@ public class Universial_Button extends JButton {
 
         @Override
         public void mouseEntered(MouseEvent e) {
-            setColor(ShowingColor);
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
-            setColor(ShowingColor);
         }
 
         @Override
@@ -90,6 +88,6 @@ public class Universial_Button extends JButton {
         ShowingColor = inputColor;
     }
     public void setHoverColors(Color inputColor){
-        HoverColor = inputColor;
+        SelectedColor = inputColor;
     }
 }
