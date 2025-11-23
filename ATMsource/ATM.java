@@ -425,9 +425,6 @@ public class ATM {
                         waitUntilNotDisplaying(new MessageFrame("Insufficient funds", "<html>Insufficient funds in your account.<br></br>Please choose a smaller amount.</html>", 5));
                         break;
                     case 5:
-                        waitUntilNotDisplaying(new LogoutFrame(5));
-                        break;
-                     case 6:
                         waitUntilNotDisplaying(new MessageFrame("Disabled", "<html>The ATM is temporary disabled.<br></br>Please use other ATM.</html>", 5));
                         break;
                 }
