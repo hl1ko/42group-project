@@ -406,10 +406,6 @@ public class ATM {
                 Withdrawal withdrawal = (Withdrawal) currentTransaction;
 
                 switch (withdrawal.getStateNum()) {
-                    case 0:
-                        waitUntilNotDisplaying(new MessageFrame("Not enough bills", "<html>Not enough bills in the ATM to handle your withdrawal request.<br></br>Please use other ATM.</html>", 5));
-                        waitUntilNotDisplaying(new MessageFrame("Take Card", "<html>Goodbye, please take your card now.</html>", 5));
-                        break;
                     case 1:
                         waitUntilNotDisplaying(new MessageFrame("Not enough bills", "<html>Not enough bills in the ATM to handle your withdrawal request.<br></br> Please use other ATM.</html>", 5));
                         waitUntilNotDisplaying(new MessageFrame("Take Card", "<html>Goodbye, please take your card now.</html>", 5));
