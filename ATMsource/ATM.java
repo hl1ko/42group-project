@@ -231,7 +231,7 @@ public class ATM {
             buttomPanel.add(inputField);
             add(buttomPanel, BorderLayout.SOUTH);
 
-            inputField.requestFocus();
+            //inputField.requestFocus();
 
             MenuHandler handler = new MenuHandler();
             balanceButton.addActionListener(handler);
